@@ -1,20 +1,28 @@
 ﻿using CommandLineParser.Arguments;
 using CsvHelper;
 using CsvHelper.Configuration;
+using log4net;
+using log4net.Config;
 using SharpKml.Base;
 using SharpKml.Dom;
 using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace GravityVectorToKML
 {
     static class Program
     {
+        static ILog Log = LogManager.GetLogger(typeof(Program));
+
         static void Main(string[] args)
         {
+
+            var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+            XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
 
             CommandLineParser.CommandLineParser parser =
                 new CommandLineParser.CommandLineParser();
@@ -38,9 +46,12 @@ namespace GravityVectorToKML
                 {
 
                     var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
-                    Console.WriteLine($"Loading {files.Count()} gravity vectors");
-                    Console.WriteLine(DateTime.Now.ToString() + ": Starting..");
+                    int fileCount = files.Count();
+                    Log.Debug($"Loading {fileCount} gravity vectors");
+                    Log.Debug("Starting..");
 
+                    int processedFiles = 0;
+                    ulong accRecords = 0;
                     Parallel.ForEach(files, file =>
                     {
                         try
@@ -59,7 +70,8 @@ namespace GravityVectorToKML
                                 CultureInfo = CultureInfo.InvariantCulture
                             });
                             var records = csv.GetRecords<NormalPoint>().ToList();
-                            Console.WriteLine($"Processing {Path.GetFileName(kmlFileName)}: {records.Count()} records");
+                            accRecords += (ulong)(records.Count);
+                            //Log.Debug($"Processing {Path.GetFileName(kmlFileName)}: {records.Count()} records");
 
 
                             foreach (var record in records)
@@ -96,7 +108,7 @@ namespace GravityVectorToKML
                                 {
                                     Line = new LineStyle()
                                     {
-                                        PhysicalWidth = record.dist_med,//Math.Min(record.dist_med / 150, 1) * 100,
+                                        PhysicalWidth = record.dist_med,
                                         Color = GetColorFromSpeed(record.sog),
                                     }
                                 });
@@ -112,12 +124,17 @@ namespace GravityVectorToKML
                             kml.Feature = rootFolder;
                             serializer.Serialize(kml);
                             File.WriteAllText(kmlFileName, serializer.Xml);
+                            processedFiles++;
 
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine("Error: " + e.Message);
-                            Console.WriteLine("Stack trace: " + e.StackTrace);
+                            Log.Error(e);
+                        }
+
+                        if (processedFiles % 5 == 0)
+                        {
+                            Log.Debug($"Processed {processedFiles}/{fileCount} files ({((double)processedFiles / (double)fileCount).ToString("0.00%")}) for a total of {accRecords} records");
                         }
 
                     });
@@ -125,14 +142,14 @@ namespace GravityVectorToKML
 
                 else
                 {
-                    Console.WriteLine("Path not found: " + path);
+                    Log.Debug("Path not found: " + path);
                 }
             }
             else
             {
-                Console.WriteLine("You must specify --path");
+                Log.Debug("You must specify --path");
             }
-            Console.WriteLine(DateTime.Now.ToString() + ": Done!");
+            Log.Debug("Done!");
         }
 
         private static Color32 GetColorFromSpeed(double speed)
@@ -142,6 +159,7 @@ namespace GravityVectorToKML
             return color32;
 
         }
+
 
         public class NormalPoint
         {
