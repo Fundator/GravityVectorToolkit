@@ -39,6 +39,8 @@ namespace GravityVectorToKML
 
                     var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
                     Console.WriteLine($"Loading {files.Count()} gravity vectors");
+                    Console.WriteLine(DateTime.Now.ToString() + ": Starting..");
+
                     Parallel.ForEach(files, file =>
                     {
                         try
@@ -110,6 +112,7 @@ namespace GravityVectorToKML
                             kml.Feature = rootFolder;
                             serializer.Serialize(kml);
                             File.WriteAllText(kmlFileName, serializer.Xml);
+
                         }
                         catch (Exception e)
                         {
@@ -129,13 +132,13 @@ namespace GravityVectorToKML
             {
                 Console.WriteLine("You must specify --path");
             }
-
+            Console.WriteLine(DateTime.Now.ToString() + ": Done!");
         }
 
         private static Color32 GetColorFromSpeed(double speed)
         {
             var normalizedSpeed = Math.Min(speed / 13, 1);
-            Color32 color32 = new Color32(255, 0, Convert.ToByte((int)(255 * (1 - normalizedSpeed))), Convert.ToByte((int)(normalizedSpeed * 255)));
+            Color32 color32 = new Color32(191, 0, Convert.ToByte((int)(255 * (1 - normalizedSpeed))), Convert.ToByte((int)(normalizedSpeed * 255)));
             return color32;
 
         }
