@@ -1,6 +1,8 @@
 ﻿using CommandLineParser.Arguments;
 using CsvHelper;
 using CsvHelper.Configuration;
+using GravityVectorToKML.Model;
+using GravityVectorToKML.CSV.Mapping;
 using log4net;
 using log4net.Config;
 using SharpKml.Base;
@@ -11,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using DemoDataAccess;
 
 namespace GravityVectorToKML
 {
@@ -23,6 +26,8 @@ namespace GravityVectorToKML
 
             var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
+
+            FluentConfiguration.Configure(true);
 
             CommandLineParser.CommandLineParser parser =
                 new CommandLineParser.CommandLineParser();
@@ -88,9 +93,9 @@ namespace GravityVectorToKML
                                 clusterSegment.Coordinates = new CoordinateCollection();
 
                                 bool newCluster = false;
-                                if (currentClusterIndex != record.clusterindex)
+                                if (currentClusterIndex != record.ClusterIndex)
                                 {
-                                    currentClusterIndex = record.clusterindex;
+                                    currentClusterIndex = record.ClusterIndex;
                                     folder = new Folder();
                                     folder.Name = "Cluster " + currentClusterIndex.ToString();
                                     rootFolder.AddFeature(folder);
@@ -99,21 +104,21 @@ namespace GravityVectorToKML
 
                                 if (!newCluster)
                                 {
-                                    clusterSegment.Coordinates.Add(new Vector(previousNormalPoint.x, previousNormalPoint.y));
+                                    clusterSegment.Coordinates.Add(new Vector(previousNormalPoint.Latitude, previousNormalPoint.Longitude));
                                 }
-                                clusterSegment.Coordinates.Add(new Vector(record.x, record.y));
+                                clusterSegment.Coordinates.Add(new Vector(record.Latitude, record.Longitude));
 
                                 Placemark placemark = new Placemark();
                                 placemark.AddStyle(new Style()
                                 {
                                     Line = new LineStyle()
                                     {
-                                        PhysicalWidth = record.dist_med,
-                                        Color = GetColorFromSpeed(record.sog),
+                                        PhysicalWidth = record.DistanceMedian,
+                                        Color = GetColorFromSpeed(record.SpeedOverGround),
                                     }
                                 });
                                 placemark.Geometry = clusterSegment;
-                                placemark.Name = $"Grid: {record.grid_id} / Distance: {record.dist_med} / Speed: {record.sog} / Course: {record.cog}";
+                                placemark.Name = $"Grid: {record.GridId} / Distance: {record.DistanceMedian} / Speed: {record.SpeedOverGround} / Course: {record.CourseOverGround}";
                                 folder.AddFeature(placemark);
 
                                 // Do this last!

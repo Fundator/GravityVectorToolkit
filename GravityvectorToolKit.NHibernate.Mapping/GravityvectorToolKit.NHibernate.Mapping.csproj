@@ -6,13 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="FluentNHibernate" Version="2.1.2" />
-    <PackageReference Include="NetTopologySuite" Version="1.15.0-pre063" />
     <PackageReference Include="NHibernate.Spatial.MySQL" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\GravityVectorToolKit.DataModel\GravityVectorToolKit.DataModel.csproj" />
-    <ProjectReference Include="..\GravityvectorToolKit.NHibernate.Mapping\GravityvectorToolKit.NHibernate.Mapping.csproj" />
   </ItemGroup>
 
 </Project>
