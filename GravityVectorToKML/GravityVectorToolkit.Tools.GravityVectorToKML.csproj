@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GravityVector.Common\GravityVectorToolKit.Common.csproj" />
     <ProjectReference Include="..\GravityVectorToolKit.DataAccess\GravityVectorToolKit.DataAccess.csproj" />
     <ProjectReference Include="..\GravityVectorToolKit.DataModel\GravityVectorToolKit.DataModel.csproj" />
     <ProjectReference Include="..\GravityVectorToolKit.Mapping\GravityVectorToolKit.CSV.Mapping.csproj" />

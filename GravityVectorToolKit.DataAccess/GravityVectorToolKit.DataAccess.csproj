@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="FluentNHibernate" Version="2.1.2" />
+    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="mysql.data" Version="8.0.11" />
     <PackageReference Include="NetTopologySuite" Version="1.15.0-pre063" />
     <PackageReference Include="NHibernate.Spatial.MySQL" Version="5.0.0" />
   </ItemGroup>

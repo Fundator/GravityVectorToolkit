@@ -14,6 +14,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using DemoDataAccess;
+using System.Collections.Generic;
+using GravityVector.Common;
 
 namespace GravityVectorToKML
 {
@@ -26,8 +28,6 @@ namespace GravityVectorToKML
 
             var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
-
-            FluentConfiguration.Configure(true);
 
             CommandLineParser.CommandLineParser parser =
                 new CommandLineParser.CommandLineParser();
@@ -70,11 +70,7 @@ namespace GravityVectorToKML
                             Folder rootFolder = new Folder();
                             Folder folder = null;
 
-                            var csv = new CsvReader(File.OpenText(file), new Configuration
-                            {
-                                CultureInfo = CultureInfo.InvariantCulture
-                            });
-                            var records = csv.GetRecords<NormalPoint>().ToList();
+                            List<NormalPoint> records = Util.ReadGravityVector(file);
                             accRecords += (ulong)(records.Count);
                             //Log.Debug($"Processing {Path.GetFileName(kmlFileName)}: {records.Count()} records");
 
