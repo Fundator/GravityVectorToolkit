@@ -14,52 +14,53 @@ using System.Threading.Tasks;
 
 namespace DemoDataAccess
 {
-    public static class FluentConfiguration
-    {
-        public static void Configure(bool generateTables = false)
-        {
+	public static class FluentConfiguration
+	{
+		public static void Configure(bool generateTables = false)
+		{
 
-            var cfg = Fluently.Configure()
-                .Database(FluentNHibernate.Cfg.Db.MySQLConfiguration.Standard
-                .ConnectionString(c => c.Server("localhost").Database("gravityvectortoolkit").Username("gvtk").Password("gvtk"))
-                .Driver<MySqlDataDriver>()
-                .Dialect<MySQL57SpatialDialect>())
-                .Mappings(x => x.FluentMappings.AddFromAssemblyOf<NormalPointGMapping>())
-                .BuildConfiguration();
+			var cfg = Fluently.Configure()
+				.Database(FluentNHibernate.Cfg.Db.MySQLConfiguration.Standard
+				.ConnectionString("Server=localhost;Database=gravityvectortoolkit;Connect Timeout=36000;port=3306;Uid=gvtk;Pwd=gvtk")
+				.Driver<MySqlDataDriver>()
+				.Dialect<MySQL57SpatialDialect>())
+				.Mappings(x => x.FluentMappings.AddFromAssemblyOf<NormalPointGMapping>())
+				.BuildConfiguration()
+				.SetProperty("command_timeout", "-1");
 
-            cfg.AddAuxiliaryDatabaseObject(new SpatialAuxiliaryDatabaseObject(cfg));
+			cfg.AddAuxiliaryDatabaseObject(new SpatialAuxiliaryDatabaseObject(cfg));
 
-            if (generateTables)
-            {
-                var exporter = new SchemaExport(cfg);
-                exporter.Drop(false, true);
-                exporter.Create(true, true);
-            }
+			if (generateTables)
+			{
+				var exporter = new SchemaExport(cfg);
+				exporter.Drop(false, true);
+				exporter.Create(true, true);
+			}
 
-            SessionManager.SessionFactory = cfg.BuildSessionFactory();
+			SessionManager.SessionFactory = cfg.BuildSessionFactory();
 
-        }
-    }
+		}
+	}
 
 
-    public static class SessionManager
-    {
-        private static ISession _session;
-        public static ISessionFactory SessionFactory;
-        public static ISession Session
-        {
-            get
-            {
-                if (_session == null)
-                {
-                    if (SessionFactory == null)
-                    {
-                        FluentConfiguration.Configure();
-                    }
-                    _session = SessionFactory.OpenSession();
-                }
-                return _session;
-            }
-        }
-    }
+	public static class SessionManager
+	{
+		private static ISession _session;
+		public static ISessionFactory SessionFactory;
+		public static ISession Session
+		{
+			get
+			{
+				if (_session == null)
+				{
+					if (SessionFactory == null)
+					{
+						FluentConfiguration.Configure();
+					}
+					_session = SessionFactory.OpenSession();
+				}
+				return _session;
+			}
+		}
+	}
 }
