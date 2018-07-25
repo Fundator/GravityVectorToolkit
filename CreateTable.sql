@@ -1,5 +1,4 @@
-SELECT * FROM gravityvectortoolkit.normalpointg
-where ToLocationId = 2328171;CREATE TABLE `normalpointg` (
+CREATE TABLE `normalpointg` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `FromLocationId` int(11) DEFAULT NULL,
   `ToLocationId` int(11) DEFAULT NULL,
@@ -23,7 +22,7 @@ where ToLocationId = 2328171;CREATE TABLE `normalpointg` (
   `LesserCourseStdDev` double DEFAULT NULL,
   `GreaterCourseStdDev` double DEFAULT NULL,
   `DataCount` double DEFAULT NULL,
-  `PositionGeometry` geometry NOT NULL,
+  `PositionGeometry` geometry NOT NULL SRID 4326,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `idx_normalpointg_FromLocationId_ToLocationId_ClusterIndex_GridId` (`FromLocationId`,`ToLocationId`,`ClusterIndex`,`GridId`),
   KEY `idx_Speed_Course_Dist` (`SpeedOverGround`,`CourseOverGround`,`DistanceMedian`,`MaxDistanceLeft`,`MaxDistanceRight`,`DistanceStdDevLeft`,`DistanceStdDevRight`),
