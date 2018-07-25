@@ -58,7 +58,11 @@ namespace GravityVectorToKML.CSV.Mapping
 			Map(m => m.LesserCourseStdDev).Name("lesser_cog_std");
 			Map(m => m.GreaterCourseStdDev).Name("greater_cog_std");
 			Map(m => m.DataCount).Name("data_count");
-			Map(m => m.PositionGeometry).ConvertUsing(row => new Point(new Coordinate(Double.Parse(row.GetField("y"), CultureInfo.InvariantCulture), Double.Parse(row.GetField("x"), CultureInfo.InvariantCulture))));
+			Map(m => m.PositionGeometry).ConvertUsing(row => {
+				var p = new Point(new Coordinate(Double.Parse(row.GetField("y"), CultureInfo.InvariantCulture), Double.Parse(row.GetField("x"), CultureInfo.InvariantCulture)));
+				p.SRID = 4326;
+				return p;
+			});
 		}
 	}
 }
