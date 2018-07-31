@@ -1,15 +1,12 @@
 ﻿using CommandLineParser.Arguments;
 using DemoDataAccess;
-using GeoAPI.Geometries;
 using GravityVector.Common;
 using GravityVectorToKML.Model;
 using log4net;
 using log4net.Config;
-using NetTopologySuite.Geometries;
 using NHibernate;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -17,11 +14,11 @@ using System.Threading.Tasks;
 
 namespace GravityVectorToolkit.Tools.DatabaseImport
 {
-	static class Program
+	internal static class Program
 	{
-		static ILog Log = LogManager.GetLogger(typeof(Program));
+		private static ILog Log = LogManager.GetLogger(typeof(Program));
 
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
 			var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
 			XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
@@ -44,14 +41,12 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 			FluentConfiguration.Configure(false);
 
-
 			if (pathArg.Parsed)
 			{
 				var path = Path.GetFullPath(pathArg.Value);
 
 				if (Directory.Exists(path))
 				{
-
 					var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
 					List<ISession> sessions = new List<ISession>();
 					int fileCount = files.Count();
@@ -72,9 +67,6 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 							var filename = Path.GetFileName(file);
 
 							ulong batchRecords = 0;
-
-							var currentClusterIndex = -1d;
-							NormalPoint previousNormalPoint = null;
 
 							List<NormalPointG> records = Util.ReadGravityVector(file);
 							accRecords += (ulong)(records.Count);
@@ -101,7 +93,6 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 								session.Close();
 								session.Dispose();
 							}
-
 						}
 						catch (Exception e)
 						{
