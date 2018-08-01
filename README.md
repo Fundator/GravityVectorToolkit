@@ -33,3 +33,43 @@ CREATE INDEX kystkontur_wkb_geometry_geom_idx
     (wkb_geometry)
     TABLESPACE pg_default;
 ```
+
+For å analysere hvilke gravity vectors som ligger på land kan man opprette et materialized view (for best ytelse):
+
+```
+CREATE MATERIALIZED VIEW public.gravityvectoronshore
+TABLESPACE pg_default
+AS
+ SELECT row_number() OVER (ORDER BY p.id) AS objectid,
+    p.id,
+    p.fromlocationid,
+    p.tolocationid,
+    p.clusterindex,
+    p.gridid,
+    p.latitude,
+    p.longitude,
+    p.speedoverground,
+    p.courseoverground,
+    p.distancemedian,
+    p.maxdistanceleft,
+    p.maxdistanceright,
+    p.distancestddevleft,
+    p.distancestddevright,
+    p.maxlesserspeeddiff,
+    p.maxgreaterspeeddiff,
+    p.lesserspeedstddev,
+    p.greaterspeedstddev,
+    p.maxlessercoursediff,
+    p.maxgreatercoursediff,
+    p.lessercoursestddev,
+    p.greatercoursestddev,
+    p.datacount,
+    p.positiongeometry
+   FROM "NormalPointG" p
+     JOIN kystkontur k ON st_within(p.positiongeometry, k.wkb_geometry)
+  WHERE k.objtype::text = 'Landareal'::text
+WITH DATA;
+
+ALTER TABLE public.gravityvectoronshore
+    OWNER TO postgres;
+```
