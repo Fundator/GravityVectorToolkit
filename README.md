@@ -73,3 +73,9 @@ WITH DATA;
 ALTER TABLE public.gravityvectoronshore
     OWNER TO postgres;
 ```
+
+For å oppdatere alle rader i en tabell med geometrier til en felles SRID:
+
+```
+select UpdateGeometrySRID('public', 'kystkontur', 'wkb_geometry', 4326) ;
+```
