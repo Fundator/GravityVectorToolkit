@@ -7,6 +7,8 @@ Kommando for å importere shapefiles til PostGIS: `for /r %v in (\*.shp) do ogr2
 Husk på spesifisere -nln "NavnPåTabell" og -nlt geometry. Ogr2ogr vil potensielt opprette tabellen med en spesifikk geometritype (f.eks LineString) som vil fører til feilmeldinger når man kjører importen av data. Isåfall kan man generere et create-script for tabellen, droppe den, og endre geometritypen til å være kun `geometry`.
 
 ```
+CREATE SEQUENCE kystkontur_ogc_fid_seq START 1;
+
 CREATE TABLE public.kystkontur
 (
     ogc_fid integer NOT NULL DEFAULT nextval('kystkontur_ogc_fid_seq'::regclass),
