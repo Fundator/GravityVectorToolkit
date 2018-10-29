@@ -1,10 +1,12 @@
 ﻿using FluentNHibernate.Cfg;
+using FluentNHibernate.Conventions.Helpers;
 using GravityVectorToKML.CSV.Mapping;
 using GravityVectorToKML.Model;
 using NHibernate;
 using NHibernate.Driver;
 using NHibernate.Spatial.Dialect;
 using NHibernate.Spatial.Mapping;
+using NHibernate.Spatial.Type;
 using NHibernate.Tool.hbm2ddl;
 using System;
 using System.Collections.Generic;
@@ -20,11 +22,15 @@ namespace DemoDataAccess
 		{
 
 			var cfg = Fluently.Configure()
-				.Database(FluentNHibernate.Cfg.Db.MySQLConfiguration.Standard
-				.ConnectionString("Server=localhost;Database=gravityvectortoolkit;Connect Timeout=36000;port=3306;Uid=gvtk;Pwd=gvtk")
-				.Driver<MySqlDataDriver>()
-				.Dialect<MySQL57SpatialDialect>())
-				.Mappings(x => x.FluentMappings.AddFromAssemblyOf<NormalPointGMapping>())
+				//.Database(FluentNHibernate.Cfg.Db.MySQLConfiguration.Standard
+				//.ConnectionString("Server=localhost;Database=gravityvectortoolkit;Connect Timeout=36000;port=3306;Uid=gvtk;Pwd=gvtk")
+				//.Driver<MySqlDataDriver>()
+				//.Dialect<MySQL57SpatialDialect>())
+				.Database(FluentNHibernate.Cfg.Db.PostgreSQLConfiguration.Standard
+				.ConnectionString("Server=localhost;Port=5432;Database=gvtk;User Id=gvtk;Password = gvtk;")
+				.Driver<NpgsqlDriver>()
+				.Dialect<PostGis20Dialect>())				
+				.Mappings(x => x.FluentMappings.Add(typeof(NormalPointGMapping<PostGisGeometryType>)))
 				.BuildConfiguration()
 				.SetProperty("command_timeout", "-1");
 
