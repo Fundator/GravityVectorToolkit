@@ -43,8 +43,9 @@ namespace GravityVectorToKML.CSV.Mapping
 			Map(m => m.Latitude).Name("x");
 			Map(m => m.Longitude).Name("y");
 			Map(m => m.SpeedOverGround).Name("sog");
-			Map(m => m.CourseOverGround).Name("cog");
-			Map(m => m.DistanceMedian).Name("dist_med");
+            Map(m => m.CourseOverGround).Name("cog");
+            Map(m => m.Eta).Name("eta");
+            Map(m => m.DistanceMedian).Name("dist_med");
 			Map(m => m.MaxDistanceLeft).Name("max_dist_left");
 			Map(m => m.MaxDistanceRight).Name("max_dist_right");
 			Map(m => m.DistanceStdDevLeft).Name("dist_std_left");
