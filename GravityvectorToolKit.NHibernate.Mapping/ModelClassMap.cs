@@ -5,7 +5,7 @@ using NHibernate.Spatial.Type;
 
 namespace GravityVectorToKML.CSV.Mapping
 {
-	public class NormalPointGMapping : ClassMap<NormalPointG>
+	public class NormalPointGMapping<T> : ClassMap<NormalPointG> where T : IGeometryUserType
 	{
 		public NormalPointGMapping()
 		{
@@ -57,7 +57,9 @@ namespace GravityVectorToKML.CSV.Mapping
 			Map(x => x.GreaterCourseStdDev);
 			Map(x => x.DataCount);
 
-			Map(x => x.PositionGeometry).CustomType<MySQL57GeometryType>().Not.Nullable();
+			Map(x => x.PositionGeometry).Column("positiongeometry").CustomType<T>().Not.Nullable();
+			
+
 		}
 	}
 }
