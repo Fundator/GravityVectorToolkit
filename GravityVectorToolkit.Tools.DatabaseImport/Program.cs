@@ -42,7 +42,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 			Log.Debug("Configuring database..");
 
-			FluentConfiguration.Configure(false);
+			FluentConfiguration.Configure(true);
 
 
 			if (pathArg.Parsed)
