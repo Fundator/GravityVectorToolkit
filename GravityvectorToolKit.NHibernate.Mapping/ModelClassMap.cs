@@ -34,8 +34,8 @@ namespace GravityVectorToKML.CSV.Mapping
 
 
 			Id(x => x.Id).GeneratedBy.Identity();
-			Map(x => x.FromLocationId);
-			Map(x => x.ToLocationId);
+			Map(x => x.FromLocationId).Index("FromLocationToLocation_Idx");
+			Map(x => x.ToLocationId).Index("FromLocationToLocation_Idx");
 			Map(x => x.ClusterIndex);
 			Map(x => x.GridId);
 			Map(x => x.Latitude);
