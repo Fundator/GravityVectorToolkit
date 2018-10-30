@@ -14,7 +14,8 @@ namespace GravityVector.Common
 	{
 		public static List<NormalPointG> ReadGravityVector(string file)
 		{
-			var csv = new CsvReader(File.OpenText(file), new Configuration
+			StreamReader reader = File.OpenText(file);
+			var csv = new CsvReader(reader, new Configuration
 			{
 				CultureInfo = CultureInfo.InvariantCulture,
 				HeaderValidated = null,
@@ -23,6 +24,9 @@ namespace GravityVector.Common
 			csv.Configuration.RegisterClassMap<ModelClassMapG>();
 
 			var records = csv.GetRecords<NormalPointG>().ToList();
+			reader.Close();
+			reader.Dispose();
+			csv.Dispose();
 			return records;
 		}
 	}
