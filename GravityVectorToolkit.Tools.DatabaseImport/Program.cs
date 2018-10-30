@@ -75,8 +75,6 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 							ulong batchRecords = 0;
 
-							List<NormalPointG> records = Util.ReadGravityVector(file);
-							accRecords += (ulong)(records.Count);
 							var stuff = filename.Split(new string[] { "_", "." }, StringSplitOptions.RemoveEmptyEntries);
 							int fromLocationId = Int32.Parse(stuff[1]);
 							int toLocationId = Int32.Parse(stuff[2]);
@@ -94,6 +92,8 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
                             if (!skip)
                             {
+                                List<NormalPointG> records = Util.ReadGravityVector(file);
+                                accRecords += (ulong)(records.Count);
 
                                 ITransaction transaction = BeginTransaction(session);
                                 foreach (var record in records)
