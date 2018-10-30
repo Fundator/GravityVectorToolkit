@@ -117,6 +117,8 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
                             else
                             {
                                 Log.Info($"Skipped {filename} because it has already been processed");
+                                session.Close();
+                                session.Dispose();
                             }
 
                             processedFiles++;
