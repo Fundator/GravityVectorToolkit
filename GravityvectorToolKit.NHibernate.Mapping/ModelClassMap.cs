@@ -42,8 +42,10 @@ namespace GravityVectorToKML.CSV.Mapping
 			Map(x => x.Longitude);
 			Map(x => x.SpeedOverGround);
 			Map(x => x.CourseOverGround);
-			Map(x => x.Eta);
-			Map(x => x.DistanceMedian);
+            Map(x => x.Eta);
+            Map(x => x.EtaLowerStd);
+            Map(x => x.EtaUpperStd);
+            Map(x => x.DistanceMedian);
 			Map(x => x.MaxDistanceLeft);
 			Map(x => x.MaxDistanceRight);
 			Map(x => x.DistanceStdDevLeft);
