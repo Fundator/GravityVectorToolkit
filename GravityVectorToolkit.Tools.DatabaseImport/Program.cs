@@ -39,14 +39,13 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 			Log.Debug("Configuring database..");
 
-			FluentConfiguration.Configure(true);
-
 			if (pathArg.Parsed)
 			{
 				var path = Path.GetFullPath(pathArg.Value);
 
 				if (Directory.Exists(path))
 				{
+					FluentConfiguration.Configure(true);
 					var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
 					List<ISession> sessions = new List<ISession>();
 					int fileCount = files.Count();
@@ -102,6 +101,15 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 						}
 					});
 				}
+				else
+				{
+					Log.Error($"The path {path} does not exist");
+					return;
+				}
+			}
+			else
+			{
+				Log.Error($"You must specify a path");
 			}
 		}
 
