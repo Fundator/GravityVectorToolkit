@@ -51,13 +51,13 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 					var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
 					List<ISession> sessions = new List<ISession>();
 					int fileCount = files.Count();
-                    Log.Debug($"Drop and create? " + (dropAndCreate ? "Yes" : "No"));
+					Log.Debug($"Drop and create? " + (dropAndCreate ? "Yes" : "No"));
 
-                    if (dropAndCreate)
-                    {
-                        Log.Info("You have specified that the schema should be dropped and recreated. Press ctrl-c now to cancel this program.");
-                        Thread.Sleep(5000);
-                    }
+					if (dropAndCreate)
+					{
+						Log.Info("You have specified that the schema should be dropped and recreated. Press ctrl-c now to cancel this program.");
+						Thread.Sleep(5000);
+					}
 
 					Log.Debug($"Loading {fileCount} gravity vectors");                    
 					Log.Debug("Starting..");
@@ -79,53 +79,52 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 							int fromLocationId = Int32.Parse(stuff[1]);
 							int toLocationId = Int32.Parse(stuff[2]);
 
-                            // If the user opted to keep existing data, then we need to check if the current row exist
-                            // This puts more load on the database, but can potentially save a lot of time
-                            bool skip = false;
+							// If the user opted to keep existing data, then we need to check if the current row exist
+							// This puts more load on the database, but can potentially save a lot of time
+							bool skip = false;
 							if (!dropAndCreate)
 							{
 								var result = session.Query<NormalPointG>()
 													.Where(p => p.FromLocationId == fromLocationId 
 															&& p.ToLocationId == toLocationId).Count();
-                                skip = result > 0;
-                            }
+								skip = result > 0;
+							}
 
-                            if (!skip)
-                            {
-                                List<NormalPointG> records = Util.ReadGravityVector(file);
-                                accRecords += (ulong)(records.Count);
+							if (!skip)
+							{
+								List<NormalPointG> records = Util.ReadGravityVector(file);
+								accRecords += (ulong)(records.Count);
 
-                                ITransaction transaction = BeginTransaction(session);
-                                foreach (var record in records)
-                                {
-                                    record.FromLocationId = fromLocationId;
-                                    record.ToLocationId = toLocationId;
-                                    batchRecords++;
-                                    session.SaveOrUpdate(record);
-                                }
+								ITransaction transaction = BeginTransaction(session);
+								foreach (var record in records)
+								{
+									record.FromLocationId = fromLocationId;
+									record.ToLocationId = toLocationId;
+									batchRecords++;
+									session.SaveOrUpdate(record);
+								}
 
 
-                                lock (syncRoot) // Ensure flushing is always done in sync
-                                {
-                                    Log.Info($"Committing transaction and flushing session for file {filename}");
-                                    transaction.Commit();
-                                    session.Flush();
-                                    session.Close();
-                                    session.Dispose();
-                                }
-                            }
-                            else
-                            {
-                                Log.Info($"Skipped {filename} because it has already been processed");
-                                session.Close();
-                                session.Dispose();
-                            }
+								lock (syncRoot) // Ensure flushing is always done in sync
+								{
+									Log.Info($"Committing transaction and flushing session for file {filename}");
+									transaction.Commit();
+									session.Flush();
+								}
+								records = null;
+							}
+							else
+							{
+								Log.Info($"Skipped {filename} because it has already been processed");
+							}
+							session.Close();
+							session.Dispose();
 
-                            processedFiles++;
-                            Log.Info($"Processed {batchRecords} records from {filename} ({processedFiles}/{fileCount} files / {((double)processedFiles / (double)fileCount).ToString("0.00%")}) from a preliminary total of {accRecords} records");
+							processedFiles++;
+							Log.Info($"Processed {batchRecords} records from {filename} ({processedFiles}/{fileCount} files / {((double)processedFiles / (double)fileCount).ToString("0.00%")}) from a preliminary total of {accRecords} records");
 
-                        }
-                        catch (Exception e)
+						}
+						catch (Exception e)
 						{
 							Log.Error(e);
 							Console.WriteLine("Press any key to continue loading gravity vectors..");
