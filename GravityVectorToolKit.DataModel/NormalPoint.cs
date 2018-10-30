@@ -15,6 +15,8 @@ namespace GravityVectorToKML.Model
 		public virtual double SpeedOverGround { get; set; }
 		public virtual double CourseOverGround { get; set; }
 		public virtual double Eta { get; set; }
+		public virtual double EtaLowerStd { get; set; }
+		public virtual double EtaUpperStd { get; set; }
 		public virtual double DistanceMedian { get; set; }
 		public virtual double MaxDistanceLeft { get; set; }
 		public virtual double MaxDistanceRight { get; set; }
