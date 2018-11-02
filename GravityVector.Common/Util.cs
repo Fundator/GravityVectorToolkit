@@ -1,7 +1,7 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
-using GravityVectorToKML.CSV.Mapping;
-using GravityVectorToKML.Model;
+using GravityVectorToolKit.CSV.Mapping;
+using GravityVectorToolKit.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

@@ -1,8 +1,8 @@
 ﻿using CommandLineParser.Arguments;
 using CsvHelper;
 using CsvHelper.Configuration;
-using GravityVectorToKML.Model;
-using GravityVectorToKML.CSV.Mapping;
+using GravityVectorToolKit.DataModel;
+using GravityVectorToolKit.CSV.Mapping;
 using log4net;
 using log4net.Config;
 using SharpKml.Base;
@@ -17,7 +17,7 @@ using DemoDataAccess;
 using System.Collections.Generic;
 using GravityVector.Common;
 
-namespace GravityVectorToKML
+namespace GravityVectorToolKit
 {
     static class Program
     {

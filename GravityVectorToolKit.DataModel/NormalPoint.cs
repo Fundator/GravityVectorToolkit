@@ -1,7 +1,7 @@
 ﻿using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 
-namespace GravityVectorToKML.Model
+namespace GravityVectorToolKit.DataModel
 {
 	public class NormalPoint
 	{

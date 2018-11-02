@@ -1,11 +1,11 @@
 ﻿using CsvHelper.Configuration;
 using GeoAPI.Geometries;
-using GravityVectorToKML.Model;
+using GravityVectorToolKit.DataModel;
 using NetTopologySuite.Geometries;
 using System;
 using System.Globalization;
 
-namespace GravityVectorToKML.CSV.Mapping
+namespace GravityVectorToolKit.CSV.Mapping
 {
     //public class ModelClassMap : ClassMap<NormalPoint>
     //{

@@ -1,7 +1,7 @@
 ﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Conventions.Helpers;
-using GravityVectorToKML.CSV.Mapping;
-using GravityVectorToKML.Model;
+using GravityVectorToolKit.CSV.Mapping;
+using GravityVectorToolKit.DataModel;
 using NHibernate;
 using NHibernate.Driver;
 using NHibernate.Spatial.Dialect;
