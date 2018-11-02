@@ -38,6 +38,7 @@ namespace GravityVectorToKML.CSV.Mapping
 	{
 		public ModelClassMapG()
 		{
+            Map(m => m.GravityVectorId).Name("id");
 			Map(m => m.ClusterIndex).Name("clusterindex");
 			Map(m => m.GridId).Name("grid_id");
 			Map(m => m.Latitude).Name("x");
