@@ -6,6 +6,7 @@ namespace GravityVectorToKML.Model
 	public class NormalPoint
 	{
 		public virtual int Id { get; set; }
+		public virtual int GravityVectorId { get; set; }
 		public virtual int FromLocationId { get; set; }
 		public virtual int ToLocationId { get; set; }
 		public virtual double ClusterIndex { get; set; }
