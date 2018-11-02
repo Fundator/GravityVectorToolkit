@@ -1,7 +1,7 @@
 ﻿using CommandLineParser.Arguments;
 using DemoDataAccess;
 using GravityVector.Common;
-using GravityVectorToKML.Model;
+using GravityVectorToolKit.DataModel;
 using log4net;
 using log4net.Config;
 using NHibernate;

@@ -1,9 +1,9 @@
 ﻿using FluentNHibernate.Mapping;
 using GeoAPI.Geometries;
-using GravityVectorToKML.Model;
+using GravityVectorToolKit.DataModel;
 using NHibernate.Spatial.Type;
 
-namespace GravityVectorToKML.CSV.Mapping
+namespace GravityVectorToolKit.CSV.Mapping
 {
 	public class NormalPointGMapping<T> : ClassMap<NormalPointG> where T : IGeometryUserType
 	{
