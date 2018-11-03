@@ -70,7 +70,7 @@ namespace GravityVectorToolKit
                             Folder rootFolder = new Folder();
                             Folder folder = null;
 
-                            List<NormalPointG> records = Util.ReadGravityVector(file);
+                            List<NormalPoint> records = Util.ReadGravityVector(file);
                             accRecords += (ulong)(records.Count);
                             //Log.Debug($"Processing {Path.GetFileName(kmlFileName)}: {records.Count()} records");
 

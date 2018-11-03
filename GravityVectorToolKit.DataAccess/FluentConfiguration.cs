@@ -30,7 +30,12 @@ namespace DemoDataAccess
 				.ConnectionString("Server=localhost;Port=5432;Database=gvtk;User Id=gvtk;Password = gvtk;")
 				.Driver<NpgsqlDriver>()
 				.Dialect<PostGis20Dialect>())
-				.Mappings(x => x.FluentMappings.Add(typeof(NormalPointGMapping<PostGisGeometryType>)))
+				.Mappings(x => 
+					{
+						x.FluentMappings.Add(typeof(NormalPointGMapping<PostGisGeometryType>));
+						x.FluentMappings.Add(typeof(NormalRouteMapping<PostGisGeometryType>));
+					}
+				)
 				.BuildConfiguration()
 				.SetProperty("command_timeout", "-1");
 
