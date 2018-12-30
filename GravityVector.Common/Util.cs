@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace GravityVector.Common
 {
-	public class Util
+	public static class Util
 	{
 		public static List<NormalPoint> ReadGravityVector(string file)
 		{

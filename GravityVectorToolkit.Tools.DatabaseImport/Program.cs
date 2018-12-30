@@ -246,7 +246,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			return TryNTimes(() =>
 			{
 				var session = SessionManager.SessionFactory.OpenSession();
-				session.FlushMode = FlushMode.Never;
+				session.FlushMode = FlushMode.Manual;
 				return session;
 			}, 10);
 		}
@@ -260,11 +260,11 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 				{
 					return f();
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
 					if (i == n)
 					{
-						throw e;
+						throw;
 					}
 					else
 					{
