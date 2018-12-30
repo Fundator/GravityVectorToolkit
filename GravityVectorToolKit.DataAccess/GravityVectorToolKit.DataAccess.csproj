@@ -7,9 +7,7 @@
   <ItemGroup>
     <PackageReference Include="FluentNHibernate" Version="2.1.2" />
     <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="mysql.data" Version="8.0.11" />
-    <PackageReference Include="NHibernate.Spatial.MySQL" Version="5.1.0-pre001" />
-    <PackageReference Include="nhibernate.spatial.postgis" Version="5.1.0-pre001" />
+    <PackageReference Include="nhibernate.spatial.postgis" Version="5.1.0" />
   </ItemGroup>
 
   <ItemGroup>
