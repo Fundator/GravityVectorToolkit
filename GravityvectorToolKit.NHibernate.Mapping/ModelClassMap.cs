@@ -48,7 +48,7 @@ namespace GravityVectorToolKit.CSV.Mapping
 			Id(x => x.NormalRouteId).GeneratedBy.Identity();
 			Map(x => x.FromLocationId).Index("FromLocationToLocation_Idx");
 			Map(x => x.ToLocationId).Index("FromLocationToLocation_Idx");
-			Map(x => x.NormalRouteGeometry).Column("normalroutegeometry").CustomType<T>().Not.Nullable();
+			Map(x => x.NormalRouteGeometry).Column("normalroutegeometry").CustomType<T>();
 			HasMany(x => x.NormalPoints).KeyColumn(nameof(NormalRoute.NormalRouteId)).Inverse().Cascade.All();
 		}
 	}

@@ -42,7 +42,7 @@ namespace GravityVectorToolKit.DataModel
 		public virtual double LesserCourseStdDev { get; set; }
 		public virtual double GreaterCourseStdDev { get; set; }
 		public virtual double DataCount { get; set; }
-		public virtual List<int> NextGravityVectors { get; set; }
+		//public virtual List<int> NextGravityVectors { get; set; }
 		public virtual IGeometry PositionGeometry { get; set; }
 	}
 }

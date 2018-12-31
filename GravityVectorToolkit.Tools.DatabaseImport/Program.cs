@@ -79,9 +79,9 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 							ulong batchRecords = 0;
 
-							var stuff = filename.Split(new string[] { "_", "." }, StringSplitOptions.RemoveEmptyEntries);
-							int fromLocationId = Int32.Parse(stuff[1]);
-							int toLocationId = Int32.Parse(stuff[2]);
+							var stuff = filename.Split(new string[] { "_", ".", "-" }, StringSplitOptions.RemoveEmptyEntries);
+							int fromLocationId = Int32.Parse(stuff[4]);
+							int toLocationId = Int32.Parse(stuff[5]);
 
 							// If the user opted to keep existing data, then we need to check if the current row exist
 							// This puts more load on the database, but can potentially save a lot of time
@@ -100,7 +100,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 								accRecords += (ulong)(records.Count);
 
 								NormalRoute normalRoute = new NormalRoute();
-								MapRoutePath(normalRoute, records);
+								//MapRoutePath(normalRoute, records);
 
 								normalRoute.FromLocationId = fromLocationId;
 								normalRoute.ToLocationId = toLocationId;
@@ -153,6 +153,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			}
 		}
 
+		/*
 		private static void MapRoutePath(NormalRoute normalRoute, List<NormalPoint> normalPoints)
 		{
 			var coordinateLists = new List<CoordinateList>();
@@ -176,8 +177,9 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 			normalRoute.NormalRouteGeometry = new MultiLineString(coordinateLists.Where(cl => cl.Count() >= 2).Select(cl => new LineString(cl.ToCoordinateArray())).ToArray());
 		}
+		*/
 
-
+		/*
 		private static CoordinateList GetCoordinateListFromNormalPoint(Dictionary<int, NormalPoint> gravityVectorLookup, List<NormalPoint> normalPoints, NormalPoint currentNormalPoint, CoordinateList coordinates = null, Dictionary<long, int> noInfiniteLoops = null, int depth = 0)
 		{
 			if (coordinates == null)
@@ -224,6 +226,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			return coordinates;
 
 		}
+		*/
 
 		private static long UniqueId(int left, int right)
 		{

@@ -19,7 +19,8 @@ namespace GravityVector.Common
 			{
 				CultureInfo = CultureInfo.InvariantCulture,
 				HeaderValidated = null,
-				MissingFieldFound = null			
+				MissingFieldFound = null,
+				Delimiter = ","
 			});
 			csv.Configuration.RegisterClassMap<ModelClassMapG>();
 
