@@ -2,16 +2,37 @@
 using GeoAPI.Geometries;
 using GravityVectorToolKit.DataModel;
 using NetTopologySuite.Geometries;
+using NetTopologySuite.IO;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GravityVectorToolKit.CSV.Mapping
 {
-	public class ModelClassMapG : ClassMap<NormalPoint>
+
+	public class NormalRouteCsvClassMap : ClassMap<NormalRoute>
 	{
-		public ModelClassMapG()
+		WKTReader wktReader = new WKTReader();
+
+		public NormalRouteCsvClassMap()
+		{
+			//Map(m => m.NormalRouteId).Name("");
+			Map(m => m.FromLocationId).Name("dep_id");
+			Map(m => m.ToLocationId).Name("arr_id");
+			Map(m => m.NormalRouteGeometry).ConvertUsing(row => {
+
+				var p = wktReader.Read(row.GetField("normal_route"));
+				p.SRID = 4326;
+				return p;
+			});
+		}
+	}
+
+	public class NormalPointCsvClassMap : ClassMap<NormalPoint>
+	{
+		public NormalPointCsvClassMap()
 		{
             Map(m => m.GravityVectorId).Name("");
 			Map(m => m.ClusterIndex).Name("clusterindex");
@@ -37,17 +58,6 @@ namespace GravityVectorToolKit.CSV.Mapping
 			Map(m => m.LesserCourseStdDev).Name("lessercoursestddev");
 			Map(m => m.GreaterCourseStdDev).Name("greatercoursestddev");
 			Map(m => m.DataCount).Name("datacount");
-
-			//Map(m => m.NextGravityVectors).ConvertUsing(row =>
-			//{
-			//	var ids = row.GetField("next_gvs").Split(new char[] { '[', ',', ']' }, StringSplitOptions.RemoveEmptyEntries)
-			//										.Where(x => x.Trim() != "-1" && !string.IsNullOrWhiteSpace(x))
-			//										.Select(x => Int32.Parse(x))
-			//										.ToList();
-			//	return ids;
-
-
-			//});
 
 			Map(m => m.PositionGeometry).ConvertUsing(row => {
 				var p = new Point(new Coordinate(Double.Parse(row.GetField("longitude"), CultureInfo.InvariantCulture), Double.Parse(row.GetField("latitude"), CultureInfo.InvariantCulture)));
