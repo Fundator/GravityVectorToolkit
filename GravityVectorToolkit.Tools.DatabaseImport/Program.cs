@@ -36,11 +36,65 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			ValueArgument<string> pathArg = new ValueArgument<string>(
 				'p', "path", "Path to a folder containing gravity vector files");
 
+			ValueArgument<string> normalRoutePathArg = new ValueArgument<string>(
+				'n', "normal-route-path", "Path to a file containing normal route linestrings");
+
 			parser.Arguments.Add(dropAndCreateArg);
 			parser.Arguments.Add(pathArg);
+			parser.Arguments.Add(normalRoutePathArg);
 			parser.ParseCommandLine(args);
 
 			Log.Debug("Configuring database..");
+
+			bool dropAndCreate = dropAndCreateArg.Parsed ? dropAndCreateArg.Value : true;
+			if (dropAndCreate)
+			{
+				Log.Info("You have specified that the schema should be dropped and recreated. Press ctrl-c now to cancel this program.");
+				Thread.Sleep(5000);
+			}
+
+			FluentConfiguration.Configure(dropAndCreate);
+
+
+			Dictionary<string, NormalRoute> normalRouteLookup = null;
+			List<NormalRoute> normalRoutes = null;
+
+			if (normalRoutePathArg.Parsed)
+			{
+				var path = Path.GetFullPath(normalRoutePathArg.Value);
+
+				if (File.Exists(path))
+				{
+					Log.Info("Loading normal routes..");
+					normalRoutes = Util.ReadNormalRouteFile(path);
+					//Log.Info($"{normalRoutes.Count} normal routes loaded, creating lookup table..");
+					//foreach (var normalRoute in normalRoutes)
+					//{
+					//	normalRouteLookup[normalRoute.FromLocationId + "-" + normalRoute.ToLocationId] = normalRoute;
+					//}
+
+					ISession nrSession = GetSession();
+					ITransaction transaction = BeginTransaction(nrSession);
+					foreach (var normalRoute in normalRoutes)
+					{
+						nrSession.SaveOrUpdate(normalRoute);
+					}
+					Log.Info($"Saving normal routes to database..");
+					transaction.Commit();
+					nrSession.Flush();
+					nrSession.Close();
+				}
+				else
+				{
+					Log.Error($"The path {path} does not exist");
+					return;
+				}
+			}
+			else
+			{
+				Log.Warn("You have not specified a normal route file. Press ctrl-c now to cancel this program.");
+				Thread.Sleep(5000);
+			}
 
 			if (pathArg.Parsed)
 			{
@@ -48,14 +102,6 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 				if (Directory.Exists(path))
 				{
-					bool dropAndCreate = dropAndCreateArg.Parsed ? dropAndCreateArg.Value : true;
-					if (dropAndCreate)
-					{
-						Log.Info("You have specified that the schema should be dropped and recreated. Press ctrl-c now to cancel this program.");
-						Thread.Sleep(5000);
-					}
-
-					FluentConfiguration.Configure(dropAndCreate);
 					var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
 					List<ISession> sessions = new List<ISession>();
 					int fileCount = files.Count();
@@ -63,7 +109,12 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 
 
-					Log.Debug($"Loading {fileCount} gravity vectors");                    
+
+
+
+
+
+					Log.Debug($"Loading {fileCount} gravity vectors");
 					Log.Debug("Starting..");
 
 					int processedFiles = 0;
@@ -99,24 +150,39 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 								List<NormalPoint> records = Util.ReadGravityVector(file);
 								accRecords += (ulong)(records.Count);
 
-								NormalRoute normalRoute = new NormalRoute();
+								//NormalRoute normalRoute = new NormalRoute();
+
+								//var normalRouteKey = fromLocationId + "-" + toLocationId;
+								//if (normalRouteLookup != null && normalRouteLookup.ContainsKey(normalRouteKey))
+								//{
+								//	normalRoute = normalRouteLookup[normalRouteKey];
+								//}
+								//else
+								//{
+								//	normalRoute = new NormalRoute();
+								//	normalRoute.FromLocationId = fromLocationId;
+								//	normalRoute.ToLocationId = toLocationId;
+								//}
+
 								//MapRoutePath(normalRoute, records);
 
-								normalRoute.FromLocationId = fromLocationId;
-								normalRoute.ToLocationId = toLocationId;
-								normalRoute.NormalPoints = records;
-								foreach (var record in records)
+								//normalRoute.NormalPoints = records;
+								//foreach (var record in records)
+								//{
+								//	record.NormalRoute = normalRoute;
+								//	batchRecords++;
+								//}
+
+								ITransaction transaction = BeginTransaction(session);
+								foreach(var normalPoint in records)
 								{
-									record.NormalRoute = normalRoute;
+									session.SaveOrUpdate(normalPoint);
 									batchRecords++;
 								}
 
-								ITransaction transaction = BeginTransaction(session);
-								session.SaveOrUpdate(normalRoute);
-
 								lock (syncRoot) // Ensure flushing is always done in sync
 								{
-									Log.Info($"Committing transaction and flushing session for file {filename}");
+									Log.Debug($"Committing transaction and flushing session for file {filename}");
 									transaction.Commit();
 									session.Flush();
 								}
