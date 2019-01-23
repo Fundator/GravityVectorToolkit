@@ -6,18 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="commandlineargumentsparser" Version="3.0.18" />
+    <PackageReference Include="commandlineargumentsparser" Version="3.0.19" />
     <PackageReference Include="fluentnhibernate" Version="2.1.2" />
-    <PackageReference Include="geoapi" Version="1.7.5-pre020" />
+    <PackageReference Include="geoapi" Version="1.7.5" />
     <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="mysql.data" Version="8.0.11" />
-    <PackageReference Include="nettopologysuite" Version="1.15.0-pre063" />
-    <PackageReference Include="nhibernate" Version="5.1.3" />
-    <PackageReference Include="nhibernate.spatial.mysql" Version="5.0.0" />
+    <PackageReference Include="nhibernate" Version="5.2.1" />
+    <PackageReference Include="nhibernate.spatial.postgis" Version="5.1.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GravityVector.Common\GravityVectorToolKit.Common.csproj" />
     <ProjectReference Include="..\GravityVectorToolKit.DataAccess\GravityVectorToolKit.DataAccess.csproj" />
+    <ProjectReference Include="..\GravityVectorToolKit.Mapping\GravityVectorToolKit.CSV.Mapping.csproj" />
   </ItemGroup>
 
   <ItemGroup>

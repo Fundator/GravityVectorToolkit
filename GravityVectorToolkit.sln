@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityVectorToolkit.Tools.GravityVectorToKML", "GravityVectorToKML\GravityVectorToolkit.Tools.GravityVectorToKML.csproj", "{29F5776D-C501-4D89-BDB1-393D7F9B6E39}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityVectorToolKit.DataModel", "GravityVectorToolKit.DataModel\GravityVectorToolKit.DataModel.csproj", "{CDD3F0BC-8E89-4EA9-A0A6-102F1875CD47}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityVectorToolKit.CSV.Mapping", "GravityVectorToolKit.Mapping\GravityVectorToolKit.CSV.Mapping.csproj", "{068A7566-9771-4D39-8748-A1B6F49167AD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityVectorToolKit.DataAccess", "GravityVectorToolKit.DataAccess\GravityVectorToolKit.DataAccess.csproj", "{6AC2C16C-85A8-406D-AC0C-1A2A0CA711E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GravityvectorToolKit.NHibernate.Mapping", "GravityvectorToolKit.NHibernate.Mapping\GravityvectorToolKit.NHibernate.Mapping.csproj", "{A08C12AC-4CB1-4041-94A3-F1B8730A8297}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityvectorToolKit.NHibernate.Mapping", "GravityvectorToolKit.NHibernate.Mapping\GravityvectorToolKit.NHibernate.Mapping.csproj", "{A08C12AC-4CB1-4041-94A3-F1B8730A8297}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GravityVectorToolkit.Tools.DatabaseImport", "GravityVectorToolkit.Tools.DatabaseImport\GravityVectorToolkit.Tools.DatabaseImport.csproj", "{E31A7665-9F26-4209-BCD0-6D566F367E2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityVectorToolkit.Tools.DatabaseImport", "GravityVectorToolkit.Tools.DatabaseImport\GravityVectorToolkit.Tools.DatabaseImport.csproj", "{E31A7665-9F26-4209-BCD0-6D566F367E2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GravityVectorToolKit.Common", "GravityVector.Common\GravityVectorToolKit.Common.csproj", "{AB6FE0DE-44BC-4664-8A70-08836A88662B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityVectorToolKit.Common", "GravityVector.Common\GravityVectorToolKit.Common.csproj", "{AB6FE0DE-44BC-4664-8A70-08836A88662B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityVectorToolkit.Tools.GravityVectorToKML", "GravityVectorToolkit.Tools.GravityVectorToKML\GravityVectorToolkit.Tools.GravityVectorToKML.csproj", "{B3D65BAB-3A66-4AD3-A250-328361B29994}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{29F5776D-C501-4D89-BDB1-393D7F9B6E39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{29F5776D-C501-4D89-BDB1-393D7F9B6E39}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{29F5776D-C501-4D89-BDB1-393D7F9B6E39}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{29F5776D-C501-4D89-BDB1-393D7F9B6E39}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CDD3F0BC-8E89-4EA9-A0A6-102F1875CD47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CDD3F0BC-8E89-4EA9-A0A6-102F1875CD47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDD3F0BC-8E89-4EA9-A0A6-102F1875CD47}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +47,10 @@ Global
 		{AB6FE0DE-44BC-4664-8A70-08836A88662B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB6FE0DE-44BC-4664-8A70-08836A88662B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB6FE0DE-44BC-4664-8A70-08836A88662B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3D65BAB-3A66-4AD3-A250-328361B29994}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3D65BAB-3A66-4AD3-A250-328361B29994}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3D65BAB-3A66-4AD3-A250-328361B29994}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3D65BAB-3A66-4AD3-A250-328361B29994}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

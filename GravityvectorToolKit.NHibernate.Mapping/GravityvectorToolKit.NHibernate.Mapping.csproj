@@ -6,7 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="FluentNHibernate" Version="2.1.2" />
-    <PackageReference Include="NHibernate.Spatial.MySQL" Version="5.0.0" />
+    <PackageReference Include="NetTopologySuite" Version="1.15.1" />
+    <PackageReference Include="nhibernate.spatial.postgis" Version="5.1.0" />
   </ItemGroup>
 
   <ItemGroup>
