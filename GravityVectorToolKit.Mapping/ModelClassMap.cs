@@ -2,55 +2,65 @@
 using GeoAPI.Geometries;
 using GravityVectorToolKit.DataModel;
 using NetTopologySuite.Geometries;
+using NetTopologySuite.IO;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GravityVectorToolKit.CSV.Mapping
 {
-	public class ModelClassMapG : ClassMap<NormalPoint>
+
+	public class NormalRouteCsvClassMap : ClassMap<NormalRoute>
 	{
-		public ModelClassMapG()
+		WKTReader wktReader = new WKTReader();
+
+		public NormalRouteCsvClassMap()
+		{
+			//Map(m => m.NormalRouteId).Name("");
+			Map(m => m.FromLocationId).Name("dep_id");
+			Map(m => m.ToLocationId).Name("arr_id");
+			Map(m => m.NormalRouteGeometry).ConvertUsing(row => {
+
+				var p = wktReader.Read(row.GetField("normal_route"));
+				p.SRID = 4326;
+				return p;
+			});
+		}
+	}
+
+	public class NormalPointCsvClassMap : ClassMap<NormalPoint>
+	{
+		public NormalPointCsvClassMap()
 		{
             Map(m => m.GravityVectorId).Name("");
 			Map(m => m.ClusterIndex).Name("clusterindex");
-			Map(m => m.GridId).Name("grid_id");
-			Map(m => m.Latitude).Name("x");
-			Map(m => m.Longitude).Name("y");
-			Map(m => m.SpeedOverGround).Name("sog");
-            Map(m => m.CourseOverGround).Name("cog");
+			Map(m => m.GridId).Name("gridid");
+			Map(m => m.Latitude).Name("latitude");
+			Map(m => m.Longitude).Name("longitude");
+			Map(m => m.SpeedOverGround).Name("speedoverground");
+            Map(m => m.CourseOverGround).Name("courseoverground");
             Map(m => m.Eta).Name("eta");
             Map(m => m.EtaLowerStd).Name("lower_eta_std");
             Map(m => m.EtaUpperStd).Name("upper_eta_std");
             Map(m => m.DistanceMedian).Name("dist_med");
-			Map(m => m.MaxDistanceLeft).Name("max_dist_left");
-			Map(m => m.MaxDistanceRight).Name("max_dist_right");
-			Map(m => m.DistanceStdDevLeft).Name("dist_std_left");
-			Map(m => m.DistanceStdDevRight).Name("dist_std_right");
-			Map(m => m.MaxLesserSpeedDiff).Name("max_lesser_sog_diff");
-			Map(m => m.MaxGreaterSpeedDiff).Name("max_greater_sog_diff");
-			Map(m => m.LesserSpeedStdDev).Name("lesser_sog_std");
-			Map(m => m.GreaterSpeedStdDev).Name("greater_sog_std");
-			Map(m => m.MaxLesserCourseDiff).Name("max_lesser_cog_diff");
-			Map(m => m.MaxGreaterCourseDiff).Name("max_greater_cog_diff");
-			Map(m => m.LesserCourseStdDev).Name("lesser_cog_std");
-			Map(m => m.GreaterCourseStdDev).Name("greater_cog_std");
-			Map(m => m.DataCount).Name("data_count");
-
-			Map(m => m.NextGravityVectors).ConvertUsing(row =>
-			{
-				var ids = row.GetField("next_gvs").Split(new char[] { '[', ',', ']' }, StringSplitOptions.RemoveEmptyEntries)
-													.Where(x => x.Trim() != "-1" && !string.IsNullOrWhiteSpace(x))
-													.Select(x => Int32.Parse(x))
-													.ToList();
-				return ids;
-
-
-			});
+			Map(m => m.MaxDistanceLeft).Name("maxdistanceleft");
+			Map(m => m.MaxDistanceRight).Name("maxdistanceright");
+			Map(m => m.DistanceStdDevLeft).Name("distancestddevleft");
+			Map(m => m.DistanceStdDevRight).Name("distancestddevright");
+			Map(m => m.MaxLesserSpeedDiff).Name("maxlesserspeeddiff");
+			Map(m => m.MaxGreaterSpeedDiff).Name("maxgreaterspeeddiff");
+			Map(m => m.LesserSpeedStdDev).Name("lesserspeedstddev");
+			Map(m => m.GreaterSpeedStdDev).Name("greaterspeedstddev");
+			Map(m => m.MaxLesserCourseDiff).Name("maxlessercoursediff");
+			Map(m => m.MaxGreaterCourseDiff).Name("maxgreatercoursediff");
+			Map(m => m.LesserCourseStdDev).Name("lessercoursestddev");
+			Map(m => m.GreaterCourseStdDev).Name("greatercoursestddev");
+			Map(m => m.DataCount).Name("datacount");
 
 			Map(m => m.PositionGeometry).ConvertUsing(row => {
-				var p = new Point(new Coordinate(Double.Parse(row.GetField("y"), CultureInfo.InvariantCulture), Double.Parse(row.GetField("x"), CultureInfo.InvariantCulture)));
+				var p = new Point(new Coordinate(Double.Parse(row.GetField("longitude"), CultureInfo.InvariantCulture), Double.Parse(row.GetField("latitude"), CultureInfo.InvariantCulture)));
 				p.SRID = 4326;
 				return p;
 			});

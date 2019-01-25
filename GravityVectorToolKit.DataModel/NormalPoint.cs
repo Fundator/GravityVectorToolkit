@@ -17,7 +17,7 @@ namespace GravityVectorToolKit.DataModel
 	public class NormalPoint
 	{
 		public virtual int NormalPointId { get; set; }
-		public virtual NormalRoute NormalRoute { get; set; }
+		//public virtual NormalRoute NormalRoute { get; set; }
 		public virtual int GravityVectorId { get; set; }
 		public virtual double ClusterIndex { get; set; }
 		public virtual double GridId { get; set; }
@@ -42,7 +42,7 @@ namespace GravityVectorToolKit.DataModel
 		public virtual double LesserCourseStdDev { get; set; }
 		public virtual double GreaterCourseStdDev { get; set; }
 		public virtual double DataCount { get; set; }
-		public virtual List<int> NextGravityVectors { get; set; }
+		//public virtual List<int> NextGravityVectors { get; set; }
 		public virtual IGeometry PositionGeometry { get; set; }
 	}
 }
