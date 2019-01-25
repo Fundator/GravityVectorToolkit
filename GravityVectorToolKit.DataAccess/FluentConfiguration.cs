@@ -27,7 +27,7 @@ namespace DemoDataAccess
 				//.Driver<MySqlDataDriver>()
 				//.Dialect<MySQL57SpatialDialect>())
 				.Database(FluentNHibernate.Cfg.Db.PostgreSQLConfiguration.Standard
-				.ConnectionString("Server=localhost;Port=5432;Database=gvtk;User Id=gvtk;Password = gvtk;")
+				.ConnectionString("Server=localhost;Port=5432;Database=gvtk20181230;User Id=gvtk;Password = gvtk;")
 				.Driver<NpgsqlDriver>()
 				.Dialect<PostGis20Dialect>())
 				.Mappings(x => 
