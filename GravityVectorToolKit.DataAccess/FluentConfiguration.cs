@@ -18,7 +18,7 @@ namespace DemoDataAccess
 {
 	public static class FluentConfiguration
 	{
-		public static void Configure(bool generateTables = false)
+		public static void Configure(string connectionString, bool generateTables = false)
 		{
 
 			var cfg = Fluently.Configure()
@@ -26,8 +26,9 @@ namespace DemoDataAccess
 				//.ConnectionString("Server=localhost;Database=gravityvectortoolkit;Connect Timeout=36000;port=3306;Uid=gvtk;Pwd=gvtk")
 				//.Driver<MySqlDataDriver>()
 				//.Dialect<MySQL57SpatialDialect>())
+				// Server=localhost;Port=5432;Database=gvtk20181230;User Id=gvtk;Password = gvtk;
 				.Database(FluentNHibernate.Cfg.Db.PostgreSQLConfiguration.Standard
-				.ConnectionString("Server=localhost;Port=5432;Database=gvtk20181230;User Id=gvtk;Password = gvtk;")
+				.ConnectionString(connectionString)
 				.Driver<NpgsqlDriver>()
 				.Dialect<PostGis20Dialect>())
 				.Mappings(x => 
@@ -64,10 +65,10 @@ namespace DemoDataAccess
 			{
 				if (_session == null)
 				{
-					if (SessionFactory == null)
-					{
-						FluentConfiguration.Configure();
-					}
+					//if (SessionFactory == null)
+					//{
+					//	FluentConfiguration.Configure();
+					//}
 					_session = SessionFactory.OpenSession();
 				}
 				return _session;
