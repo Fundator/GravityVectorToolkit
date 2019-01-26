@@ -30,6 +30,10 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			CommandLineParser.CommandLineParser parser =
 				new CommandLineParser.CommandLineParser();
 
+			ValueArgument<string> connectionStringArg = new ValueArgument<string>(
+				'c', "connectionstring", "Connection string to the PostgreSQL database");
+
+
 			ValueArgument<bool> dropAndCreateArg = new ValueArgument<bool>(
 				'd', "drop", "Drop and recreate the database");
 
@@ -39,6 +43,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			ValueArgument<string> normalRoutePathArg = new ValueArgument<string>(
 				'n', "normal-route-path", "Path to a file containing normal route linestrings");
 
+			parser.Arguments.Add(connectionStringArg);
 			parser.Arguments.Add(dropAndCreateArg);
 			parser.Arguments.Add(pathArg);
 			parser.Arguments.Add(normalRoutePathArg);
@@ -53,7 +58,9 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 				Thread.Sleep(5000);
 			}
 
-			FluentConfiguration.Configure(dropAndCreate);
+			var connectionString = connectionStringArg.Value;
+
+			FluentConfiguration.Configure(connectionString, dropAndCreate);
 
 
 			//Dictionary<string, NormalRoute> normalRouteLookup = null;
