@@ -12,7 +12,7 @@ namespace GravityVector.Common
 {
 	public static class Util
 	{
-		static Configuration DefaultConfig = new Configuration
+		static Configuration DefaultConfig => new Configuration
 		{
 			CultureInfo = CultureInfo.InvariantCulture,
 			HeaderValidated = null,
