@@ -56,7 +56,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			FluentConfiguration.Configure(dropAndCreate);
 
 
-			Dictionary<string, NormalRoute> normalRouteLookup = null;
+			//Dictionary<string, NormalRoute> normalRouteLookup = null;
 			List<NormalRoute> normalRoutes = null;
 
 			if (normalRoutePathArg.Parsed)
