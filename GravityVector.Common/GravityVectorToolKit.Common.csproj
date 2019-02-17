@@ -5,10 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="csvhelper" Version="12.1.0" />
+    <PackageReference Include="csvhelper" Version="12.1.2" />
+    <PackageReference Include="nhibernate" Version="5.1.4" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GravityVectorToolKit.DataAccess\GravityVectorToolKit.DataAccess.csproj" />
     <ProjectReference Include="..\GravityVectorToolKit.DataModel\GravityVectorToolKit.DataModel.csproj" />
     <ProjectReference Include="..\GravityVectorToolKit.Mapping\GravityVectorToolKit.CSV.Mapping.csproj" />
   </ItemGroup>
