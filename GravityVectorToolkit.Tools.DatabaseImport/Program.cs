@@ -65,7 +65,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 			FluentConfiguration.Configure(connectionString, dropAndCreate);
 
-			List<NormalRoute> normalRoutes = null;
+			List<NormalRoute> normalRoutes = null; // TODO: Implement linking normal points to normal routes
 
 			if (normalRoutePathArg.Parsed)
 			{

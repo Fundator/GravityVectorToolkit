@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace GravityVectorToolKit.DataModel
 {
 
-	public class NormalPoint
+	public class NormalPoint // TODO: Rename to GravityVector?
 	{
 		public virtual int NormalPointId { get; set; }
 
