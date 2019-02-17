@@ -5,9 +5,9 @@ using NHibernate.Spatial.Type;
 
 namespace GravityVectorToolKit.CSV.Mapping
 {
-	public class NormalPointGMapping<T> : ClassMap<NormalPoint> where T : IGeometryUserType
+	public class NormalPointMapping<T> : ClassMap<NormalPoint> where T : IGeometryUserType
 	{
-		public NormalPointGMapping()
+		public NormalPointMapping()
 		{
 			ImportType<IGeometry>();
 			Id(x => x.NormalPointId).GeneratedBy.Identity();
@@ -17,10 +17,10 @@ namespace GravityVectorToolKit.CSV.Mapping
 			Map(x => x.Longitude).Index("Filter_Idx");
 			Map(x => x.SpeedOverGround).Index("Filter_Idx");
 			Map(x => x.CourseOverGround).Index("Filter_Idx");
-            Map(x => x.Eta).Index("Filter_Idx");
-            Map(x => x.EtaLowerStd).Index("Filter_Idx");
-            Map(x => x.EtaUpperStd).Index("Filter_Idx");
-            Map(x => x.DistanceMedian);
+			Map(x => x.Eta).Index("Filter_Idx");
+			Map(x => x.EtaLowerStd).Index("Filter_Idx");
+			Map(x => x.EtaUpperStd).Index("Filter_Idx");
+			Map(x => x.DistanceMedian);
 			Map(x => x.MaxDistanceLeft);
 			Map(x => x.MaxDistanceRight);
 			Map(x => x.DistanceStdDevLeft);
@@ -36,20 +36,6 @@ namespace GravityVectorToolKit.CSV.Mapping
 			Map(x => x.DataCount).Index("Filter_Idx");
 			Map(x => x.PositionGeometry).Column("positiongeometry").CustomType<T>().Not.Nullable();
 			//References(x => x.NormalRoute, nameof(NormalRoute.NormalRouteId)).Index("NormalRouteId_Idx").Cascade.None();
-		}
-	}
-
-	public class NormalRouteMapping<T> : ClassMap<NormalRoute> where T : IGeometryUserType
-	{
-		public NormalRouteMapping()
-		{
-			ImportType<IGeometry>();
-
-			Id(x => x.NormalRouteId).GeneratedBy.Identity();
-			Map(x => x.FromLocationId).Index("FromLocationToLocation_Idx");
-			Map(x => x.ToLocationId).Index("FromLocationToLocation_Idx");
-			Map(x => x.NormalRouteGeometry).Column("normalroutegeometry").CustomType<T>();
-			//HasMany(x => x.NormalPoints).KeyColumn(nameof(NormalRoute.NormalRouteId)).Inverse().Cascade.All();
 		}
 	}
 }
