@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -10,8 +10,8 @@
     <PackageReference Include="fluentnhibernate" Version="2.1.2" />
     <PackageReference Include="geoapi" Version="1.7.5" />
     <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="nhibernate" Version="5.2.1" />
-    <PackageReference Include="nhibernate.spatial.postgis" Version="5.1.0" />
+    <PackageReference Include="nhibernate" Version="5.1.4" />
+    <PackageReference Include="nhibernate.spatial.postgis" Version="5.1.1" />
   </ItemGroup>
 
   <ItemGroup>
