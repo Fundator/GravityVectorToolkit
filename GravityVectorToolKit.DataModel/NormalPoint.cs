@@ -1,24 +1,16 @@
 ﻿using GeoAPI.Geometries;
-using NetTopologySuite.Geometries;
 using System.Collections.Generic;
 
 namespace GravityVectorToolKit.DataModel
 {
-	public class NormalRoute
-	{
-		public virtual int NormalRouteId { get; set; }
-		public virtual int FromLocationId { get; set; }
-		public virtual int ToLocationId { get; set; }
-		public virtual IGeometry NormalRouteGeometry{ get; set; }
-
-		public virtual IList<NormalPoint> NormalPoints { get; set; }
-	}
 
 	public class NormalPoint
 	{
 		public virtual int NormalPointId { get; set; }
+
 		//public virtual NormalRoute NormalRoute { get; set; }
 		public virtual int GravityVectorId { get; set; }
+
 		public virtual double ClusterIndex { get; set; }
 		public virtual double GridId { get; set; }
 		public virtual double Latitude { get; set; }
@@ -42,7 +34,6 @@ namespace GravityVectorToolKit.DataModel
 		public virtual double LesserCourseStdDev { get; set; }
 		public virtual double GreaterCourseStdDev { get; set; }
 		public virtual double DataCount { get; set; }
-		//public virtual List<int> NextGravityVectors { get; set; }
 		public virtual IGeometry PositionGeometry { get; set; }
 	}
 }

@@ -20,7 +20,7 @@ namespace DemoDataAccess
 				.Dialect<PostGis20Dialect>())
 				.Mappings(x =>
 					{
-						x.FluentMappings.Add(typeof(NormalPointGMapping<PostGisGeometryType>));
+						x.FluentMappings.Add(typeof(NormalPointMapping<PostGisGeometryType>));
 						x.FluentMappings.Add(typeof(NormalRouteMapping<PostGisGeometryType>));
 					}
 				)

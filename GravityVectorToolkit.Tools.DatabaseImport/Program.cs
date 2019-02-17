@@ -1,11 +1,10 @@
 ﻿using CommandLineParser.Arguments;
 using DemoDataAccess;
-using GeoAPI.Geometries;
 using GravityVector.Common;
+using GravityVectorToolKit.CSV.Mapping;
 using GravityVectorToolKit.DataModel;
 using log4net;
 using log4net.Config;
-using NetTopologySuite.Geometries;
 using NHibernate;
 using System;
 using System.Collections.Generic;
@@ -32,7 +31,6 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 			ValueArgument<string> connectionStringArg = new ValueArgument<string>(
 				'c', "connectionstring", "Connection string to the PostgreSQL database");
-
 
 			ValueArgument<bool> dropAndCreateArg = new ValueArgument<bool>(
 				'd', "drop", "Drop and recreate the database");
@@ -62,8 +60,6 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 			FluentConfiguration.Configure(connectionString, dropAndCreate);
 
-
-			//Dictionary<string, NormalRoute> normalRouteLookup = null;
 			List<NormalRoute> normalRoutes = null;
 
 			if (normalRoutePathArg.Parsed)
@@ -73,12 +69,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 				if (File.Exists(path))
 				{
 					Log.Info("Loading normal routes..");
-					normalRoutes = Util.ReadNormalRouteFile(path);
-					//Log.Info($"{normalRoutes.Count} normal routes loaded, creating lookup table..");
-					//foreach (var normalRoute in normalRoutes)
-					//{
-					//	normalRouteLookup[normalRoute.FromLocationId + "-" + normalRoute.ToLocationId] = normalRoute;
-					//}
+					normalRoutes = Util.ReadCsvFile<NormalRoute, NormalRouteCsvClassMap>(path);
 
 					ISession nrSession = GetSession();
 					ITransaction transaction = BeginTransaction(nrSession);
@@ -114,13 +105,6 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 					int fileCount = files.Count();
 					Log.Debug($"Drop and create? " + (dropAndCreate ? "Yes" : "No"));
 
-
-
-
-
-
-
-
 					Log.Debug($"Loading {fileCount} gravity vectors");
 					Log.Debug("Starting..");
 
@@ -154,34 +138,11 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 							if (!skip)
 							{
-								List<NormalPoint> records = Util.ReadGravityVector(file);
+								List<NormalPoint> records = Util.ReadCsvFile<NormalPoint, NormalPointCsvClassMap>(file);
 								accRecords += (ulong)(records.Count);
 
-								//NormalRoute normalRoute = new NormalRoute();
-
-								//var normalRouteKey = fromLocationId + "-" + toLocationId;
-								//if (normalRouteLookup != null && normalRouteLookup.ContainsKey(normalRouteKey))
-								//{
-								//	normalRoute = normalRouteLookup[normalRouteKey];
-								//}
-								//else
-								//{
-								//	normalRoute = new NormalRoute();
-								//	normalRoute.FromLocationId = fromLocationId;
-								//	normalRoute.ToLocationId = toLocationId;
-								//}
-
-								//MapRoutePath(normalRoute, records);
-
-								//normalRoute.NormalPoints = records;
-								//foreach (var record in records)
-								//{
-								//	record.NormalRoute = normalRoute;
-								//	batchRecords++;
-								//}
-
 								ITransaction transaction = BeginTransaction(session);
-								foreach(var normalPoint in records)
+								foreach (var normalPoint in records)
 								{
 									session.SaveOrUpdate(normalPoint);
 									batchRecords++;
@@ -204,7 +165,6 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 							processedFiles++;
 							Log.Info($"Processed {batchRecords} records from {filename} ({processedFiles}/{fileCount} files / {((double)processedFiles / (double)fileCount).ToString("0.00%")}) from a preliminary total of {accRecords} records");
-
 						}
 						catch (Exception e)
 						{
@@ -224,89 +184,6 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			{
 				Log.Error($"You must specify a path");
 			}
-		}
-
-		/*
-		private static void MapRoutePath(NormalRoute normalRoute, List<NormalPoint> normalPoints)
-		{
-			var coordinateLists = new List<CoordinateList>();
-			var noInfiniteLoops = new Dictionary<int, int>();
-
-			Log.Info("Loading gravity vectors into hash table..");
-			var gravityVectorLookup = new Dictionary<int, NormalPoint>();
-
-			foreach(var normalPoint in normalPoints)
-			{
-				gravityVectorLookup[normalPoint.GravityVectorId] = normalPoint;
-			}
-
-			foreach (var normalPoint in normalPoints)
-			{
-				coordinateLists.Add(GetCoordinateListFromNormalPoint(gravityVectorLookup, normalPoints, normalPoint, null, new Dictionary<long, int>()));
-			}
-
-			Log.Info("Found " + coordinateLists.Where(cl => cl.Count() >= 2).Count() + " linestrings with 2 or more coordinates.");
-			Log.Info("Discarded " + coordinateLists.Where(cl => cl.Count() < 2).Count() + " linestrings with less than 2 coordinates.");
-
-			normalRoute.NormalRouteGeometry = new MultiLineString(coordinateLists.Where(cl => cl.Count() >= 2).Select(cl => new LineString(cl.ToCoordinateArray())).ToArray());
-		}
-		*/
-
-		/*
-		private static CoordinateList GetCoordinateListFromNormalPoint(Dictionary<int, NormalPoint> gravityVectorLookup, List<NormalPoint> normalPoints, NormalPoint currentNormalPoint, CoordinateList coordinates = null, Dictionary<long, int> noInfiniteLoops = null, int depth = 0)
-		{
-			if (coordinates == null)
-			{
-				coordinates = new CoordinateList();
-			}
-
-			if (noInfiniteLoops == null)
-			{
-				Log.Warn("Dictionary for tracking circular references is null. This is probably going to take a lot of time.");
-				noInfiniteLoops = new Dictionary<long, int>();
-			}
-
-			if (currentNormalPoint.SpeedOverGround < 60 && currentNormalPoint.DistanceMedian < 600) // Ignore gravity vectors where the speed is too high
-			{
-				coordinates.Add(new Coordinate(currentNormalPoint.Longitude, currentNormalPoint.Latitude));
-			}
-
-			if (currentNormalPoint.NextGravityVectors.Any())
-			{
-				foreach(var nextNormalPointId in currentNormalPoint.NextGravityVectors)
-				{
-					var lookupId = UniqueId(currentNormalPoint.GravityVectorId, nextNormalPointId);
-					int vertexLoopCount = 0;
-					noInfiniteLoops.TryGetValue(lookupId, out vertexLoopCount);
-
-					if (vertexLoopCount >= 1)
-					{
-						break;
-					}
-					else
-					{
-						var nextNormalPoint = gravityVectorLookup[nextNormalPointId];
-
-						noInfiniteLoops[lookupId] = ++vertexLoopCount;
-
-						GetCoordinateListFromNormalPoint(gravityVectorLookup, normalPoints, nextNormalPoint, coordinates, noInfiniteLoops, ++depth);
-					}
-
-				}
-
-			}
-
-			return coordinates;
-
-		}
-		*/
-
-		private static long UniqueId(int left, int right)
-		{
-			long uniqueId = (long)left;
-			uniqueId = uniqueId << 32;
-			uniqueId += (long)right;
-			return uniqueId;
 		}
 
 		private static ITransaction BeginTransaction(ISession session)

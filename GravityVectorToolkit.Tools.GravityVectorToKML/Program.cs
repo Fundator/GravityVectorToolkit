@@ -70,8 +70,8 @@ namespace GravityVectorToolKit
                             Folder rootFolder = new Folder();
                             Folder folder = null;
 
-                            List<NormalPoint> records = Util.ReadGravityVector(file);
-                            accRecords += (ulong)(records.Count);
+                            List<NormalPoint> records = Util.ReadCsvFile<NormalPoint, NormalPointCsvClassMap>(file);
+							accRecords += (ulong)(records.Count);
                             //Log.Debug($"Processing {Path.GetFileName(kmlFileName)}: {records.Count()} records");
 
 

@@ -4,25 +4,21 @@ using GravityVectorToolKit.DataModel;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace GravityVectorToolKit.CSV.Mapping
 {
-
 	public class NormalRouteCsvClassMap : ClassMap<NormalRoute>
 	{
-		WKTReader wktReader = new WKTReader();
+		private WKTReader wktReader = new WKTReader();
 
 		public NormalRouteCsvClassMap()
 		{
 			//Map(m => m.NormalRouteId).Name("");
 			Map(m => m.FromLocationId).Name("dep_id");
 			Map(m => m.ToLocationId).Name("arr_id");
-			Map(m => m.NormalRouteGeometry).ConvertUsing(row => {
-
+			Map(m => m.NormalRouteGeometry).ConvertUsing(row =>
+			{
 				var p = wktReader.Read(row.GetField("normal_route"));
 				p.SRID = 4326;
 				return p;
@@ -34,17 +30,17 @@ namespace GravityVectorToolKit.CSV.Mapping
 	{
 		public NormalPointCsvClassMap()
 		{
-            Map(m => m.GravityVectorId).Name("");
+			Map(m => m.GravityVectorId).Name("");
 			Map(m => m.ClusterIndex).Name("clusterindex");
 			Map(m => m.GridId).Name("gridid");
 			Map(m => m.Latitude).Name("latitude");
 			Map(m => m.Longitude).Name("longitude");
 			Map(m => m.SpeedOverGround).Name("speedoverground");
-            Map(m => m.CourseOverGround).Name("courseoverground");
-            Map(m => m.Eta).Name("eta");
-            Map(m => m.EtaLowerStd).Name("lower_eta_std");
-            Map(m => m.EtaUpperStd).Name("upper_eta_std");
-            Map(m => m.DistanceMedian).Name("dist_med");
+			Map(m => m.CourseOverGround).Name("courseoverground");
+			Map(m => m.Eta).Name("eta");
+			Map(m => m.EtaLowerStd).Name("lower_eta_std");
+			Map(m => m.EtaUpperStd).Name("upper_eta_std");
+			Map(m => m.DistanceMedian).Name("dist_med");
 			Map(m => m.MaxDistanceLeft).Name("maxdistanceleft");
 			Map(m => m.MaxDistanceRight).Name("maxdistanceright");
 			Map(m => m.DistanceStdDevLeft).Name("distancestddevleft");
@@ -59,7 +55,8 @@ namespace GravityVectorToolKit.CSV.Mapping
 			Map(m => m.GreaterCourseStdDev).Name("greatercoursestddev");
 			Map(m => m.DataCount).Name("datacount");
 
-			Map(m => m.PositionGeometry).ConvertUsing(row => {
+			Map(m => m.PositionGeometry).ConvertUsing(row =>
+			{
 				var p = new Point(new Coordinate(Double.Parse(row.GetField("longitude"), CultureInfo.InvariantCulture), Double.Parse(row.GetField("latitude"), CultureInfo.InvariantCulture)));
 				p.SRID = 4326;
 				return p;
