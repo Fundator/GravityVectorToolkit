@@ -23,10 +23,14 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 		private static void Main(string[] args)
 		{
+			ConfigureLog();
+			Run(args);
+		}
+
+		private static void ConfigureLog()
+		{
 			var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
 			XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
-
-			Run(args);
 		}
 
 		private static void Run(string[] args)
