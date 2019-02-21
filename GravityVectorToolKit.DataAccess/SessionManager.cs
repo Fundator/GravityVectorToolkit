@@ -7,7 +7,7 @@ using NHibernate.Spatial.Mapping;
 using NHibernate.Spatial.Type;
 using NHibernate.Tool.hbm2ddl;
 
-namespace DemoDataAccess
+namespace GravityVectorToolKit.DataAccess
 {
 
 	public static class SessionManager
