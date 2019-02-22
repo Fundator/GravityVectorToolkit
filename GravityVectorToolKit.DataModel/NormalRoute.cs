@@ -9,6 +9,6 @@ namespace GravityVectorToolKit.DataModel
 		public virtual int FromLocationId { get; set; }
 		public virtual int ToLocationId { get; set; }
 		public virtual IGeometry NormalRouteGeometry { get; set; }
-		public virtual IList<NormalPoint> NormalPoints { get; set; }
+		public virtual IList<GravityVector> NormalPoints { get; set; }
 	}
 }

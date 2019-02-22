@@ -5,12 +5,13 @@ using NHibernate.Spatial.Type;
 
 namespace GravityVectorToolKit.CSV.Mapping
 {
-	public class NormalPointMapping<T> : ClassMap<NormalPoint> where T : IGeometryUserType
+	public class GravityVectorMapping<T> : ClassMap<GravityVector> where T : IGeometryUserType
 	{
-		public NormalPointMapping()
+		public GravityVectorMapping()
 		{
 			ImportType<IGeometry>();
 			Id(x => x.NormalPointId).GeneratedBy.Identity();
+			Map(x => x.GravityVectorId);
 			Map(x => x.ClusterIndex);
 			Map(x => x.GridId);
 			Map(x => x.Latitude).Index("Filter_Idx");

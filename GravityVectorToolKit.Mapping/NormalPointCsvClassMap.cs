@@ -9,7 +9,7 @@ using System.Globalization;
 namespace GravityVectorToolKit.CSV.Mapping
 {
 
-	public class NormalPointCsvClassMap : ClassMap<NormalPoint>
+	public class NormalPointCsvClassMap : ClassMap<GravityVector>
 	{
 		public NormalPointCsvClassMap()
 		{
