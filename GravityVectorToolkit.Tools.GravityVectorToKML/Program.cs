@@ -65,7 +65,7 @@ namespace GravityVectorToolKit
                             Serializer serializer = new Serializer();
                             Kml kml = new Kml();
                             var currentClusterIndex = -1d;
-							DataModel.GravityVector previousNormalPoint = null;
+							DataModel.GravityVector previousGravityVector = null;
                             LineString previousClusterSegment = null;
                             Folder rootFolder = new Folder();
                             Folder folder = null;
@@ -78,9 +78,9 @@ namespace GravityVectorToolKit
                             foreach (var record in records)
                             {
                                 // Skip the first record
-                                if (previousNormalPoint == null)
+                                if (previousGravityVector == null)
                                 {
-                                    previousNormalPoint = record;
+                                    previousGravityVector = record;
                                     continue;
                                 }
 
@@ -100,7 +100,7 @@ namespace GravityVectorToolKit
 
                                 if (!newCluster)
                                 {
-                                    clusterSegment.Coordinates.Add(new Vector(previousNormalPoint.Latitude, previousNormalPoint.Longitude));
+                                    clusterSegment.Coordinates.Add(new Vector(previousGravityVector.Latitude, previousGravityVector.Longitude));
                                 }
                                 clusterSegment.Coordinates.Add(new Vector(record.Latitude, record.Longitude));
 
@@ -118,7 +118,7 @@ namespace GravityVectorToolKit
                                 folder.AddFeature(placemark);
 
                                 // Do this last!
-                                previousNormalPoint = record;
+                                previousGravityVector = record;
                                 previousClusterSegment = clusterSegment;
                             }
 
