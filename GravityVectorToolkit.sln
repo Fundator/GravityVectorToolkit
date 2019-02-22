@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityvectorToolKit.NHiber
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityVectorToolkit.Tools.DatabaseImport", "GravityVectorToolkit.Tools.DatabaseImport\GravityVectorToolkit.Tools.DatabaseImport.csproj", "{E31A7665-9F26-4209-BCD0-6D566F367E2E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityVectorToolKit.Common", "GravityVector.Common\GravityVectorToolKit.Common.csproj", "{AB6FE0DE-44BC-4664-8A70-08836A88662B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityVectorToolKit.Common", "GravityVectorToolKit.Common\GravityVectorToolKit.Common.csproj", "{AB6FE0DE-44BC-4664-8A70-08836A88662B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityVectorToolkit.Tools.GravityVectorToKML", "GravityVectorToolkit.Tools.GravityVectorToKML\GravityVectorToolkit.Tools.GravityVectorToKML.csproj", "{B3D65BAB-3A66-4AD3-A250-328361B29994}"
 EndProject

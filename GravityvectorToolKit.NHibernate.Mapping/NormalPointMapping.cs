@@ -10,8 +10,8 @@ namespace GravityVectorToolKit.CSV.Mapping
 		public GravityVectorMapping()
 		{
 			ImportType<IGeometry>();
-			Id(x => x.NormalPointId).GeneratedBy.Identity();
-			Map(x => x.GravityVectorId);
+			Id(x => x.GravityVectorId).GeneratedBy.Identity();
+			Map(x => x.SerialId);
 			Map(x => x.ClusterIndex);
 			Map(x => x.GridId);
 			Map(x => x.Latitude).Index("Filter_Idx");

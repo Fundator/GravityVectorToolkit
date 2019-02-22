@@ -13,7 +13,7 @@ namespace GravityVectorToolKit.CSV.Mapping
 	{
 		public NormalPointCsvClassMap()
 		{
-			Map(m => m.GravityVectorId).Name("");
+			Map(m => m.SerialId).Name("");
 			Map(m => m.ClusterIndex).Name("clusterindex");
 			Map(m => m.GridId).Name("gridid");
 			Map(m => m.Latitude).Name("latitude");

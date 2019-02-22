@@ -1,6 +1,5 @@
 ﻿using CommandLineParser.Arguments;
 using GravityVectorToolKit.DataAccess;
-using GravityVector.Common;
 using GravityVectorToolKit.CSV.Mapping;
 using GravityVectorToolKit.DataModel;
 using log4net;
@@ -13,6 +12,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using GravityVectorToolKit.Common;
 
 namespace GravityVectorToolkit.Tools.DatabaseImport
 {
@@ -151,7 +151,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 					if (!skip)
 					{
-						var records = Util.ReadCsvFile<GravityVectorToolKit.DataModel.GravityVector, NormalPointCsvClassMap>(file);
+						var records = Util.ReadCsvFile<GravityVector, NormalPointCsvClassMap>(file);
 						accRecords += (ulong)(records.Count);
 
 						ITransaction transaction = Util.BeginTransaction(session);
@@ -196,7 +196,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			ITransaction transaction = Util.BeginTransaction(nrSession);
 			foreach (var normalRoute in normalRoutes)
 			{
-				nrSession.SaveOrUpdate(normalRoute);
+				nrSession.Save(normalRoute); // Use Save() because the primary is assigned
 			}
 			Log.Info($"Saving normal routes to database..");
 			transaction.Commit();

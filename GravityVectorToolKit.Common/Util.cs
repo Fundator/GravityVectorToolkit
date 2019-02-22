@@ -8,7 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 
-namespace GravityVector.Common
+namespace GravityVectorToolKit.Common
 {
 	public static class Util
 	{
