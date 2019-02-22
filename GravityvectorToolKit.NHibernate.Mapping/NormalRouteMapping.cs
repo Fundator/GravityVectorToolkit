@@ -10,10 +10,11 @@ namespace GravityVectorToolKit.CSV.Mapping
 		public NormalRouteMapping()
 		{
 			ImportType<IGeometry>();
-
-			Id(x => x.NormalRouteId).GeneratedBy.Identity();
+			Id(x => x.NormalRouteId).GeneratedBy.Assigned();
 			Map(x => x.FromLocationId).Index("FromLocationToLocation_Idx");
 			Map(x => x.ToLocationId).Index("FromLocationToLocation_Idx");
+			Map(x => x.HighError).Index("HighError_Idx");
+			Map(x => x.VoyageCount).Index("VoyageCount_Idx");
 			Map(x => x.NormalRouteGeometry).Column("normalroutegeometry").CustomType<T>();
 			//HasMany(x => x.NormalPoints).KeyColumn(nameof(NormalRoute.NormalRouteId)).Inverse().Cascade.All();
 		}

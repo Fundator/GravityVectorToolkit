@@ -6,10 +6,10 @@ namespace GravityVectorToolKit.DataModel
 
 	public class GravityVector // TODO: Rename to GravityVector?
 	{
-		public virtual int NormalPointId { get; set; }
+		public virtual int GravityVectorId { get; set; }
 
 		//public virtual NormalRoute NormalRoute { get; set; }
-		public virtual int GravityVectorId { get; set; }
+		public virtual int SerialId { get; set; }
 
 		public virtual double ClusterIndex { get; set; }
 		public virtual double GridId { get; set; }
