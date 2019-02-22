@@ -11,6 +11,7 @@ namespace GravityVectorToolKit.CSV.Mapping
 		{
 			ImportType<IGeometry>();
 			Id(x => x.GravityVectorId).GeneratedBy.Identity();
+			Version(x => x.LastModified);
 			Map(x => x.SerialId);
 			Map(x => x.ClusterIndex);
 			Map(x => x.GridId);
@@ -36,7 +37,7 @@ namespace GravityVectorToolKit.CSV.Mapping
 			Map(x => x.GreaterCourseStdDev);
 			Map(x => x.DataCount).Index("Filter_Idx");
 			Map(x => x.PositionGeometry).Column("positiongeometry").CustomType<T>().Not.Nullable();
-			//References(x => x.NormalRoute, nameof(NormalRoute.NormalRouteId)).Index("NormalRouteId_Idx").Cascade.None();
+			References(x => x.NormalRoute, nameof(NormalRoute.NormalRouteId)).Index("NormalRouteId_Idx").Cascade.None();
 		}
 	}
 }

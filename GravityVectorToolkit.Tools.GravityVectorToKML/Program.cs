@@ -70,7 +70,7 @@ namespace GravityVectorToolKit
                             Folder rootFolder = new Folder();
                             Folder folder = null;
 
-							var records = Util.ReadCsvFile<DataModel.GravityVector, NormalPointCsvClassMap>(file);
+							var records = Util.ReadCsvFile<DataModel.GravityVector, GravityVectorCsvClassMap>(file);
 							accRecords += (ulong)(records.Count);
                             //Log.Debug($"Processing {Path.GetFileName(kmlFileName)}: {records.Count()} records");
 
