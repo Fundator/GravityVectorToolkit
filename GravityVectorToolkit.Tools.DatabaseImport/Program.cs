@@ -97,7 +97,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 				if (Directory.Exists(path))
 				{
-					LoadNormalPoints(syncRoot, dropAndCreate, path, normalRoutes);
+					LoadGravityVectors(syncRoot, dropAndCreate, path, normalRoutes);
 				}
 				else
 				{
@@ -111,7 +111,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			}
 		}
 
-		private static void LoadNormalPoints(object syncRoot, bool dropAndCreate, string path, List<NormalRoute> normalRoutes)
+		private static void LoadGravityVectors(object syncRoot, bool dropAndCreate, string path, List<NormalRoute> normalRoutes)
 		{
 			var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
 			int fileCount = files.Count();
@@ -157,16 +157,16 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 						accRecords += (ulong)(records.Count);
 
 						ITransaction transaction = Util.BeginTransaction(session);
-						foreach (var normalPoint in records)
+						foreach (var gravityVector in records)
 						{
-							var normalRoute = normalRouteMap[normalPoint.NormalRouteId];
-							normalPoint.NormalRoute = normalRoute;
+							var normalRoute = normalRouteMap[gravityVector.NormalRouteId];
+							gravityVector.NormalRoute = normalRoute;
 							if (normalRoute.GravityVectors == null)
 							{
 								normalRoute.GravityVectors = new List<GravityVector>();
 							}
-							normalRoute.GravityVectors.Add(normalPoint);
-							session.SaveOrUpdate(normalPoint);
+							normalRoute.GravityVectors.Add(gravityVector);
+							session.SaveOrUpdate(gravityVector);
 							batchRecords++;
 						}
 
