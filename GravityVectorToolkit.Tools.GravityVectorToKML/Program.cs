@@ -65,12 +65,12 @@ namespace GravityVectorToolKit
                             Serializer serializer = new Serializer();
                             Kml kml = new Kml();
                             var currentClusterIndex = -1d;
-                            NormalPoint previousNormalPoint = null;
+							DataModel.GravityVector previousNormalPoint = null;
                             LineString previousClusterSegment = null;
                             Folder rootFolder = new Folder();
                             Folder folder = null;
 
-                            List<NormalPoint> records = Util.ReadCsvFile<NormalPoint, NormalPointCsvClassMap>(file);
+							var records = Util.ReadCsvFile<DataModel.GravityVector, NormalPointCsvClassMap>(file);
 							accRecords += (ulong)(records.Count);
                             //Log.Debug($"Processing {Path.GetFileName(kmlFileName)}: {records.Count()} records");
 
