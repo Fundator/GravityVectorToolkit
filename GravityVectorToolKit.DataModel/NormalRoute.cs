@@ -1,4 +1,5 @@
 ﻿using GeoAPI.Geometries;
+using System;
 using System.Collections.Generic;
 
 namespace GravityVectorToolKit.DataModel
@@ -10,7 +11,8 @@ namespace GravityVectorToolKit.DataModel
 		public virtual int ToLocationId { get; set; }
 		public virtual bool HighError { get; set; }
 		public virtual int VoyageCount { get; set; }
+		public virtual DateTime LastModified { get; set; }
 		public virtual IGeometry NormalRouteGeometry { get; set; }
-		public virtual IList<GravityVector> NormalPoints { get; set; }
+		public virtual IList<GravityVector> GravityVectors { get; set; }
 	}
 }

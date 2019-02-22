@@ -11,12 +11,13 @@ namespace GravityVectorToolKit.CSV.Mapping
 		{
 			ImportType<IGeometry>();
 			Id(x => x.NormalRouteId).GeneratedBy.Assigned();
+			Version(x => x.LastModified);
 			Map(x => x.FromLocationId).Index("FromLocationToLocation_Idx");
 			Map(x => x.ToLocationId).Index("FromLocationToLocation_Idx");
 			Map(x => x.HighError).Index("HighError_Idx");
 			Map(x => x.VoyageCount).Index("VoyageCount_Idx");
 			Map(x => x.NormalRouteGeometry).Column("normalroutegeometry").CustomType<T>();
-			//HasMany(x => x.NormalPoints).KeyColumn(nameof(NormalRoute.NormalRouteId)).Inverse().Cascade.All();
+			HasMany(x => x.GravityVectors).KeyColumn(nameof(NormalRoute.NormalRouteId)).Inverse().Cascade.All();
 		}
 	}
 }

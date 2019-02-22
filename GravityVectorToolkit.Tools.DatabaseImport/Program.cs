@@ -97,7 +97,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 				if (Directory.Exists(path))
 				{
-					LoadNormalPoints(syncRoot, dropAndCreate, path);
+					LoadNormalPoints(syncRoot, dropAndCreate, path, normalRoutes);
 				}
 				else
 				{
@@ -111,7 +111,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			}
 		}
 
-		private static void LoadNormalPoints(object syncRoot, bool dropAndCreate, string path)
+		private static void LoadNormalPoints(object syncRoot, bool dropAndCreate, string path, List<NormalRoute> normalRoutes)
 		{
 			var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
 			int fileCount = files.Count();
@@ -122,6 +122,8 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 			int processedFiles = 0;
 			ulong accRecords = 0;
+
+			var normalRouteMap = normalRoutes.ToDictionary(x => x.NormalRouteId, x => x);
 
 			Parallel.ForEach(files, file =>
 			{
@@ -151,12 +153,19 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 					if (!skip)
 					{
-						var records = Util.ReadCsvFile<GravityVector, NormalPointCsvClassMap>(file);
+						var records = Util.ReadCsvFile<GravityVector, GravityVectorCsvClassMap>(file);
 						accRecords += (ulong)(records.Count);
 
 						ITransaction transaction = Util.BeginTransaction(session);
 						foreach (var normalPoint in records)
 						{
+							var normalRoute = normalRouteMap[normalPoint.NormalRouteId];
+							normalPoint.NormalRoute = normalRoute;
+							if (normalRoute.GravityVectors == null)
+							{
+								normalRoute.GravityVectors = new List<GravityVector>();
+							}
+							normalRoute.GravityVectors.Add(normalPoint);
 							session.SaveOrUpdate(normalPoint);
 							batchRecords++;
 						}
@@ -196,7 +205,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			ITransaction transaction = Util.BeginTransaction(nrSession);
 			foreach (var normalRoute in normalRoutes)
 			{
-				nrSession.Save(normalRoute); // Use Save() because the primary is assigned
+				nrSession.SaveOrUpdate(normalRoute); // Use Save() because the primary is assigned
 			}
 			Log.Info($"Saving normal routes to database..");
 			transaction.Commit();

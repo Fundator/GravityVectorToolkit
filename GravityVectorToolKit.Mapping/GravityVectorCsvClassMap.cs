@@ -9,11 +9,12 @@ using System.Globalization;
 namespace GravityVectorToolKit.CSV.Mapping
 {
 
-	public class NormalPointCsvClassMap : ClassMap<GravityVector>
+	public class GravityVectorCsvClassMap : ClassMap<GravityVector>
 	{
-		public NormalPointCsvClassMap()
+		public GravityVectorCsvClassMap()
 		{
 			Map(m => m.SerialId).Name("");
+			Map(m => m.NormalRouteId).ConvertUsing(row => (int)row.GetField<float>("normal_route_id"));
 			Map(m => m.ClusterIndex).Name("clusterindex");
 			Map(m => m.GridId).Name("gridid");
 			Map(m => m.Latitude).Name("latitude");
