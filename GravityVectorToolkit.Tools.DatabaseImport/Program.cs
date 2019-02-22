@@ -151,7 +151,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 					if (!skip)
 					{
-						List<NormalPoint> records = Util.ReadCsvFile<NormalPoint, NormalPointCsvClassMap>(file);
+						var records = Util.ReadCsvFile<GravityVectorToolKit.DataModel.GravityVector, NormalPointCsvClassMap>(file);
 						accRecords += (ulong)(records.Count);
 
 						ITransaction transaction = Util.BeginTransaction(session);

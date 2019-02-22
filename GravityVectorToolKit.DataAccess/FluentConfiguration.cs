@@ -20,7 +20,7 @@ namespace GravityVectorToolKit.DataAccess
 				.Dialect<PostGis20Dialect>())
 				.Mappings(x =>
 					{
-						x.FluentMappings.Add(typeof(NormalPointMapping<PostGisGeometryType>));
+						x.FluentMappings.Add(typeof(GravityVectorMapping<PostGisGeometryType>));
 						x.FluentMappings.Add(typeof(NormalRouteMapping<PostGisGeometryType>));
 					}
 				)
