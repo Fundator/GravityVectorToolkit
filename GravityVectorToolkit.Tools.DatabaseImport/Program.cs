@@ -198,14 +198,19 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 		private static List<NormalRoute> LoadNormalRoutes(string path)
 		{
 			List<NormalRoute> normalRoutes;
-			Log.Info("Loading normal routes..");
+			var filename = Path.GetFileName(path);
+			Log.Info($"Loading normal routes from {filename}..");
 			normalRoutes = Util.ReadCsvFile<NormalRoute, NormalRouteCsvClassMap>(path);
 
 			ISession nrSession = Util.GetSession();
 			ITransaction transaction = Util.BeginTransaction(nrSession);
+			int i = 0, total = normalRoutes.Count;
 			foreach (var normalRoute in normalRoutes)
 			{
+				i++;
 				nrSession.SaveOrUpdate(normalRoute); // Use Save() because the primary is assigned
+				Log.Info($"Processed {i} normal routes ({i}/{total} routes / {((double)i / (double)total).ToString("0.00%")})");
+
 			}
 			Log.Info($"Saving normal routes to database..");
 			transaction.Commit();
