@@ -11,7 +11,7 @@ namespace GravityVectorToolKit.DataAccess
 {
 	public static class FluentConfiguration
 	{
-		public static void Configure(string connectionString, bool generateTables = false)
+		public static void Configure(string connectionString, bool dropAndCreateTables = false)
 		{
 			var cfg = Fluently.Configure()
 				.Database(FluentNHibernate.Cfg.Db.PostgreSQLConfiguration.Standard
@@ -29,11 +29,11 @@ namespace GravityVectorToolKit.DataAccess
 
 			cfg.AddAuxiliaryDatabaseObject(new SpatialAuxiliaryDatabaseObject(cfg));
 
-			if (generateTables)
+			if (dropAndCreateTables)
 			{
 				var exporter = new SchemaExport(cfg);
 				exporter.Drop(false, true);
-				exporter.Create(true, true);
+				exporter.Create(false, true);
 			}
 
 			SessionManager.SessionFactory = cfg.BuildSessionFactory();
