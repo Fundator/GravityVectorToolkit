@@ -16,7 +16,10 @@ namespace GravityVectorToolKit.CSV.Mapping
 			Map(x => x.ToLocationId).Index("FromLocationToLocation_Idx");
 			Map(x => x.HighError).Index("HighError_Idx");
 			Map(x => x.VoyageCount).Index("VoyageCount_Idx");
+			Map(x => x.AverageSpeed).Index("AverageSpeed_Idx");
 			Map(x => x.NormalRouteGeometry).Column("normalroutegeometry").CustomType<T>();
+			Map(x => x.NormalRouteMaxGeometry).Column("normalroutemaxgeometry").CustomType<T>();
+			Map(x => x.NormalRouteStdGeometry).Column("normalroutestdgeometry").CustomType<T>();
 			HasMany(x => x.GravityVectors).KeyColumn(nameof(NormalRoute.NormalRouteId)).Inverse().Cascade.All();
 		}
 	}

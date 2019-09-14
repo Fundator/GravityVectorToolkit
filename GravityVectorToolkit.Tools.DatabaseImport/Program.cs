@@ -137,8 +137,8 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 					ulong batchRecords = 0;
 
 					var stuff = filename.Split(new string[] { "_", ".", "-" }, StringSplitOptions.RemoveEmptyEntries);
-					int fromLocationId = Int32.Parse(stuff[4]);
-					int toLocationId = Int32.Parse(stuff[5]);
+					int fromLocationId = Int32.Parse(stuff[3]);
+					int toLocationId = Int32.Parse(stuff[4]);
 
 					// If the user opted to keep existing data, then we need to check if the current row exist
 					// This puts more load on the database, but can potentially save a lot of time
