@@ -16,7 +16,7 @@ namespace GravityVectorToolKit.DataAccess
 			var cfg = Fluently.Configure()
 				.Database(FluentNHibernate.Cfg.Db.PostgreSQLConfiguration.Standard
 				.ConnectionString(connectionString)
-				.Driver<NpgsqlDriver>()
+				.Driver</*NHibernate.Extensions.NpgSql.NpgSqlDriver*/NpgsqlDriver>()
 				.Dialect<PostGis20Dialect>())
 				.Mappings(x =>
 					{

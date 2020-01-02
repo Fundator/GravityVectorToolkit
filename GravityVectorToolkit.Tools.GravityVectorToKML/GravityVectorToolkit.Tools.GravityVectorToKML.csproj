@@ -6,10 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineArgumentsParser" Version="3.0.19" />
-    <PackageReference Include="csvhelper" Version="12.1.2" />
+    <PackageReference Include="CommandLineArgumentsParser" Version="3.0.20" />
+    <PackageReference Include="csvhelper" Version="12.2.1" />
     <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="SharpKml.Core" Version="5.0.0-alpha1" />
+    <PackageReference Include="SharpKml.Core" Version="5.1.0" />
   </ItemGroup>
 
   <ItemGroup>

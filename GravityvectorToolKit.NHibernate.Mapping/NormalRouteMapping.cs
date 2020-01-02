@@ -15,6 +15,8 @@ namespace GravityVectorToolKit.CSV.Mapping
 			Map(x => x.FromLocationId).Index("FromLocationToLocation_Idx");
 			Map(x => x.ToLocationId).Index("FromLocationToLocation_Idx");
 			Map(x => x.HighError).Index("HighError_Idx");
+			Map(x => x.BackboneHarbour).Index("BackboneHarbour_Idx");
+			//Map(x => x.AverageSog).CustomSqlType("float[]");
 			Map(x => x.VoyageCount).Index("VoyageCount_Idx");
 			Map(x => x.AverageSpeed).Index("AverageSpeed_Idx");
 			Map(x => x.NormalRouteGeometry).Column("normalroutegeometry").CustomType<T>();
