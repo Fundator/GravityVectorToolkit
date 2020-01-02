@@ -17,5 +17,7 @@ namespace GravityVectorToolKit.DataModel
 		public virtual IGeometry NormalRouteMaxGeometry { get; set; }
 		public virtual IGeometry NormalRouteStdGeometry { get; set; }
 		public virtual IList<GravityVector> GravityVectors { get; set; }
+		public virtual bool BackboneHarbour { get; set; }
+		//public virtual List<float> AverageSog { get; set; }
 	}
 }

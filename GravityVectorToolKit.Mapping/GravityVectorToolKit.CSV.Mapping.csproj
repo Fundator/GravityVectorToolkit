@@ -1,12 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="csvhelper" Version="12.1.2" />
-    <PackageReference Include="nettopologysuite" Version="1.15.1" />
+    <PackageReference Include="csvhelper" Version="12.2.1" />
+    <PackageReference Include="GeoAPI" Version="1.7.5" />
+    <PackageReference Include="NetTopologySuite" Version="1.15.3" />
   </ItemGroup>
 
   <ItemGroup>
