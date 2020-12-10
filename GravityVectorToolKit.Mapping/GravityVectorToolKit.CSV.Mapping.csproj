@@ -5,9 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="csvhelper" Version="12.2.1" />
-    <PackageReference Include="GeoAPI" Version="1.7.5" />
-    <PackageReference Include="NetTopologySuite" Version="1.15.3" />
+    <PackageReference Include="csvhelper" Version="18.0.0" />
+    <PackageReference Include="NetTopologySuite" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿using GeoAPI.Geometries;
+﻿using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
 
@@ -64,7 +64,7 @@ namespace GravityVectorToolKit.DataModel
 
 		public virtual double DataCount { get; set; }
 		public virtual DateTime LastModified { get; set; }
-		public virtual IGeometry PositionGeometry { get; set; }
+		public virtual Geometry PositionGeometry { get; set; }
 
 
 		#region Metadata

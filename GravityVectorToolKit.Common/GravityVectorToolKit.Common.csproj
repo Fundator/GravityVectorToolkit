@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="csvhelper" Version="12.2.1" />
-    <PackageReference Include="nhibernate" Version="5.1.4" />
+    <PackageReference Include="csvhelper" Version="18.0.0" />
+    <PackageReference Include="nhibernate" Version="5.3.5" />
   </ItemGroup>
 
   <ItemGroup>

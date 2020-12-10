@@ -1,6 +1,6 @@
 ﻿using FluentNHibernate.Mapping;
-using GeoAPI.Geometries;
 using GravityVectorToolKit.DataModel;
+using NetTopologySuite.Geometries;
 using NHibernate.Spatial.Type;
 
 namespace GravityVectorToolKit.CSV.Mapping
@@ -9,7 +9,7 @@ namespace GravityVectorToolKit.CSV.Mapping
 	{
 		public NormalRouteMapping()
 		{
-			ImportType<IGeometry>();
+			ImportType<Geometry>();
 			Id(x => x.NormalRouteId).GeneratedBy.Assigned();
 			Version(x => x.LastModified);
 			Map(x => x.FromLocationId).Index("FromLocationToLocation_Idx");

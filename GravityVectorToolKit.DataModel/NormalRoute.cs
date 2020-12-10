@@ -1,4 +1,4 @@
-﻿using GeoAPI.Geometries;
+﻿using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
 
@@ -13,9 +13,9 @@ namespace GravityVectorToolKit.DataModel
 		public virtual int VoyageCount { get; set; }
 		public virtual int AverageSpeed { get; set; }
 		public virtual DateTime LastModified { get; set; }
-		public virtual IGeometry NormalRouteGeometry { get; set; }
-		public virtual IGeometry NormalRouteMaxGeometry { get; set; }
-		public virtual IGeometry NormalRouteStdGeometry { get; set; }
+		public virtual Geometry NormalRouteGeometry { get; set; }
+		public virtual Geometry NormalRouteMaxGeometry { get; set; }
+		public virtual Geometry NormalRouteStdGeometry { get; set; }
 		public virtual IList<GravityVector> GravityVectors { get; set; }
 		public virtual bool BackboneHarbour { get; set; }
 		//public virtual List<float> AverageSog { get; set; }

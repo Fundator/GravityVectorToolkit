@@ -1,11 +1,11 @@
 ﻿using CsvHelper.Configuration;
 using GravityVectorToolKit.DataModel;
 using NetTopologySuite.IO;
-using GeoAPI.Geometries;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.Json;
+using NetTopologySuite.Geometries;
 
 namespace GravityVectorToolKit.CSV.Mapping
 {
@@ -72,21 +72,21 @@ namespace GravityVectorToolKit.CSV.Mapping
 			Map(m => m.NormalRouteGeometry).ConvertUsing(row =>
 			{
 				WKTReader wktReader = new WKTReader();
-				IGeometry p = wktReader.Read(row.GetField("normal_route"));
+				Geometry p = wktReader.Read(row.GetField("normal_route"));
 				p.SRID = 4326;
 				return p;
 			});
 			Map(m => m.NormalRouteMaxGeometry).ConvertUsing(row =>
 			{
 				WKTReader wktReader = new WKTReader();
-				IGeometry p = wktReader.Read(row.GetField("normal_route_max_polygon")).Buffer(0);
+				Geometry p = wktReader.Read(row.GetField("normal_route_max_polygon")).Buffer(0);
 				p.SRID = 4326;
 				return p;
 			});
 			Map(m => m.NormalRouteStdGeometry).ConvertUsing(row =>
 			{
 				WKTReader wktReader = new WKTReader();
-				IGeometry p = wktReader.Read(row.GetField("normal_route_std_polygon")).Buffer(0);
+				Geometry p = wktReader.Read(row.GetField("normal_route_std_polygon")).Buffer(0);
 				p.SRID = 4326;
 				return p;
 			});

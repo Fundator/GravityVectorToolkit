@@ -1,5 +1,4 @@
 ﻿using CsvHelper.Configuration;
-using GeoAPI.Geometries;
 using GravityVectorToolKit.DataModel;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;

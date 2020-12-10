@@ -12,9 +12,8 @@ namespace GravityVectorToolKit.Common
 {
 	public static class Util
 	{
-		private static Configuration DefaultConfig => new Configuration
+		private static CsvConfiguration DefaultConfig => new CsvConfiguration(CultureInfo.InvariantCulture)
 		{
-			CultureInfo = CultureInfo.InvariantCulture,
 			HeaderValidated = null,
 			MissingFieldFound = null,
 			Delimiter = ",",
