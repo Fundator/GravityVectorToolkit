@@ -54,7 +54,7 @@ namespace GravityVectorToolKit.CSV.Mapping
 					.TypeConverterOption.BooleanValues(false, true, "False", "false");
 
 
-			Map(m => m.NormalRouteId).ConvertUsing(row => (int)row.GetField<float>("normal_route_id"));
+			Map(m => m.NormalRouteId).ConvertUsing(row => row.GetField<string>("normal_route_id"));
 			Map(m => m.FromLocationId).Name("dep_id");
 			Map(m => m.ToLocationId).Name("arr_id");
 			Map(m => m.HighError).Name("high_error")
