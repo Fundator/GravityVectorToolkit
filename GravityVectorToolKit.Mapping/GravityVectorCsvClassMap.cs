@@ -14,7 +14,7 @@ namespace GravityVectorToolKit.CSV.Mapping
 		public GravityVectorCsvClassMap()
 		{
 			Map(m => m.SerialId).Name("");
-			Map(m => m.NormalRouteId).ConvertUsing(row => (int)row.GetField<float>("normal_route_id"));
+			Map(m => m.NormalRouteId).ConvertUsing(row => row.GetField<string>("normal_route_id").Split("_")[0]);
 			Map(m => m.ClusterIndex).Name("clusterindex");
 			Map(m => m.GridId).Name("gridid");
 			Map(m => m.Latitude).Name("latitude");

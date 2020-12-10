@@ -6,7 +6,7 @@ namespace GravityVectorToolKit.DataModel
 {
 	public class NormalRoute
 	{
-		public virtual int NormalRouteId { get; set; }
+		public virtual string NormalRouteId { get; set; }
 		public virtual int FromLocationId { get; set; }
 		public virtual int ToLocationId { get; set; }
 		public virtual bool HighError { get; set; }
