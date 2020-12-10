@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentNHibernate" Version="2.1.2" />
-    <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="nhibernate.spatial.postgis" Version="5.1.1" />
+    <PackageReference Include="FluentNHibernate" Version="3.1.0" />
+    <PackageReference Include="log4net" Version="2.0.12" />
+    <PackageReference Include="nhibernate.spatial.postgis" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
