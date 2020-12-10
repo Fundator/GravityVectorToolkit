@@ -71,7 +71,7 @@ namespace GravityVectorToolKit.DataModel
 		/// <summary>
 		/// This field is only used for lookup to identify the correct normalroute based on its id
 		/// </summary>
-		public virtual int NormalRouteId { get; set; }
+		public virtual string NormalRouteId { get; set; }
 		#endregion
 	}
 }
