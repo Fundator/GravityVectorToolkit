@@ -1,6 +1,7 @@
 ﻿using CommandLineParser.Arguments;
-using GravityVectorToolKit.DataAccess;
+using GravityVectorToolKit.Common;
 using GravityVectorToolKit.CSV.Mapping;
+using GravityVectorToolKit.DataAccess;
 using GravityVectorToolKit.DataModel;
 using log4net;
 using log4net.Config;
@@ -12,7 +13,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using GravityVectorToolKit.Common;
 
 namespace GravityVectorToolkit.Tools.DatabaseImport
 {
@@ -35,19 +35,18 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 		private static void Run(string[] args)
 		{
-			CommandLineParser.CommandLineParser parser =
-							new CommandLineParser.CommandLineParser();
+			var parser = new CommandLineParser.CommandLineParser();
 
-			ValueArgument<string> connectionStringArg = new ValueArgument<string>(
+			var connectionStringArg = new ValueArgument<string>(
 				'c', "connectionstring", "Connection string to the PostgreSQL database");
 
-			ValueArgument<bool> dropAndCreateArg = new ValueArgument<bool>(
+			var dropAndCreateArg = new ValueArgument<bool>(
 				'd', "drop", "Drop and recreate the database");
 
-			ValueArgument<string> pathArg = new ValueArgument<string>(
+			var pathArg = new ValueArgument<string>(
 				'p', "path", "Path to a folder containing gravity vector files");
 
-			ValueArgument<string> normalRoutePathArg = new ValueArgument<string>(
+			var normalRoutePathArg = new ValueArgument<string>(
 				'n', "normal-route-path", "Path to a file containing normal route linestrings");
 
 			parser.Arguments.Add(connectionStringArg);
@@ -210,7 +209,6 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 				i++;
 				nrSession.SaveOrUpdate(normalRoute); // Use Save() because the primary is assigned
 				Log.Info($"Processed {i} normal routes ({i}/{total} routes / {((double)i / (double)total).ToString("0.00%")})");
-
 			}
 			Log.Info($"Saving normal routes to database..");
 			transaction.Commit();
