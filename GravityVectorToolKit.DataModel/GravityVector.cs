@@ -8,8 +8,8 @@ namespace GravityVectorToolKit.DataModel
 		public virtual int GravityVectorId { get; set; }
 		public virtual NormalRoute NormalRoute { get; set; }
 
-		public virtual int FromHarbourId { get; set; }
-		public virtual int ToHarbourId { get; set; }
+		public virtual int FromHarbourId { get; set; } // TODO: Replace with a reference to the harbour when harbour support is completed
+		public virtual int ToHarbourId { get; set; } // TODO: Replace with a reference to the harbour when harbour support is completed
 
 		public virtual int SerialId { get; set; }
 		public virtual double ClusterIndex { get; set; }
