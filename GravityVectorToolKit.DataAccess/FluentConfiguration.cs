@@ -22,6 +22,7 @@ namespace GravityVectorToolKit.DataAccess
 					{
 						x.FluentMappings.Add(typeof(GravityVectorMapping<PostGisGeometryType>));
 						x.FluentMappings.Add(typeof(NormalRouteMapping<PostGisGeometryType>));
+						x.FluentMappings.Add(typeof(DeviationCellMapping<PostGisGeometryType>));
 					}
 				)
 				.BuildConfiguration()
