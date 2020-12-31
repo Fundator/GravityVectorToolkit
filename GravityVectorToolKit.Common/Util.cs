@@ -4,6 +4,7 @@ using GravityVectorToolKit.DataAccess;
 using NHibernate;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -17,8 +18,9 @@ namespace GravityVectorToolKit.Common
 			HeaderValidated = null,
 			MissingFieldFound = null,
 			Delimiter = ",",
-			BufferSize = 1048576
+			BufferSize = 1048576,
 		};
+
 
 		public static List<TModel> ReadCsvFile<TModel, TClassMap>(string file) where TClassMap : ClassMap<TModel>
 		{
@@ -32,11 +34,38 @@ namespace GravityVectorToolKit.Common
 			return records;
 		}
 
+		public static IEnumerable<TModel> ReadCsvFileByRow<TModel, TClassMap>(string file) where TClassMap : ClassMap<TModel>
+		{
+			StreamReader reader = File.OpenText(file);
+			var csv = new CsvReader(reader, DefaultConfig);
+			csv.Configuration.RegisterClassMap<TClassMap>();
+			//var records = csv.GetRecords<TModel>().ToList();
+			while (csv.Read())
+			{
+				var record = csv.GetRecord<TModel>();
+				yield return record;
+			}
+			reader.Close();
+			reader.Dispose();
+			csv.Dispose();
+		}
+
+		public static IEnumerable<TModel> ReadFromList<TModel, TClassMap>(IEnumerable<string> lines) where TClassMap : ClassMap<TModel>
+		{
+			var reader = new StringReader(string.Join("\r\n", lines.ToArray()));
+			var csv = new CsvReader(reader, DefaultConfig);
+			csv.Configuration.RegisterClassMap<TClassMap>();
+			var records = csv.GetRecords<TModel>().ToList();
+			reader.Close();
+			reader.Dispose();
+			return records;
+		}
+
 		public static ITransaction BeginTransaction(ISession session)
 		{
 			//return TryNTimes(() =>
 			//{
-				return session.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
+			return session.BeginTransaction(System.Data.IsolationLevel.Snapshot);
 			//}, 10);
 		}
 
