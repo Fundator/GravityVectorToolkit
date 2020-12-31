@@ -3,9 +3,7 @@ using GravityVectorToolKit.DataModel;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 
 namespace GravityVectorToolKit.CSV.Mapping
 {

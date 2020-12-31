@@ -1,13 +1,11 @@
 ﻿using CsvHelper.Configuration;
 using GravityVectorToolKit.DataModel;
 using NetTopologySuite.Geometries;
-using NetTopologySuite.IO;
 using System;
 using System.Globalization;
 
 namespace GravityVectorToolKit.CSV.Mapping
 {
-
 	public class GravityVectorCsvClassMap : ClassMap<GravityVector>
 	{
 		public GravityVectorCsvClassMap()
@@ -25,6 +23,7 @@ namespace GravityVectorToolKit.CSV.Mapping
 			Map(m => m.EtaUpperStd).Name("upper_eta_std");
 
 			#region Position statistics
+
 			Map(m => m.DistanceMedian).Name("dist_med");
 			Map(m => m.MaxDistanceLeft).Name("maxdistanceleft");
 			Map(m => m.MaxDistanceRight).Name("maxdistanceright");
@@ -38,9 +37,11 @@ namespace GravityVectorToolKit.CSV.Mapping
 			Map(m => m.MaxGreaterCourseDiff).Name("maxgreatercoursediff");
 			Map(m => m.LesserCourseStdDev).Name("lessercoursestddev");
 			Map(m => m.GreaterCourseStdDev).Name("greatercoursestddev");
-			#endregion
+
+			#endregion Position statistics
 
 			#region Vessel detail statistics
+
 			Map(m => m.MaxLesserShipGrossTonnageDiff).Name("maxlessershipgrosstonnagediff");
 			Map(m => m.MaxGreaterShipGrossTonnageDiff).Name("maxgreatershipgrosstonnagediff");
 			Map(m => m.LesserShipGrossTonnageStdDev).Name("lessershipgrosstonnagestddev");
@@ -53,9 +54,11 @@ namespace GravityVectorToolKit.CSV.Mapping
 			Map(m => m.MaxGreaterShipBreadthDiff).Name("maxgreatershipbreadthdiff");
 			Map(m => m.LesserShipBreadthStdDev).Name("lessershipbreadthstddev");
 			Map(m => m.GreaterShipBreadthStdDev).Name("greatershipbreadthstddev");
-			#endregion
+
+			#endregion Vessel detail statistics
 
 			#region Wave statistics
+
 			Map(m => m.MaxLesserShipWaveHeightDiff).Name("maxlessershipwaveheightdiff");
 			Map(m => m.MaxGreaterShipWaveHeightDiff).Name("maxgreatershipwaveheightdiff");
 			Map(m => m.LesserShipWaveHeightStdDev).Name("lessershipwaveheightstddev");
@@ -64,14 +67,15 @@ namespace GravityVectorToolKit.CSV.Mapping
 			Map(m => m.MaxGreaterShipWaveDirectionDiff).Name("maxgreatershipwavedirectiondiff");
 			Map(m => m.LesserShipWaveDirectionStdDev).Name("lessershipwavedirectionstddev");
 			Map(m => m.GreaterShipWaveDirectionStdDev).Name("greatershipwavedirectionstddev");
-			#endregion
+
+			#endregion Wave statistics
 
 			Map(m => m.DataCount).Name("datacount");
 			Map(m => m.PositionGeometry).ConvertUsing(row =>
 			{
 				var p = new Point(
 							new Coordinate(
-								Double.Parse(row.GetField("longitude"), CultureInfo.InvariantCulture), 
+								Double.Parse(row.GetField("longitude"), CultureInfo.InvariantCulture),
 								Double.Parse(row.GetField("latitude"), CultureInfo.InvariantCulture)));
 				p.SRID = 4326;
 				return p;

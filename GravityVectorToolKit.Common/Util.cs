@@ -2,9 +2,7 @@
 using CsvHelper.Configuration;
 using GravityVectorToolKit.DataAccess;
 using NHibernate;
-using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -20,7 +18,6 @@ namespace GravityVectorToolKit.Common
 			Delimiter = ",",
 			BufferSize = 1048576,
 		};
-
 
 		public static List<TModel> ReadCsvFile<TModel, TClassMap>(string file) where TClassMap : ClassMap<TModel>
 		{
@@ -73,9 +70,9 @@ namespace GravityVectorToolKit.Common
 		{
 			//return TryNTimes(() =>
 			//{
-				var session = SessionManager.SessionFactory.OpenSession();
-				session.FlushMode = FlushMode.Manual;
-				return session;
+			var session = SessionManager.SessionFactory.OpenSession();
+			session.FlushMode = FlushMode.Manual;
+			return session;
 			//}, 10);
 		}
 

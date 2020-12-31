@@ -1,15 +1,7 @@
-﻿using FluentNHibernate.Cfg;
-using GravityVectorToolKit.CSV.Mapping;
-using NHibernate;
-using NHibernate.Driver;
-using NHibernate.Spatial.Dialect;
-using NHibernate.Spatial.Mapping;
-using NHibernate.Spatial.Type;
-using NHibernate.Tool.hbm2ddl;
+﻿using NHibernate;
 
 namespace GravityVectorToolKit.DataAccess
 {
-
 	public static class SessionManager
 	{
 		private static ISession _session;

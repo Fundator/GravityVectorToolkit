@@ -1,6 +1,5 @@
 ﻿using FluentNHibernate.Cfg;
 using GravityVectorToolKit.CSV.Mapping;
-using NHibernate;
 using NHibernate.Driver;
 using NHibernate.Spatial.Dialect;
 using NHibernate.Spatial.Mapping;

@@ -25,7 +25,8 @@ namespace GravityVectorToolkit.Test.UnitTests
 		{
 			var file = "Resources/deviation_map_sample.csv";
 			int i = 0;
-			foreach (var record in Util.ReadCsvFileByRow<DeviationCell, DeviationCellCsvClassMap>(file)) {
+			foreach (var record in Util.ReadCsvFileByRow<DeviationCell, DeviationCellCsvClassMap>(file))
+			{
 				i++;
 			}
 

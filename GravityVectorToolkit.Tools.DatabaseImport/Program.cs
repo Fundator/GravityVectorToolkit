@@ -71,7 +71,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			}
 
 			var connectionString = connectionStringArg.Value;
-;
+			;
 			Log.Info("Configuring database..");
 			FluentConfiguration.Configure(connectionString, dropAndCreate);
 			Log.Info("Database connected!");
@@ -124,7 +124,6 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			{
 				Log.Info($"Gravity vector path not specified, skipping..");
 			}
-
 
 			if (deviationCellsPathArg.Parsed)
 			{
@@ -205,7 +204,6 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 						var linesWithHeader = new List<string> { header }.Concat(lines);
 						try
 						{
-
 							var session = Util.GetSession();
 							var transaction = Util.BeginTransaction(session);
 							var records = Util.ReadFromList<GravityVector, GravityVectorCsvClassMap>(linesWithHeader);
@@ -242,7 +240,6 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 				Log.Error(e);
 			}
 		}
-	
 
 		private static List<NormalRoute> LoadNormalRoutes(string path)
 		{
@@ -279,7 +276,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 						transaction.Commit();
 						nrSession.Flush();
 						nrSession.Close();
-						lock(syncRoot)
+						lock (syncRoot)
 						{
 							allNormalRoutes.AddRange(normalRoutes);
 						}

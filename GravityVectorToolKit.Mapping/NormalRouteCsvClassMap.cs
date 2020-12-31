@@ -1,11 +1,7 @@
 ﻿using CsvHelper.Configuration;
 using GravityVectorToolKit.DataModel;
-using NetTopologySuite.IO;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text.Json;
 using NetTopologySuite.Geometries;
+using NetTopologySuite.IO;
 
 namespace GravityVectorToolKit.CSV.Mapping
 {
@@ -40,8 +36,8 @@ namespace GravityVectorToolKit.CSV.Mapping
 				std_length,
 				std_breadth,
 				std_month,
-				avg_eta_seconds			 
-			 
+				avg_eta_seconds
+
 			 */
 			//Map(m => m.AverageSog).ConvertUsing(row =>
 			//{
@@ -52,7 +48,6 @@ namespace GravityVectorToolKit.CSV.Mapping
 			Map(m => m.BackboneHarbour).Name("backbone_harbour")
 					.TypeConverterOption.BooleanValues(true, true, "True", "true")
 					.TypeConverterOption.BooleanValues(false, true, "False", "false");
-
 
 			Map(m => m.NormalRouteId).ConvertUsing(row => row.GetField<string>("normal_route_id"));
 			Map(m => m.FromLocationId).Name("dep_id");
@@ -66,8 +61,6 @@ namespace GravityVectorToolKit.CSV.Mapping
 			//Map(m => m.FromLocationId).Name("dep_id");
 			//Map(m => m.FromLocationId).Name("dep_id");
 			//Map(m => m.FromLocationId).Name("dep_id");
-
-
 
 			Map(m => m.NormalRouteGeometry).ConvertUsing(row =>
 			{
