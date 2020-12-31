@@ -1,10 +1,8 @@
 ﻿using NetTopologySuite.Geometries;
 using System;
-using System.Collections.Generic;
 
 namespace GravityVectorToolKit.DataModel
 {
-
 	public class GravityVector
 	{
 		public virtual int GravityVectorId { get; set; }
@@ -21,6 +19,7 @@ namespace GravityVectorToolKit.DataModel
 		public virtual double EtaUpperStd { get; set; }
 
 		#region Position statistics
+
 		public virtual double DistanceMedian { get; set; }
 		public virtual double MaxDistanceLeft { get; set; }
 		public virtual double MaxDistanceRight { get; set; }
@@ -34,9 +33,11 @@ namespace GravityVectorToolKit.DataModel
 		public virtual double MaxGreaterCourseDiff { get; set; }
 		public virtual double LesserCourseStdDev { get; set; }
 		public virtual double GreaterCourseStdDev { get; set; }
-		#endregion
+
+		#endregion Position statistics
 
 		#region Vessel detail statistics
+
 		public virtual double MaxLesserShipGrossTonnageDiff { get; set; }
 		public virtual double MaxGreaterShipGrossTonnageDiff { get; set; }
 		public virtual double LesserShipGrossTonnageStdDev { get; set; }
@@ -49,9 +50,11 @@ namespace GravityVectorToolKit.DataModel
 		public virtual double MaxGreaterShipBreadthDiff { get; set; }
 		public virtual double LesserShipBreadthStdDev { get; set; }
 		public virtual double GreaterShipBreadthStdDev { get; set; }
-		#endregion
+
+		#endregion Vessel detail statistics
 
 		#region Wave statistics
+
 		public virtual double MaxLesserShipWaveHeightDiff { get; set; }
 		public virtual double MaxGreaterShipWaveHeightDiff { get; set; }
 		public virtual double LesserShipWaveHeightStdDev { get; set; }
@@ -60,18 +63,20 @@ namespace GravityVectorToolKit.DataModel
 		public virtual double MaxGreaterShipWaveDirectionDiff { get; set; }
 		public virtual double LesserShipWaveDirectionStdDev { get; set; }
 		public virtual double GreaterShipWaveDirectionStdDev { get; set; }
-		#endregion
+
+		#endregion Wave statistics
 
 		public virtual double DataCount { get; set; }
 		public virtual DateTime LastModified { get; set; }
 		public virtual Geometry PositionGeometry { get; set; }
 
-
 		#region Metadata
+
 		/// <summary>
 		/// This field is only used for lookup to identify the correct normalroute based on its id
 		/// </summary>
 		public virtual string NormalRouteId { get; set; }
-		#endregion
+
+		#endregion Metadata
 	}
 }

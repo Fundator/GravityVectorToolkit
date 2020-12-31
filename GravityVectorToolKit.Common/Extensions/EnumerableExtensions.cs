@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace GravityVectorToolKit.Common.Extensions
 {
@@ -26,10 +25,12 @@ namespace GravityVectorToolKit.Common.Extensions
 			{
 				_input = input;
 			}
+
 			public IEnumerator<string> GetEnumerator()
 			{
 				return new LineReadingEnumerator(_input);
 			}
+
 			IEnumerator IEnumerable.GetEnumerator()
 			{
 				return GetEnumerator();
@@ -45,23 +46,28 @@ namespace GravityVectorToolKit.Common.Extensions
 			{
 				_input = input;
 			}
+
 			public void Dispose()
 			{
 				_input.Dispose();
 			}
+
 			public bool MoveNext()
 			{
 				_current = _input.ReadLine();
 				return _current != null;
 			}
+
 			public void Reset()
 			{
 				throw new NotSupportedException();
 			}
+
 			public string Current
 			{
 				get { return _current; }
 			}
+
 			object IEnumerator.Current
 			{
 				get { return _current; }
@@ -78,10 +84,12 @@ namespace GravityVectorToolKit.Common.Extensions
 				_inner = inner;
 				_length = length;
 			}
+
 			public IEnumerator<IReadOnlyList<T>> GetEnumerator()
 			{
 				return new ChunkingEnumerator<T>(_inner.GetEnumerator(), _length);
 			}
+
 			IEnumerator IEnumerable.GetEnumerator()
 			{
 				return GetEnumerator();
@@ -100,11 +108,13 @@ namespace GravityVectorToolKit.Common.Extensions
 				_inner = inner;
 				_length = length;
 			}
+
 			public void Dispose()
 			{
 				_inner.Dispose();
 				_current = null;
 			}
+
 			public bool MoveNext()
 			{
 				var currentBuffer = new List<T>();
@@ -129,12 +139,14 @@ namespace GravityVectorToolKit.Common.Extensions
 				_current = null;
 				return false;
 			}
+
 			public void Reset()
 			{
 				_inner.Reset();
 				_current = null;
 				_endOfInner = false;
 			}
+
 			public IReadOnlyList<T> Current
 			{
 				get
@@ -147,6 +159,7 @@ namespace GravityVectorToolKit.Common.Extensions
 					throw new InvalidOperationException();
 				}
 			}
+
 			object IEnumerator.Current
 			{
 				get

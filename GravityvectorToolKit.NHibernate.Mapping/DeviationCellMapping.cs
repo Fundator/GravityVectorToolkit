@@ -5,7 +5,6 @@ using NHibernate.Spatial.Type;
 
 namespace GravityVectorToolKit.CSV.Mapping
 {
-
 	public class DeviationCellMapping<T> : ClassMap<DeviationCell> where T : IGeometryUserType
 	{
 		public DeviationCellMapping()
