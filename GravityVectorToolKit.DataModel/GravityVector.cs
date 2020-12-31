@@ -7,6 +7,10 @@ namespace GravityVectorToolKit.DataModel
 	{
 		public virtual int GravityVectorId { get; set; }
 		public virtual NormalRoute NormalRoute { get; set; }
+
+		public virtual int FromHarbourId { get; set; }
+		public virtual int ToHarbourId { get; set; }
+
 		public virtual int SerialId { get; set; }
 		public virtual double ClusterIndex { get; set; }
 		public virtual double GridId { get; set; }
@@ -67,15 +71,20 @@ namespace GravityVectorToolKit.DataModel
 		#endregion Wave statistics
 
 		public virtual double DataCount { get; set; }
+		public virtual double TrajectoryCount { get; set; }
 		public virtual DateTime LastModified { get; set; }
 		public virtual Geometry PositionGeometry { get; set; }
-
+		public virtual Geometry StdDevLeftPosition { get; set; }
+		public virtual Geometry StdDevRightPosition { get; set; }
+		public virtual Geometry MaxDevLeftPosition { get; set; }
+		public virtual Geometry MaxDevRightPosition { get; set; }
 		#region Metadata
 
 		/// <summary>
 		/// This field is only used for lookup to identify the correct normalroute based on its id
 		/// </summary>
 		public virtual string NormalRouteId { get; set; }
+
 
 		#endregion Metadata
 	}
