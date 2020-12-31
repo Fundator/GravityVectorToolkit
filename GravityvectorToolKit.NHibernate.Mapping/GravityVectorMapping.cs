@@ -15,6 +15,8 @@ namespace GravityVectorToolKit.CSV.Mapping
 			Map(x => x.SerialId);
 			Map(x => x.ClusterIndex);
 			Map(x => x.GridId);
+			Map(x => x.FromHarbourId).Index("Filter_Idx");
+			Map(x => x.ToHarbourId).Index("Filter_Idx");
 			Map(x => x.Latitude).Index("Filter_Idx");
 			Map(x => x.Longitude).Index("Filter_Idx");
 			Map(x => x.SpeedOverGround).Index("Filter_Idx");
@@ -36,7 +38,12 @@ namespace GravityVectorToolKit.CSV.Mapping
 			Map(x => x.LesserCourseStdDev);
 			Map(x => x.GreaterCourseStdDev);
 			Map(x => x.DataCount).Index("Filter_Idx");
+			Map(x => x.TrajectoryCount).Index("Filter_Idx");
 			Map(x => x.PositionGeometry).Column("positiongeometry").CustomType<T>().Not.Nullable();
+			Map(x => x.StdDevLeftPosition).Column("stddevleftposition").CustomType<T>().Not.Nullable();
+			Map(x => x.StdDevRightPosition).Column("stddevrightposition").CustomType<T>().Not.Nullable();
+			Map(x => x.MaxDevLeftPosition).Column("maxdevleftposition").CustomType<T>().Not.Nullable();
+			Map(x => x.MaxDevRightPosition).Column("maxdevrightposition").CustomType<T>().Not.Nullable();
 			References(x => x.NormalRoute, nameof(NormalRoute.NormalRouteId)).Index("NormalRouteId_Idx").Cascade.None();
 		}
 	}
