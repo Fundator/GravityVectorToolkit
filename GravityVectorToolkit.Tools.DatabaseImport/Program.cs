@@ -78,25 +78,6 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 			List<NormalRoute> normalRoutes = null;
 
-			if (deviationCellsPathArg.Parsed)
-			{
-				var path = Path.GetFullPath(deviationCellsPathArg.Value);
-
-				if (File.Exists(path))
-				{
-					LoadDeviationCells(path);
-				}
-				else
-				{
-					Log.Error($"The deviation map path {path} does not exist");
-					return;
-				}
-			}
-			else
-			{
-				Log.Info("Deviation cell file not specified, skipping..");
-			}
-
 			if (normalRoutePathArg.Parsed)
 			{
 				var path = Path.GetFullPath(normalRoutePathArg.Value);
@@ -143,10 +124,32 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			{
 				Log.Info($"Gravity vector path not specified, skipping..");
 			}
+
+
+			if (deviationCellsPathArg.Parsed)
+			{
+				var path = Path.GetFullPath(deviationCellsPathArg.Value);
+
+				if (File.Exists(path))
+				{
+					LoadDeviationCells(path);
+				}
+				else
+				{
+					Log.Error($"The deviation map path {path} does not exist");
+					return;
+				}
+			}
+			else
+			{
+				Log.Info("Deviation cell file not specified, skipping..");
+			}
 		}
 
 		private static void LoadDeviationCells(string path)
 		{
+			Log.Debug($"Loading deviation cells..");
+
 			var batchSize = 10000;
 			var rowCount = 0;
 			var syncRoot = new object();
@@ -156,28 +159,24 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 				var header = input.ReadLine(); // Keep the header
 				Parallel.ForEach(
 					input.ReadLines().TakeChunks(batchSize),
-					new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount /* better be number of CPU cores */ },
+					new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount },
 					lines =>
 					{
 						var linesWithHeader = new List<string> { header }
 										.Concat(lines);
-
 						var session = Util.GetSession();
 						var transaction = Util.BeginTransaction(session);
 						var records = Util.ReadFromList<DeviationCell, DeviationCellCsvClassMap>(linesWithHeader);
-
 						foreach (var record in records)
 						{
-							rowCount++;
-							if (rowCount % 1000 == 0)
-							{
-								Log.Info($"Processed {rowCount} rows");
-							}
+							Interlocked.Increment(ref rowCount);
 							session.SaveOrUpdate(record);
 						}
+						Log.Info($"Processed {rowCount} rows");
 						transaction.Commit();
 						session.Flush();
 					});
+				Log.Info($"Done processing {rowCount} deviation cells");
 			}
 		}
 
@@ -191,15 +190,11 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			{
 				using (var input = new StreamReader(File.OpenRead(file)))
 				{
-					// Keep the header
 					var header = input.ReadLine();
-
 					var filename = Path.GetFileName(file);
-
-					int rowCount = 0;
-					Log.Info($"Loading gravity vectors from {Path.GetFileName(file)}..");
-
+					var rowCount = 0;
 					const int batchSize = 10000;
+					Log.Info($"Loading gravity vectors from {Path.GetFileName(file)}..");
 					Parallel.ForEach(input.ReadLines().TakeChunks(batchSize),
 										new ParallelOptions()
 										{
@@ -208,15 +203,12 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 										lines =>
 					{
 						var linesWithHeader = new List<string> { header }.Concat(lines);
-
 						try
 						{
 
 							var session = Util.GetSession();
 							var transaction = Util.BeginTransaction(session);
-
 							var records = Util.ReadFromList<GravityVector, GravityVectorCsvClassMap>(linesWithHeader);
-
 							foreach (var gravityVector in records)
 							{
 								Interlocked.Increment(ref rowCount);
@@ -232,7 +224,6 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 							}
 
 							Log.Info($"Processed {rowCount} rows..");
-
 							transaction.Commit();
 							session.Flush();
 							session.Close();
@@ -243,7 +234,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 							Log.Error(e);
 						}
 					});
-					Log.Info($"Done processing {rowCount} records");
+					Log.Info($"Done processing {rowCount} gravity vectors");
 				}
 			}
 			catch (Exception e)
@@ -258,7 +249,6 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			List<NormalRoute> allNormalRoutes = new List<NormalRoute>();
 			var filename = Path.GetFileName(path);
 			Log.Info($"Loading normal routes from {filename}..");
-			//normalRoutes = Util.ReadCsvFile<NormalRoute, NormalRouteCsvClassMap>(path);
 			var syncRoot = new object();
 			const int batchSize = 150;
 			int rowCount = 0;
@@ -267,7 +257,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 				var header = input.ReadLine(); // Keep the header
 				Parallel.ForEach(
 					input.ReadLines().TakeChunks(batchSize),
-					new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount /* better be number of CPU cores */ },
+					new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount },
 					lines =>
 					{
 						var linesWithHeader = new List<string> { header }
