@@ -69,20 +69,20 @@ namespace GravityVectorToolKit.CSV.Mapping
 				p.SRID = 4326;
 				return p;
 			});
-			Map(m => m.NormalRouteMaxGeometry).ConvertUsing(row =>
-			{
-				WKTReader wktReader = new WKTReader();
-				Geometry p = wktReader.Read(row.GetField("normal_route_max_polygon")).Buffer(0);
-				p.SRID = 4326;
-				return p;
-			});
-			Map(m => m.NormalRouteStdGeometry).ConvertUsing(row =>
-			{
-				WKTReader wktReader = new WKTReader();
-				Geometry p = wktReader.Read(row.GetField("normal_route_std_polygon")).Buffer(0);
-				p.SRID = 4326;
-				return p;
-			});
+			//Map(m => m.NormalRouteMaxGeometry).ConvertUsing(row =>
+			//{
+			//	WKTReader wktReader = new WKTReader();
+			//	Geometry p = wktReader.Read(row.GetField("normal_route_max_polygon")).Buffer(0);
+			//	p.SRID = 4326;
+			//	return p;
+			//});
+			//Map(m => m.NormalRouteStdGeometry).ConvertUsing(row =>
+			//{
+			//	WKTReader wktReader = new WKTReader();
+			//	Geometry p = wktReader.Read(row.GetField("normal_route_std_polygon")).Buffer(0);
+			//	p.SRID = 4326;
+			//	return p;
+			//});
 		}
 	}
 }
