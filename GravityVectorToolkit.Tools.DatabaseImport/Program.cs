@@ -6,6 +6,7 @@ using GravityVectorToolKit.DataAccess;
 using GravityVectorToolKit.DataModel;
 using log4net;
 using log4net.Config;
+using NetTopologySuite.Geometries;
 using NHibernate;
 using System;
 using System.Collections.Generic;
@@ -185,6 +186,13 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 			var normalRouteMap = normalRoutes.ToDictionary(x => x.NormalRouteId, x => x);
 
+			var gvMap = new Dictionary<string, List<GravityVector>>();
+
+			foreach (var normalRoute in normalRoutes)
+			{
+				gvMap.Add(normalRoute.NormalRouteId, new List<GravityVector>());
+			}
+
 			try
 			{
 				using (var input = new StreamReader(File.OpenRead(file)))
@@ -210,7 +218,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 							foreach (var gravityVector in records)
 							{
 								Interlocked.Increment(ref rowCount);
-
+								gvMap[gravityVector.NormalRouteId].Add(gravityVector);
 								var normalRoute = normalRouteMap[gravityVector.NormalRouteId];
 								gravityVector.NormalRoute = normalRoute;
 								if (normalRoute.GravityVectors == null)
@@ -233,12 +241,76 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 						}
 					});
 					Log.Info($"Done processing {rowCount} gravity vectors");
+					Log.Info($"Generating convex hulls..");
+					var i = 0;
+					var session = Util.GetSession();
+					var transaction = Util.BeginTransaction(session);
+					foreach (var normalRoute in normalRoutes)
+					{
+						i++;
+						// Sort the gravity vectors since they are probably out of order due to parallell processing
+						gvMap[normalRoute.NormalRouteId] = gvMap[normalRoute.NormalRouteId].OrderBy(gv => gv.SerialId).ToList();
+						GenerateConvexHulls(gvMap[normalRoute.NormalRouteId], normalRoute);
+						session.SaveOrUpdate(normalRoute);
+						if (i % 100 == 0)
+						{
+							Log.Info($"Created convex hulls for {i} normal routes..");
+						}
+					}
+					transaction.Commit();
+					session.Flush();
+					session.Close();
+					session.Dispose();
+					Log.Info($"Done generating convex hulls");
 				}
 			}
 			catch (Exception e)
 			{
 				Log.Error(e);
 			}
+		}
+
+		private static void GenerateConvexHulls(List<GravityVector> gravityVectors, NormalRoute normalRoute)
+		{
+			normalRoute.NormalRouteStdGeometry = GenerateConvexHull(
+					gravityVectors.Select(gv => gv.StdDevLeftPosition.Coordinate).ToList(),
+					gravityVectors.Select(gv => gv.StdDevRightPosition.Coordinate).ToList());
+
+			normalRoute.NormalRouteMaxGeometry = GenerateConvexHull(
+					gravityVectors.Select(gv => gv.MaxDevLeftPosition.Coordinate).ToList(),
+					gravityVectors.Select(gv => gv.MaxDevRightPosition.Coordinate).ToList());
+		}
+
+		private static Polygon GenerateConvexHull(List<Coordinate> currentLeftCoords, List<Coordinate> currentRightCoords)
+		{
+			currentRightCoords.Reverse();
+			var combinedCoordsList = currentLeftCoords.Concat(currentRightCoords).ToList();
+			combinedCoordsList.Add(combinedCoordsList.First());
+			var convexHull = new Polygon(new LinearRing(combinedCoordsList.ToArray()));
+			convexHull.SRID = 4326;
+
+			if (!convexHull.IsValid)
+			{
+				//var wut = convexHull.ToText();
+				var newGeom = convexHull.Buffer(0);
+				if (!(newGeom is Polygon))
+				{
+					Log.Warn($"The fixed geometry became a {newGeom.GetType().Name} :(");
+					convexHull = null;
+				}
+				else if (!newGeom.IsValid)
+				{
+					Log.Warn("Fix unsuccessful :(");
+					convexHull = null;
+				}
+				else
+				{
+					Log.Info("Geometry was invalid but was successfully fixed!");
+					convexHull = newGeom as Polygon;
+				}
+			}
+
+			return convexHull;
 		}
 
 		private static List<NormalRoute> LoadNormalRoutes(string path)
