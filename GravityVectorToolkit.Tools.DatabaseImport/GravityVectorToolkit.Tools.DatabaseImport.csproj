@@ -1,21 +1,24 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="commandlineargumentsparser" Version="3.0.19" />
-    <PackageReference Include="fluentnhibernate" Version="2.1.2" />
-    <PackageReference Include="geoapi" Version="1.7.5" />
-    <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="nhibernate" Version="5.2.1" />
-    <PackageReference Include="nhibernate.spatial.postgis" Version="5.1.0" />
+    <PackageReference Include="commandlineargumentsparser" Version="3.0.22" />
+    <PackageReference Include="CsvHelper" Version="18.0.0" />
+    <PackageReference Include="fluentnhibernate" Version="3.1.0" />
+    <PackageReference Include="log4net" Version="2.0.12" />
+    <PackageReference Include="NetTopologySuite" Version="2.1.0" />
+    <PackageReference Include="NetTopologySuite.IO.PostGis" Version="2.0.0" />
+    <PackageReference Include="NHibernate" Version="5.3.5" />
+    <PackageReference Include="NHibernate.Spatial.PostGis" Version="6.0.0" />
+    <PackageReference Include="Npgsql" Version="3.2.7" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GravityVector.Common\GravityVectorToolKit.Common.csproj" />
+    <ProjectReference Include="..\GravityVectorToolKit.Common\GravityVectorToolKit.Common.csproj" />
     <ProjectReference Include="..\GravityVectorToolKit.DataAccess\GravityVectorToolKit.DataAccess.csproj" />
     <ProjectReference Include="..\GravityVectorToolKit.Mapping\GravityVectorToolKit.CSV.Mapping.csproj" />
   </ItemGroup>
