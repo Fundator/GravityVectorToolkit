@@ -1,14 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="csvhelper" Version="12.1.0" />
+    <PackageReference Include="csvhelper" Version="18.0.0" />
+    <PackageReference Include="nhibernate" Version="5.3.5" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GravityVectorToolKit.DataAccess\GravityVectorToolKit.DataAccess.csproj" />
     <ProjectReference Include="..\GravityVectorToolKit.DataModel\GravityVectorToolKit.DataModel.csproj" />
     <ProjectReference Include="..\GravityVectorToolKit.Mapping\GravityVectorToolKit.CSV.Mapping.csproj" />
   </ItemGroup>
