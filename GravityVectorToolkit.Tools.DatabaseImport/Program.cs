@@ -46,10 +46,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 				'd', "drop", "Drop and recreate the database");
 
 			var pathArg = new ValueArgument<string>(
-				'p', "gv-folder-path", "Path to a folder containing gravity vector files");
-
-			var mergedGravityVectorFilePath = new ValueArgument<string>(
-				'g', "gv-merged-path", "Path to a merged file containing gravity vectors");
+				'g', "gv-merged-path", "Path to a folder containing gravity vector files");
 
 			var normalRoutePathArg = new ValueArgument<string>(
 				'n', "normal-route-path", "Path to a file containing normal route linestrings");
