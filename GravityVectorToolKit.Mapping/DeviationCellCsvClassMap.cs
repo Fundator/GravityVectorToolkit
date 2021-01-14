@@ -15,52 +15,52 @@ namespace GravityVectorToolKit.CSV.Mapping
 		/// </summary>
 		public DeviationCellCsvClassMap()
 		{
-			Map(m => m.DeviationCellId).Name("geohash");
+			Map(m => m.GeoHash).Name("geohash");
 			//Map(m => m.NormalRouteId).ConvertUsing(row => row.GetField<string>("normal_route_id").Split("_")[0]);
 			Map(m => m.DistToP).Name("disttoP");
-			Map(m => m.PPoint).ConvertUsing(row =>
-			{
-				var p = new Point(
-							new Coordinate(
-								Double.Parse(row.GetField("Plon"), CultureInfo.InvariantCulture),
-								Double.Parse(row.GetField("Plat"), CultureInfo.InvariantCulture)));
-				p.SRID = 4326;
-				return p;
-			});
+			//Map(m => m.PPoint).ConvertUsing(row =>
+			//{
+			//	var p = new Point(
+			//				new Coordinate(
+			//					Double.Parse(row.GetField("Plon"), CultureInfo.InvariantCulture),
+			//					Double.Parse(row.GetField("Plat"), CultureInfo.InvariantCulture)));
+			//	p.SRID = 4326;
+			//	return p;
+			//});
 			Map(m => m.RelDistStd).Name("rel_dist_std");
 			Map(m => m.RelDistMax).Name("rel_dist_max");
 			Map(m => m.RelCogStd).Name("rel_cog_std");
 			Map(m => m.RelCogMax).Name("rel_cog_max");
 			Map(m => m.RelSogStd).Name("rel_sog_std");
 			Map(m => m.RelSogMax).Name("rel_sog_max");
-			Map(m => m.G1).ConvertUsing(row =>
-			{
-				var p = new Point(
-							new Coordinate(
-								Double.Parse(row.GetField("g1lon"), CultureInfo.InvariantCulture),
-								Double.Parse(row.GetField("g1lat"), CultureInfo.InvariantCulture)));
-				p.SRID = 4326;
-				return p;
-			});
-			Map(m => m.G2).ConvertUsing(row =>
-			{
-				var p = new Point(
-							new Coordinate(
-								Double.Parse(row.GetField("g2lon"), CultureInfo.InvariantCulture),
-								Double.Parse(row.GetField("g2lat"), CultureInfo.InvariantCulture)));
-				p.SRID = 4326;
-				return p;
-			});
-			Map(m => m.Significance).Name("significance");
-			Map(m => m.Position).ConvertUsing(row =>
-			{
-				var p = new Point(
-							new Coordinate(
-								Double.Parse(row.GetField("lon"), CultureInfo.InvariantCulture),
-								Double.Parse(row.GetField("lat"), CultureInfo.InvariantCulture)));
-				p.SRID = 4326;
-				return p;
-			});
+			//Map(m => m.G1).ConvertUsing(row =>
+			//{
+			//	var p = new Point(
+			//				new Coordinate(
+			//					Double.Parse(row.GetField("g1lon"), CultureInfo.InvariantCulture),
+			//					Double.Parse(row.GetField("g1lat"), CultureInfo.InvariantCulture)));
+			//	p.SRID = 4326;
+			//	return p;
+			//});
+			//Map(m => m.G2).ConvertUsing(row =>
+			//{
+			//	var p = new Point(
+			//				new Coordinate(
+			//					Double.Parse(row.GetField("g2lon"), CultureInfo.InvariantCulture),
+			//					Double.Parse(row.GetField("g2lat"), CultureInfo.InvariantCulture)));
+			//	p.SRID = 4326;
+			//	return p;
+			//});
+			Map(m => m.DataCount).Name("datacount");
+			//Map(m => m.Position).ConvertUsing(row =>
+			//{
+			//	var p = new Point(
+			//				new Coordinate(
+			//					Double.Parse(row.GetField("lon"), CultureInfo.InvariantCulture),
+			//					Double.Parse(row.GetField("lat"), CultureInfo.InvariantCulture)));
+			//	p.SRID = 4326;
+			//	return p;
+			//});
 			Map(m => m.DistStdLeft).Name("dist_std_left");
 			Map(m => m.DistStdRight).Name("dist_std_right");
 			Map(m => m.DistMaxLeft).Name("dist_max_left");
