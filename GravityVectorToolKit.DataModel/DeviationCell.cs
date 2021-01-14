@@ -11,19 +11,19 @@ namespace GravityVectorToolKit.DataModel
 	/// </summary>
 	public class DeviationCell
 	{
-		public virtual string DeviationCellId { get; set; }
+		public virtual string GeoHash { get; set; }
 		public virtual double DistToP { get; set; }
-		public virtual Point PPoint { get; set; }
+		//public virtual Point PPoint { get; set; }
 		public virtual double RelDistStd { get; set; }
 		public virtual double RelDistMax { get; set; }
 		public virtual double RelCogStd { get; set; }
 		public virtual double RelCogMax { get; set; }
 		public virtual double RelSogStd { get; set; }
 		public virtual double RelSogMax { get; set; }
-		public virtual Point G1 { get; set; }
-		public virtual Point G2 { get; set; }
-		public virtual double Significance { get; set; }
-		public virtual Point Position { get; set; }
+		//public virtual Point G1 { get; set; }
+		//public virtual Point G2 { get; set; }
+		public virtual int DataCount { get; set; }
+		//public virtual Point Position { get; set; }
 		public virtual double DistStdLeft { get; set; }
 		public virtual double DistStdRight { get; set; }
 		public virtual double DistMaxLeft { get; set; }
