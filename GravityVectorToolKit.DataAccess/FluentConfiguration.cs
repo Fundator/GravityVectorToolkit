@@ -5,7 +5,6 @@ using NHibernate.Spatial.Dialect;
 using NHibernate.Spatial.Mapping;
 using NHibernate.Spatial.Type;
 using NHibernate.Tool.hbm2ddl;
-using System;
 
 namespace GravityVectorToolKit.DataAccess
 {

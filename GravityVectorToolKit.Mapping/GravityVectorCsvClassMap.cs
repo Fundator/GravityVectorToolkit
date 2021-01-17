@@ -40,8 +40,6 @@ namespace GravityVectorToolKit.CSV.Mapping
 			Map(m => m.LesserCourseStdDev).Name("lessercoursestddev");
 			Map(m => m.GreaterCourseStdDev).Name("greatercoursestddev");
 
-
-
 			#endregion Position statistics
 
 			#region Vessel detail statistics
@@ -125,8 +123,6 @@ namespace GravityVectorToolKit.CSV.Mapping
 				p.SRID = 4326;
 				return p;
 			});
-
-
 		}
 	}
 }

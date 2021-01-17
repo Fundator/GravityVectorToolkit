@@ -78,13 +78,13 @@ namespace GravityVectorToolKit.DataModel
 		public virtual Geometry StdDevRightPosition { get; set; }
 		public virtual Geometry MaxDevLeftPosition { get; set; }
 		public virtual Geometry MaxDevRightPosition { get; set; }
+
 		#region Metadata
 
 		/// <summary>
 		/// This field is only used for lookup to identify the correct normalroute based on its id
 		/// </summary>
 		public virtual string NormalRouteId { get; set; }
-
 
 		#endregion Metadata
 	}
