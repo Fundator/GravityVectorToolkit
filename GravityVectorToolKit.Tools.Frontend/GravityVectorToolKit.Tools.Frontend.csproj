@@ -7,6 +7,10 @@
     <ApplicationIcon>White anchor - black background.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\GravityVectorToolkit.Tools.DatabaseImport\GravityVectorToolkit.Tools.DatabaseImport.csproj" />
   </ItemGroup>

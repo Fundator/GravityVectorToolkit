@@ -1,9 +1,6 @@
 ﻿using CsvHelper.Configuration;
 using GravityVectorToolKit.DataModel;
-using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
-using System;
-using System.Globalization;
 
 namespace GravityVectorToolKit.CSV.Mapping
 {

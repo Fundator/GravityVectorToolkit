@@ -1,5 +1,4 @@
-﻿using FluentNHibernate.Conventions.Helpers;
-using FluentNHibernate.Mapping;
+﻿using FluentNHibernate.Mapping;
 using GravityVectorToolKit.DataModel;
 using NetTopologySuite.Geometries;
 using NHibernate.Spatial.Type;

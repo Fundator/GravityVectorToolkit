@@ -5,7 +5,6 @@ using GravityVectorToolKit.DataAccess;
 using GravityVectorToolKit.DataModel;
 using log4net;
 using NetTopologySuite.Geometries;
-using NetTopologySuite.Operation.Valid;
 using NHibernate;
 using System;
 using System.Collections.Generic;
@@ -16,7 +15,6 @@ using System.Threading.Tasks;
 
 namespace GravityVectorToolkit.Tools.DatabaseImport
 {
-
 	public static class DatabaseImport
 	{
 		private static ILog Logger = LogManager.GetLogger(typeof(DatabaseImport));
@@ -99,7 +97,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 		{
 			UpdateStatus = updateStatus;
 
-			// Configure database 
+			// Configure database
 			FluentConfiguration.Configure(parameters.ConnectionString, parameters.DropAndCreate);
 
 			var normalRoutes = new List<NormalRoute>();
@@ -121,7 +119,6 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			{
 				ImportDeviationCells(parameters.DeviationMapPath);
 			}
-
 		}
 
 		public static List<NormalRoute> ImportNormalRoutes(string path)
@@ -294,6 +291,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 				Log($"Done processing {rowCount} deviation cells");
 			}
 		}
+
 		private static void GenerateConvexHulls(List<GravityVector> gravityVectors, NormalRoute normalRoute)
 		{
 			normalRoute.NormalRouteStdGeometry = GenerateConvexHull(
