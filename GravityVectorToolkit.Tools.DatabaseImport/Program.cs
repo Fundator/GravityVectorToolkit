@@ -1,27 +1,21 @@
 ﻿using CommandLineParser.Arguments;
-using GravityVectorToolKit.Common;
-using GravityVectorToolKit.Common.Extensions;
-using GravityVectorToolKit.CSV.Mapping;
 using GravityVectorToolKit.DataAccess;
 using GravityVectorToolKit.DataModel;
 using log4net;
 using log4net.Config;
-using NetTopologySuite.Geometries;
-using NHibernate;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace GravityVectorToolkit.Tools.DatabaseImport
 {
-	internal static class Program
+	public static partial class Program
 	{
-		private static ILog Log = LogManager.GetLogger(typeof(Program));
 		private static Object syncRoot = new Object();
+
+		private static ILog Log = LogManager.GetLogger(typeof(Program));
 
 		private static void Main(string[] args)
 		{
@@ -82,7 +76,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 				if (File.Exists(path))
 				{
-					normalRoutes = LoadNormalRoutes(path);
+					normalRoutes = DatabaseImport.ImportNormalRoutes(path);
 				}
 				else
 				{
@@ -110,7 +104,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 				if (File.Exists(path))
 				{
-					LoadGravityVectors(syncRoot, path, normalRoutes);
+					DatabaseImport.ImportGravityVectors(syncRoot, path, normalRoutes);
 				}
 				else
 				{
@@ -129,7 +123,7 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 
 				if (File.Exists(path))
 				{
-					LoadDeviationCells(path);
+					DatabaseImport.ImportDeviationCells(path);
 				}
 				else
 				{
@@ -141,219 +135,6 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			{
 				Log.Info("Deviation cell file not specified, skipping..");
 			}
-		}
-
-		private static void LoadDeviationCells(string path)
-		{
-			Log.Debug($"Loading deviation cells..");
-
-			var batchSize = 10000;
-			var rowCount = 0;
-			var syncRoot = new object();
-
-			using (var input = new StreamReader(File.OpenRead(path)))
-			{
-				var header = input.ReadLine(); // Keep the header
-				Parallel.ForEach(
-					input.ReadLines().TakeChunks(batchSize),
-					new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount },
-					lines =>
-					{
-						var linesWithHeader = new List<string> { header }
-										.Concat(lines);
-						var session = Util.GetSession();
-						var transaction = Util.BeginTransaction(session);
-						var records = Util.ReadFromList<DeviationCell, DeviationCellCsvClassMap>(linesWithHeader);
-						foreach (var record in records)
-						{
-							Interlocked.Increment(ref rowCount);
-							session.SaveOrUpdate(record);
-						}
-						Log.Info($"Processed {rowCount} rows");
-						transaction.Commit();
-						session.Flush();
-					});
-				Log.Info($"Done processing {rowCount} deviation cells");
-			}
-		}
-
-		private static void LoadGravityVectors(object syncRoot, string file, List<NormalRoute> normalRoutes)
-		{
-			Log.Debug($"Loading gravity vectors..");
-
-			var normalRouteMap = normalRoutes.ToDictionary(x => x.NormalRouteId, x => x);
-
-			var gvMap = new Dictionary<string, List<GravityVector>>();
-
-			foreach (var normalRoute in normalRoutes)
-			{
-				gvMap.Add(normalRoute.NormalRouteId, new List<GravityVector>());
-			}
-
-			try
-			{
-				using (var input = new StreamReader(File.OpenRead(file)))
-				{
-					var header = input.ReadLine();
-					var filename = Path.GetFileName(file);
-					var rowCount = 0;
-					const int batchSize = 10000;
-					Log.Info($"Loading gravity vectors from {Path.GetFileName(file)}..");
-					Parallel.ForEach(input.ReadLines().TakeChunks(batchSize),
-										new ParallelOptions()
-										{
-											MaxDegreeOfParallelism = Environment.ProcessorCount
-										},
-										lines =>
-					{
-						var linesWithHeader = new List<string> { header }.Concat(lines);
-						try
-						{
-							var session = Util.GetSession();
-							var transaction = Util.BeginTransaction(session);
-							var records = Util.ReadFromList<GravityVector, GravityVectorCsvClassMap>(linesWithHeader);
-							foreach (var gravityVector in records)
-							{
-								Interlocked.Increment(ref rowCount);
-								gvMap[gravityVector.NormalRouteId].Add(gravityVector);
-								var normalRoute = normalRouteMap[gravityVector.NormalRouteId];
-								gravityVector.NormalRoute = normalRoute;
-								if (normalRoute.GravityVectors == null)
-								{
-									normalRoute.GravityVectors = new List<GravityVector>();
-								}
-								normalRoute.GravityVectors.Add(gravityVector);
-								session.SaveOrUpdate(gravityVector);
-							}
-
-							Log.Info($"Processed {rowCount} rows..");
-							transaction.Commit();
-							session.Flush();
-							session.Close();
-							session.Dispose();
-						}
-						catch (Exception e)
-						{
-							Log.Error(e);
-						}
-					});
-					Log.Info($"Done processing {rowCount} gravity vectors");
-					Log.Info($"Generating convex hulls..");
-					var i = 0;
-					var session = Util.GetSession();
-					var transaction = Util.BeginTransaction(session);
-					foreach (var normalRoute in normalRoutes)
-					{
-						i++;
-						// Sort the gravity vectors since they are probably out of order due to parallell processing
-						gvMap[normalRoute.NormalRouteId] = gvMap[normalRoute.NormalRouteId].OrderBy(gv => gv.SerialId).ToList();
-						GenerateConvexHulls(gvMap[normalRoute.NormalRouteId], normalRoute);
-						session.SaveOrUpdate(normalRoute);
-						if (i % 100 == 0)
-						{
-							Log.Info($"Created convex hulls for {i} normal routes..");
-						}
-					}
-					transaction.Commit();
-					session.Flush();
-					session.Close();
-					session.Dispose();
-					Log.Info($"Done generating convex hulls");
-				}
-			}
-			catch (Exception e)
-			{
-				Log.Error(e);
-			}
-		}
-
-		private static void GenerateConvexHulls(List<GravityVector> gravityVectors, NormalRoute normalRoute)
-		{
-			normalRoute.NormalRouteStdGeometry = GenerateConvexHull(
-					gravityVectors.Select(gv => gv.StdDevLeftPosition.Coordinate).ToList(),
-					gravityVectors.Select(gv => gv.StdDevRightPosition.Coordinate).ToList());
-
-			normalRoute.NormalRouteMaxGeometry = GenerateConvexHull(
-					gravityVectors.Select(gv => gv.MaxDevLeftPosition.Coordinate).ToList(),
-					gravityVectors.Select(gv => gv.MaxDevRightPosition.Coordinate).ToList());
-		}
-
-		private static Polygon GenerateConvexHull(List<Coordinate> currentLeftCoords, List<Coordinate> currentRightCoords)
-		{
-			currentRightCoords.Reverse();
-			var combinedCoordsList = currentLeftCoords.Concat(currentRightCoords).ToList();
-			combinedCoordsList.Add(combinedCoordsList.First());
-			var convexHull = new Polygon(new LinearRing(combinedCoordsList.ToArray()));
-			convexHull.SRID = 4326;
-
-			if (!convexHull.IsValid)
-			{
-				//var wut = convexHull.ToText();
-				var newGeom = convexHull.Buffer(0);
-				if (!(newGeom is Polygon))
-				{
-					Log.Warn($"The fixed geometry became a {newGeom.GetType().Name} :(");
-					convexHull = null;
-				}
-				else if (!newGeom.IsValid)
-				{
-					Log.Warn("Fix unsuccessful :(");
-					convexHull = null;
-				}
-				else
-				{
-					Log.Info("Geometry was invalid but was successfully fixed!");
-					convexHull = newGeom as Polygon;
-				}
-			}
-
-			return convexHull;
-		}
-
-		private static List<NormalRoute> LoadNormalRoutes(string path)
-		{
-			List<NormalRoute> allNormalRoutes = new List<NormalRoute>();
-			var filename = Path.GetFileName(path);
-			Log.Info($"Loading normal routes from {filename}..");
-			var syncRoot = new object();
-			const int batchSize = 150;
-			int rowCount = 0;
-			using (var input = new StreamReader(File.OpenRead(path)))
-			{
-				var header = input.ReadLine(); // Keep the header
-				Parallel.ForEach(
-					input.ReadLines().TakeChunks(batchSize),
-					new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount },
-					lines =>
-					{
-						var linesWithHeader = new List<string> { header }
-										.Concat(lines);
-
-						var normalRoutes = Util.ReadFromList<NormalRoute, NormalRouteCsvClassMap>(linesWithHeader);
-
-						ISession nrSession = Util.GetSession();
-						ITransaction transaction = Util.BeginTransaction(nrSession);
-						foreach (var normalRoute in normalRoutes)
-						{
-							Interlocked.Increment(ref rowCount);
-							nrSession.SaveOrUpdate(normalRoute); // Use Save() because the primary is assigned
-							if (rowCount % 100 == 0)
-							{
-								Log.Info($"Processed {rowCount} normal routes");
-							}
-						}
-						transaction.Commit();
-						nrSession.Flush();
-						nrSession.Close();
-						lock (syncRoot)
-						{
-							allNormalRoutes.AddRange(normalRoutes);
-						}
-					});
-			}
-			Log.Info($"Done processing {rowCount} normal routes");
-
-			return allNormalRoutes;
 		}
 	}
 }

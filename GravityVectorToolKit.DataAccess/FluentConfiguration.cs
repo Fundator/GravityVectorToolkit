@@ -5,6 +5,7 @@ using NHibernate.Spatial.Dialect;
 using NHibernate.Spatial.Mapping;
 using NHibernate.Spatial.Type;
 using NHibernate.Tool.hbm2ddl;
+using System;
 
 namespace GravityVectorToolKit.DataAccess
 {
@@ -37,6 +38,11 @@ namespace GravityVectorToolKit.DataAccess
 			}
 
 			SessionManager.SessionFactory = cfg.BuildSessionFactory();
+		}
+
+		public static void TestConfiguration(string connectionString)
+		{
+			Configure(connectionString, false);
 		}
 	}
 }
