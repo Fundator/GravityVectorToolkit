@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using System.IO;
 
 namespace GravityVectorToolKit.Tools.Frontend
 {
@@ -20,6 +23,7 @@ namespace GravityVectorToolKit.Tools.Frontend
 
 	public partial class MainForm : Form
 	{
+		private const string SettingsFilePath = "settings.json";
 
 		/// <summary>
 		/// File dialog for the normal route file
@@ -47,7 +51,6 @@ namespace GravityVectorToolKit.Tools.Frontend
 			ConfigureCommonProperties(dlgNormalRouteFile);
 			ConfigureCommonProperties(dlgGravityVectorFile);
 			ConfigureCommonProperties(dlgDeviationMapFile);
-
 		}
 
 		/// <summary>
@@ -65,7 +68,12 @@ namespace GravityVectorToolKit.Tools.Frontend
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-
+			if (File.Exists(SettingsFilePath))
+			{
+				var settingsStr = File.ReadAllText(SettingsFilePath);
+				var settings = JsonSerializer.Deserialize<DatabaseImportParameters>(settingsStr);
+				SetParameters(settings);
+			}
 		}
 
 		private void btnFindNormalRouteFile_Click(object sender, EventArgs e)
@@ -147,62 +155,47 @@ namespace GravityVectorToolKit.Tools.Frontend
 			{
 				MessageBox.Show("Validation successful!", "Validation status",
 					MessageBoxButtons.OK, MessageBoxIcon.Information);
-
 			}
 		}
 
 		private DatabaseImportParameters GetParameters()
 		{
 			var parameters = new DatabaseImportParameters();
+			
 			parameters.NormalRoutePath = txtNormalRoutePath.Text;
 			parameters.GravityVectorPath = txtGravityVectorPath.Text;
 			parameters.DeviationMapPath = txtDeviationMapPath.Text;
-			parameters.ConnectionString = txtConnectionString.Text;
+			parameters.ConnectionDetails.HostName = txtHostname.Text;
+			parameters.ConnectionDetails.Port = txtPort.Text;
+			parameters.ConnectionDetails.DatabaseName = txtDatabase.Text;
+			parameters.ConnectionDetails.Username = txtUsername.Text;
+			parameters.ConnectionDetails.Password = txtPassword.Text;
 			parameters.DropAndCreate = chkDropAndRecreate.Checked;
+
 			return parameters;
 		}
-	}
 
-	static class ControlExtensions
-	{
-
-		private delegate void SetPropertyThreadSafeDelegate<TResult>(
-			Control @this,
-			Expression<Func<TResult>> property,
-			TResult value);
-
-		public static void SetPropertyThreadSafe<TResult>(
-			this Control @this,
-			Expression<Func<TResult>> property,
-			TResult value)
+		private void SetParameters(DatabaseImportParameters parameters)
 		{
-			var propertyInfo = (property.Body as MemberExpression).Member
-				as PropertyInfo;
+			// Database connection details
+			txtHostname.Text = parameters.ConnectionDetails.HostName;
+			txtDatabase.Text = parameters.ConnectionDetails.DatabaseName;
+			txtPort.Text = parameters.ConnectionDetails.Port;
+			txtUsername.Text = parameters.ConnectionDetails.Username;
+			txtPassword.Text = parameters.ConnectionDetails.Password;
 
-			if (propertyInfo == null ||
-				!@this.GetType().IsSubclassOf(propertyInfo.ReflectedType) ||
-				@this.GetType().GetProperty(
-					propertyInfo.Name,
-					propertyInfo.PropertyType) == null)
-			{
-				throw new ArgumentException("The lambda expression 'property' must reference a valid property on this Control.");
-			}
+			// Input files
+			txtNormalRoutePath.Text = parameters.NormalRoutePath;
+			txtGravityVectorPath.Text = parameters.GravityVectorPath;
+			txtDeviationMapPath.Text = parameters.DeviationMapPath;
+			chkDropAndRecreate.Checked = parameters.DropAndCreate;
+		}
 
-			if (@this.InvokeRequired)
-			{
-				@this.Invoke(new SetPropertyThreadSafeDelegate<TResult>
-				(SetPropertyThreadSafe),
-				new object[] { @this, property, value });
-			}
-			else
-			{
-				@this.GetType().InvokeMember(
-					propertyInfo.Name,
-					BindingFlags.SetProperty,
-					null,
-					@this,
-					new object[] { value });
-			}
+		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			var settings = GetParameters();
+			var str = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
+			File.WriteAllText(SettingsFilePath, str);
 		}
 	}
 }
