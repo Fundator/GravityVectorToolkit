@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 namespace GravityVectorToolkit.Test.UnitTests
 {
+
 	public class DeviationCellTests
 	{
 		[SetUp]
