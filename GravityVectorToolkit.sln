@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityVectorToolkit.Tools.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityVectorToolkit.Test.UnitTests", "GravityVectorToolkit.Test.UnitTests\GravityVectorToolkit.Test.UnitTests.csproj", "{C6CDEA33-F85B-4D60-B1DF-6A83F21AB072}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GravityVectorToolKit.Tools.Frontend", "GravityVectorToolKit.Tools.Frontend\GravityVectorToolKit.Tools.Frontend.csproj", "{88BE3E75-6020-48CC-8BE1-3C686C4DAE77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityVectorToolKit.Tools.Frontend", "GravityVectorToolKit.Tools.Frontend\GravityVectorToolKit.Tools.Frontend.csproj", "{88BE3E75-6020-48CC-8BE1-3C686C4DAE77}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GravityVectorToolKit.Tools.AisCombine", "GravityVectorToolKit.Tools.AisCombine\GravityVectorToolKit.Tools.AisCombine.csproj", "{73AA76D8-1E3D-43F5-B2D7-B9089686AC05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{88BE3E75-6020-48CC-8BE1-3C686C4DAE77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88BE3E75-6020-48CC-8BE1-3C686C4DAE77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88BE3E75-6020-48CC-8BE1-3C686C4DAE77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73AA76D8-1E3D-43F5-B2D7-B9089686AC05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73AA76D8-1E3D-43F5-B2D7-B9089686AC05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73AA76D8-1E3D-43F5-B2D7-B9089686AC05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73AA76D8-1E3D-43F5-B2D7-B9089686AC05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

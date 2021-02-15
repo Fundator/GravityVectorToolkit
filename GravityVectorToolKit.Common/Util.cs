@@ -2,6 +2,7 @@
 using CsvHelper.Configuration;
 using GravityVectorToolKit.DataAccess;
 using NHibernate;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -74,6 +75,29 @@ namespace GravityVectorToolKit.Common
 			session.FlushMode = FlushMode.Manual;
 			return session;
 			//}, 10);
+		}
+
+		public static long RoundToHourEpoch(DateTime dt)
+		{
+			//var t = dt - new DateTime(1970, 1, 1);
+			//int secondsSinceEpoch = (int)t.TotalSeconds;
+
+			var t = (new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, 0, 0))
+				.Subtract(new DateTime(1970, 1, 1));
+
+			return (int)t.TotalSeconds;
+			//dt
+			//long ticks = dt.Ticks + 18000000000;
+			//ticks = ticks - ticks % 36000000000;
+			//long epoch = ticks / 1000;
+			//return epoch;
+		}
+
+		public static long ToEpoch(this DateTime date)
+		{
+			var origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var diff = date.ToUniversalTime() - origin;
+			return (long)Math.Floor(diff.TotalSeconds);
 		}
 
 		/// <summary>

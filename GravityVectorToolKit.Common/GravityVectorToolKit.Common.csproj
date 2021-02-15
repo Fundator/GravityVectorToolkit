@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="csvhelper" Version="18.0.0" />
+    <PackageReference Include="geohash-dotnet" Version="1.0.4" />
     <PackageReference Include="nhibernate" Version="5.3.5" />
   </ItemGroup>
 
