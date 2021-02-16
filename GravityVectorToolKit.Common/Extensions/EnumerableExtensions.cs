@@ -1,12 +1,26 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GravityVectorToolKit.Common.Extensions
 {
 	public static class EnumerableExtensions
 	{
+		public static IEnumerable<T1> OrderedParallel<T, T1>(this IEnumerable<T> list, Func<T, T1> action)
+		{
+			var unorderedResult = new ConcurrentBag<(long, T1)>();
+			Parallel.ForEach(list, (o, state, i) =>
+			{
+				unorderedResult.Add((i, action.Invoke(o)));
+			});
+			var ordered = unorderedResult.OrderBy(o => o.Item1);
+			return ordered.Select(o => o.Item2);
+		}
+
 		public static IEnumerable<string> ReadLines(this StreamReader input)
 		{
 			return new LineReadingEnumerable(input);

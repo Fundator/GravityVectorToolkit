@@ -1,0 +1,13 @@
+{
+   "Id":"d0ded7a0-5b45-42ad-8061-0a0176081e50",
+   "AisSourceDirectory":"E:\\AIS 2018",
+   "AisDestinationDirectory":"D:\\Temporary Files\\AisCombiner\\output",
+   "WeatherDbPath":"E:\\madart-weather-2018-2020.sqlite",
+   "MaxParallellism":14,
+   "AssumeNoEpochCollissions":true,
+   "TimestampColumnName":"date_time_utc",
+   "LatitudeColumnName":"lat",
+   "LongitudeColumnName":"lon",
+   "CalculateClosest":true,
+   "PrecisionSearchLimit":3
+}
