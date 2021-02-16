@@ -74,52 +74,52 @@ namespace GravityVectorToolKit.CSV.Mapping
 
 			Map(m => m.DataCount).Name("datacount");
 			Map(m => m.TrajectoryCount).Name("trajectorycount");
-			Map(m => m.PositionGeometry).ConvertUsing(row =>
+			Map(m => m.PositionGeometry).Convert(args =>
 			{
 				var p = new Point(
 							new Coordinate(
-								Double.Parse(row.GetField("longitude"), CultureInfo.InvariantCulture),
-								Double.Parse(row.GetField("latitude"), CultureInfo.InvariantCulture)));
+								Double.Parse(args.Row.GetField("longitude"), CultureInfo.InvariantCulture),
+								Double.Parse(args.Row.GetField("latitude"), CultureInfo.InvariantCulture)));
 				p.SRID = 4326;
 				return p;
 			});
 
-			Map(m => m.StdDevLeftPosition).ConvertUsing(row =>
+			Map(m => m.StdDevLeftPosition).Convert(args =>
 			{
 				var p = new Point(
 							new Coordinate(
-								Double.Parse(row.GetField("stdcoordleftlon"), CultureInfo.InvariantCulture),
-								Double.Parse(row.GetField("stdcoordleftlat"), CultureInfo.InvariantCulture)));
+								Double.Parse(args.Row.GetField("stdcoordleftlon"), CultureInfo.InvariantCulture),
+								Double.Parse(args.Row.GetField("stdcoordleftlat"), CultureInfo.InvariantCulture)));
 				p.SRID = 4326;
 				return p;
 			});
 
-			Map(m => m.StdDevRightPosition).ConvertUsing(row =>
+			Map(m => m.StdDevRightPosition).Convert(args =>
 			{
 				var p = new Point(
 							new Coordinate(
-								Double.Parse(row.GetField("stdcoordrightlon"), CultureInfo.InvariantCulture),
-								Double.Parse(row.GetField("stdcoordrightlat"), CultureInfo.InvariantCulture)));
+								Double.Parse(args.Row.GetField("stdcoordrightlon"), CultureInfo.InvariantCulture),
+								Double.Parse(args.Row.GetField("stdcoordrightlat"), CultureInfo.InvariantCulture)));
 				p.SRID = 4326;
 				return p;
 			});
 
-			Map(m => m.MaxDevLeftPosition).ConvertUsing(row =>
+			Map(m => m.MaxDevLeftPosition).Convert(args =>
 			{
 				var p = new Point(
 							new Coordinate(
-								Double.Parse(row.GetField("maxcoordleftlon"), CultureInfo.InvariantCulture),
-								Double.Parse(row.GetField("maxcoordleftlat"), CultureInfo.InvariantCulture)));
+								Double.Parse(args.Row.GetField("maxcoordleftlon"), CultureInfo.InvariantCulture),
+								Double.Parse(args.Row.GetField("maxcoordleftlat"), CultureInfo.InvariantCulture)));
 				p.SRID = 4326;
 				return p;
 			});
 
-			Map(m => m.MaxDevRightPosition).ConvertUsing(row =>
+			Map(m => m.MaxDevRightPosition).Convert(args =>
 			{
 				var p = new Point(
 							new Coordinate(
-								Double.Parse(row.GetField("maxcoordrightlon"), CultureInfo.InvariantCulture),
-								Double.Parse(row.GetField("maxcoordrightlat"), CultureInfo.InvariantCulture)));
+								Double.Parse(args.Row.GetField("maxcoordrightlon"), CultureInfo.InvariantCulture),
+								Double.Parse(args.Row.GetField("maxcoordrightlat"), CultureInfo.InvariantCulture)));
 				p.SRID = 4326;
 				return p;
 			});

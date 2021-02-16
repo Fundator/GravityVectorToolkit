@@ -62,10 +62,10 @@ namespace GravityVectorToolKit.CSV.Mapping
 			Map(m => m.DistStdRight).Name("dist_std_right");
 			Map(m => m.DistMaxLeft).Name("dist_max_left");
 			Map(m => m.DistMaxRight).Name("dist_max_right");
-			Map(m => m.Geom).ConvertUsing(row =>
+			Map(m => m.Geom).Convert(args =>
 			{
 				var wktReader = new WKTReader();
-				var p = wktReader.Read(row.GetField("geometry"));
+				var p = wktReader.Read(args.Row.GetField("geometry"));
 				p.SRID = 4326;
 				return p;
 			});

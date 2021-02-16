@@ -49,23 +49,23 @@ namespace GravityVectorToolKit.CSV.Mapping
 					.TypeConverterOption.BooleanValues(true, true, "True", "true")
 					.TypeConverterOption.BooleanValues(false, true, "False", "false");
 
-			Map(m => m.NormalRouteId).ConvertUsing(row => row.GetField<string>("normal_route_id"));
+			Map(m => m.NormalRouteId).Convert(row => row.Row.GetField<string>("normal_route_id"));
 			Map(m => m.FromLocationId).Name("dep_id");
 			Map(m => m.ToLocationId).Name("arr_id");
 			Map(m => m.HighError).Name("high_error")
 					.TypeConverterOption.BooleanValues(true, true, "True", "true")
 					.TypeConverterOption.BooleanValues(false, true, "False", "false");
 
-			Map(m => m.VoyageCount).ConvertUsing(row => (int)row.GetField<float>("voyage_count"));
+			Map(m => m.VoyageCount).Convert(row => (int)row.Row.GetField<float>("voyage_count"));
 
 			//Map(m => m.FromLocationId).Name("dep_id");
 			//Map(m => m.FromLocationId).Name("dep_id");
 			//Map(m => m.FromLocationId).Name("dep_id");
 
-			Map(m => m.NormalRouteGeometry).ConvertUsing(row =>
+			Map(m => m.NormalRouteGeometry).Convert(row =>
 			{
 				WKTReader wktReader = new WKTReader();
-				Geometry p = wktReader.Read(row.GetField("normal_route"));
+				Geometry p = wktReader.Read(row.Row.GetField("normal_route"));
 				p.SRID = 4326;
 				return p;
 			});

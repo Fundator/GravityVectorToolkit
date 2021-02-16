@@ -24,7 +24,7 @@ namespace GravityVectorToolKit.Common
 		{
 			StreamReader reader = File.OpenText(file);
 			var csv = new CsvReader(reader, DefaultConfig);
-			csv.Configuration.RegisterClassMap<TClassMap>();
+			csv.Context.RegisterClassMap<TClassMap>();
 			var records = csv.GetRecords<TModel>().ToList();
 			reader.Close();
 			reader.Dispose();
@@ -36,7 +36,7 @@ namespace GravityVectorToolKit.Common
 		{
 			StreamReader reader = File.OpenText(file);
 			var csv = new CsvReader(reader, DefaultConfig);
-			csv.Configuration.RegisterClassMap<TClassMap>();
+			csv.Context.RegisterClassMap<TClassMap>();
 			//var records = csv.GetRecords<TModel>().ToList();
 			while (csv.Read())
 			{
@@ -52,7 +52,7 @@ namespace GravityVectorToolKit.Common
 		{
 			var reader = new StringReader(string.Join("\r\n", lines.ToArray()));
 			var csv = new CsvReader(reader, DefaultConfig);
-			csv.Configuration.RegisterClassMap<TClassMap>();
+			csv.Context.RegisterClassMap<TClassMap>();
 			var records = csv.GetRecords<TModel>().ToList();
 			reader.Close();
 			reader.Dispose();

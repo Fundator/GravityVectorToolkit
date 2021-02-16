@@ -15,7 +15,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.NetTopologySuite" Version="5.0.3" />
     <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="16.8.3" />
-    <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="NUnit" Version="3.13.1" />
     <PackageReference Include="nunit3testadapter" Version="3.17.0" />
     <PackageReference Include="Sylvan.Common" Version="0.3.0-B0001" />
     <PackageReference Include="Sylvan.Data.Csv" Version="0.9.2" />
