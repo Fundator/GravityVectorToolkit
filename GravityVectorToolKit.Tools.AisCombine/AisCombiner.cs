@@ -154,7 +154,7 @@ namespace GravityVectorToolKit.Tools.AisCombine
 				var lat = csv.GetFloat(Specification.LatitudeColumnName);
 				var lon = csv.GetFloat(Specification.LongitudeColumnName);
 				var point = new Point(lon, lat);
-				var hash = GeoHasher.Encode(point, Specification.Precision);
+				var hash = GeoHasher.Encode(point, Specification.GeohashMatchPrecision);
 
 				WeatherHist match = null;
 
@@ -168,7 +168,7 @@ namespace GravityVectorToolKit.Tools.AisCombine
 					if (matches.Count() > 0)
 					{
 						match = SelectBestMatch(point, matches);
-						MapRedirect(hash, GeoHasher.Reduce(match.Geohash, Specification.Precision));
+						MapRedirect(hash, GeoHasher.Reduce(match.Geohash, Specification.GeohashMatchPrecision));
 					}
 				}
 
@@ -254,7 +254,7 @@ namespace GravityVectorToolKit.Tools.AisCombine
 				var fromNeighbours = FindNeighbours(currentRoundedEpoch, reducedHash);
 				var fromCurrentReducedHash = EpochManager.Lookup(currentRoundedEpoch,
 													reducedHash,
-														reducedHash.Length < Specification.Precision);
+														reducedHash.Length < Specification.GeohashMatchPrecision);
 				data.AddRange(fromNeighbours);
 				data.AddRange(fromCurrentReducedHash);
 
@@ -307,7 +307,7 @@ namespace GravityVectorToolKit.Tools.AisCombine
 			var data = new List<WeatherHist>();
 			foreach (var n in neighbours)
 			{
-				var tmp = EpochManager.Lookup(currentRoundedEpoch, n, n.Length < Specification.Precision);
+				var tmp = EpochManager.Lookup(currentRoundedEpoch, n, n.Length < Specification.GeohashMatchPrecision);
 				if (tmp != null)
 				{
 					data.AddRange(tmp);
