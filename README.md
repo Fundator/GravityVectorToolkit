@@ -55,13 +55,18 @@ Name | Required | Default value | Description
 ------------ | ------------- | ------------- | -------------
 `AisSourceDirectory` | Yes | n/a | AIS source file directory containing AIS files in CSV format.
 `AisDestinationDirectory` | Yes | n/a | Destination directory (requires approx 150% capacity compared to the total input file sizes).
-`WeatherDbPath` | Yes | n/a | The path to the SQLite file containing weather data.
-`MaxParallellism` | Yes | maximum available threads | The maximum amount of threads to use. Set this to a lower value if you run out of memory.
 `AssumeNoEpochCollissions` | Yes | true | Set this to true if the files containing AIS data is split on days. If runtime concurrency errors occur, set this to false. Medium to high negative performance impact.
-`TimestampColumnName` | Yes | "date_time_utc" | The name of the timestamp column in the source AIS files.
+`CalculateClosest` | Yes | true | Higher precision when matching positions with weather data. Very low negative performance impact, but with greatly improved end result.
+`Delimiter` | No | ";" | Which delimiter to use to parse the input CSV files.
+`GeohashMatchPrecision` | Yes | 5 | The initial geohash precision to search for weather data (includes neighbours). Should be roughly equivalent to the resolution of the weather data set.
 `LatitudeColumnName` | Yes | "lat" | The name of the latitude column in the source AIS files.
 `LongitudeColumnName` | Yes | "lon" |  The name of the longitude column in the source AIS files. 
-`CalculateClosest` | Yes | true | Higher precision when matching positions with weather data. Very low negative performance impact, but with greatly improved end result.
-`GeohashMatchPrecision` | Yes | 5 | The initial geohash precision to search for weather data (includes neighbours). Should be roughly equivalent to the resolution of the weather data set.
+`MaximumEpochAgeMinutes` | No | 15 | The maximum age of cached weather epochs before being vacuumed.
+`MaxParallellism` | Yes | maximum available threads | The maximum amount of threads to use. Set this to a lower value if you run out of memory.
 `PrecisionSearchLimit` | Yes | 3 | The lowest geohash precision to search for weather data (includes neighbours). Values higher than 3 is not recommended.
+`SortBy` | No | "path" | Which sort order to use when processing files. Valid settings are "path" and "size".
+`StatusMessageCycleSeconds` | No | 10 | How often the status messages is printed to the console during processing.
+`TimestampColumnName` | Yes | "date_time_utc" | The name of the timestamp column in the source AIS files.
+`UseDirectSQL` | No | false | Set this to true to query the database directly and cache the results, which is faster for CSV-files grouped by MMSI. For CSV files grouped by day, set this to false.
+`WeatherDbPath` | Yes | n/a | The path to the SQLite file containing weather data.
 
