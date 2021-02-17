@@ -3,13 +3,20 @@ using GravityVectorToolKit.Common;
 using GravityVectorToolKit.Tools.AisCombine.DataAccess;
 using log4net;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace GravityVectorToolKit.Tools.AisCombine
 {
 	public class EpochManager
 	{
+		ThreadLocal<MadartWeatherDbContext> ThreadLocalDbContext;
+		ThreadLocal<Dictionary<long, SortedDictionary<string, WeatherHist>>> ThreadLocalQueryCache;
+		ConcurrentDictionary<long, ConcurrentDictionary<string, WeatherHist>> QueryCache;
+
+		private readonly int MaximumEpochAgeMinutes;
 		private static ILog Log = LogManager.GetLogger(typeof(AisCombiner));
 
 		int maxCapacity = Environment.ProcessorCount*256;
@@ -22,47 +29,80 @@ namespace GravityVectorToolKit.Tools.AisCombine
 
 		public string DatabasePath { get; }
 
-		public EpochManager(string db)
+		public EpochManager(string db, int maximumEpochAgeMinutes = 15)
 		{
 			DatabasePath = db;
+			MaximumEpochAgeMinutes = maximumEpochAgeMinutes;
+			ThreadLocalDbContext = new ThreadLocal<MadartWeatherDbContext>(() =>
+			{
+				return new MadartWeatherDbContext(DatabasePath);
+			});
+
+			ThreadLocalQueryCache = new ThreadLocal<Dictionary<long, SortedDictionary<string, WeatherHist>>>(() =>
+			{
+				return new Dictionary<long, SortedDictionary<string, WeatherHist>>();
+			});
+
+			QueryCache = new ConcurrentDictionary<long, ConcurrentDictionary<string, WeatherHist>>();
+
 		}
 
-		public bool IsAvailable(long currentRoundedEpoch)
+		public int EpochsLoaded
+		{
+			get
+			{
+				return Index.Count();
+			}
+		}
+
+		public bool IsLoaded(long currentRoundedEpoch)
 		{
 			return Index.ContainsKey(currentRoundedEpoch);
 		}
 
-		public void Load(long epoch)
+		public bool Load(long epoch)
 		{
 			if (!Index.ContainsKey(epoch))
 			{
 				Vacuum(); // Free up space if possible first
 
-				Log.Info("Loading epoch " + epoch);
 				var context = new MadartWeatherDbContext(DatabasePath);
 				var result = context.WeatherHists.Where(w => w.Epoch == epoch).ToList();
 
-				foreach(var weatherHist in result)
+				if (result.Any())
 				{
-					var hash = weatherHist.Geohash.Substring(0, 5);
-					if (!Index.ContainsKey(epoch))
+					foreach (var weatherHist in result)
 					{
-						lock (syncRoot)
+						var hash = weatherHist.Geohash.Substring(0, 5);
+						if (!Index.ContainsKey(epoch))
 						{
-							Index[epoch] = new Dictionary<string, List<WeatherHist>>();
+							lock (syncRoot)
+							{
+								Index[epoch] = new Dictionary<string, List<WeatherHist>>();
+							}
 						}
+
+						if (!Index[epoch].ContainsKey(hash))
+						{
+							lock (syncRoot)
+							{
+								Index[epoch][hash] = new List<WeatherHist>();
+							}
+						}
+
+						Index[epoch][hash].Add(weatherHist);
 					}
 
-					if (!Index[epoch].ContainsKey(hash))
-					{
-						lock (syncRoot)
-						{
-							Index[epoch][hash] = new List<WeatherHist>();
-						}
-					}
-
-					Index[epoch][hash].Add(weatherHist);
+					return true;
 				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return true;
 			}
 		}
 
@@ -91,7 +131,7 @@ namespace GravityVectorToolKit.Tools.AisCombine
 		}
 		public void VacuumPeriodic()
 		{
-			var toBeRemoved = EpochLastAccessed.ToList().Where(e => (DateTime.Now - e.Value).TotalSeconds > 15 * 60).ToList();
+			var toBeRemoved = EpochLastAccessed.ToList().Where(e => (DateTime.Now - e.Value).TotalSeconds > (MaximumEpochAgeMinutes * 60)).ToList();
 			if (toBeRemoved.Any())
 			{
 				Log.Info("Vacuuming old epoch entries..");
@@ -110,29 +150,71 @@ namespace GravityVectorToolKit.Tools.AisCombine
 		}
 
 		GvtkGeohasher Hasher = new GvtkGeohasher();
-
-		public List<WeatherHist> Lookup(long epoch, string hash, bool reducedPrecision)
+		int cacheMiss = 0;
+		int cacheHit = 0;
+		public List<WeatherHist> Lookup(long epoch, string hash, bool reducedPrecision, bool useSql = false, string originalHash = "")
 		{
-			if (Index.ContainsKey(epoch))
+			if (originalHash == string.Empty)
 			{
-				EpochLastAccessed[epoch] = DateTime.Now;
+				originalHash = hash;
+			}
+			if (!useSql)
+			{
+				if (Index.ContainsKey(epoch))
+				{
+					EpochLastAccessed[epoch] = DateTime.Now;
 
-				if (reducedPrecision)
-				{
-					return Index[epoch].Where(e => e.Key.StartsWith(hash)).SelectMany(e => e.Value).ToList();
-				}
-				else if (Index[epoch].ContainsKey(hash))
-				{
-					return Index[epoch][hash];
+					if (reducedPrecision)
+					{
+						return Index[epoch].ToList().Where(e => e.Key.StartsWith(hash)).SelectMany(e => e.Value).ToList();
+					}
+					else if (Index[epoch].ContainsKey(hash))
+					{
+						return Index[epoch][hash];
+					}
+					else
+					{
+						return new List<WeatherHist>();
+					}
 				}
 				else
 				{
-					return new List<WeatherHist>();
+					throw new Exception($"This epoch ({epoch}) is not loaded");
 				}
-			} 
+			}
 			else
 			{
-				throw new Exception($"This epoch ({epoch}) is not loaded");
+				// Check the cache first
+				var queryCache = QueryCache;
+				if (queryCache.ContainsKey(epoch))
+				{
+					var tmp = queryCache[epoch].ToList().Where(kvp => kvp.Key.StartsWith(hash)).Select(kvp => kvp.Value).ToList();
+					if (tmp.Count() > 0)
+					{
+						Interlocked.Increment(ref cacheHit);
+						return tmp;
+					}
+				}
+
+				// Query the database
+				var context = ThreadLocalDbContext.Value;
+				var result = context.WeatherHists.Where(wh => (wh.Epoch == epoch) && wh.Geohash.StartsWith(hash)).ToList();
+
+				foreach (var w in result)
+				{
+					if (!queryCache.ContainsKey(w.Epoch))
+					{
+						queryCache[w.Epoch] = new ConcurrentDictionary<string, WeatherHist>();
+					}
+					if (!queryCache[w.Epoch].TryAdd(w.Geohash, w))
+					{
+						//Log.Warn($"Unable to add {w.Epoch}/{w.Geohash} to cache");
+					}
+				}
+
+				Interlocked.Increment(ref cacheMiss);
+				return result;
+
 			}
 		}
 	}

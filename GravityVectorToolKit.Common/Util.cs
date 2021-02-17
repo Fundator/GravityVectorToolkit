@@ -79,56 +79,32 @@ namespace GravityVectorToolKit.Common
 
 		public static long RoundToHourEpoch(DateTime dt)
 		{
-			//var t = dt - new DateTime(1970, 1, 1);
-			//int secondsSinceEpoch = (int)t.TotalSeconds;
 
 			var t = (new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, 0, 0))
 				.Subtract(new DateTime(1970, 1, 1));
-
 			return (int)t.TotalSeconds;
-			//dt
-			//long ticks = dt.Ticks + 18000000000;
-			//ticks = ticks - ticks % 36000000000;
-			//long epoch = ticks / 1000;
-			//return epoch;
 		}
+
+		static DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
 		public static long ToEpoch(this DateTime date)
 		{
-			var origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var diff = date.ToUniversalTime() - origin;
+			var diff = date.ToUniversalTime() - epoch;
 			return (long)Math.Floor(diff.TotalSeconds);
 		}
 
-		/// <summary>
-		/// Execute the given function n times and catch/log any exceptions
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="f"></param>
-		/// <param name="n"></param>
-		/// <returns></returns>
-		//public static T TryNTimes<T>(Func<T> f, int n)
-		//{
-		//	int i = 0;
-		//	while (true)
-		//	{
-		//		try
-		//		{
-		//			return f();
-		//		}
-		//		catch (Exception)
-		//		{
-		//			if (i == n)
-		//			{
-		//				throw;
-		//			}
-		//			else
-		//			{
-		//				Log.Warn($"Caught exception, retrying {i}/{n} times..");
-		//				i++;
-		//			}
-		//		}
-		//	}
-		//}
+		public static DateTime DateTimeFromEpoch(long timestamp)
+		{
+			return epoch.AddSeconds(timestamp);
+		}
+
+		public static string FormatFileSize(long bytes)
+		{
+			var unit = 1024;
+			if (bytes < unit) { return $"{bytes} B"; }
+
+			var exp = (int)(Math.Log(bytes) / Math.Log(unit));
+			return $"{bytes / Math.Pow(unit, exp):F2} {("KMGTPE")[exp - 1]}B";
+		}
 	}
 }

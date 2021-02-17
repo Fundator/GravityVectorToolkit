@@ -6,18 +6,22 @@ namespace GravityVectorToolKit.Tools.AisCombine
 {
 	public class AisCombinerSettings
 	{
-		public readonly string Id = Guid.NewGuid().ToString();
 		public string AisSourceDirectory;
 		public string AisDestinationDirectory;
 		public string WeatherDbPath;
 		public int MaxParallellism = Environment.ProcessorCount;
 		public bool AssumeNoEpochCollissions = false;
-		public readonly string TimestampColumnName = "date_time_utc";
-		public readonly string LatitudeColumnName = "lat";
-		public readonly string LongitudeColumnName = "lon";
+		public string TimestampColumnName = "date_time_utc";
+		public string LatitudeColumnName = "lat";
+		public string LongitudeColumnName = "lon";
 		public bool CalculateClosest = true;
-		internal int GeohashMatchPrecision = 5;
+		public int GeohashMatchPrecision = 5;
 		public int PrecisionSearchLimit = 3;
+		public char Delimiter = ';';
+		public int StatusMessageCycleSeconds = 10;
+		public int MaximumEpochAgeMinutes = 15;
+		public string SortBy = "path";
+		public bool UseDirectSQL = false;
 
 		public List<string> Validate()
 		{
