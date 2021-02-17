@@ -35,7 +35,6 @@ namespace GravityVectorToolKit.Tools.AisCombine
 		public AisCombiner(AisCombinerSettings settings)
 		{
 			Settings = settings;
-			File.WriteAllText("settings2.json", JsonConvert.SerializeObject(settings));
 		}
 
 		#region Public methods
