@@ -188,11 +188,14 @@ namespace GravityVectorToolKit.Tools.AisCombine
 				var queryCache = QueryCache;
 				if (queryCache.ContainsKey(epoch))
 				{
-					var tmp = queryCache[epoch].ToList().Where(kvp => kvp.Key.StartsWith(hash)).Select(kvp => kvp.Value).ToList();
-					if (tmp.Count() > 0)
+					if (queryCache.TryGetValue(epoch, out var records))
 					{
-						Interlocked.Increment(ref cacheHit);
-						return tmp;
+						var tmp = records.Where(kvp => kvp.Key.StartsWith(hash)).Select(kvp => kvp.Value).ToList();
+						if (tmp.Count() > 0)
+						{
+							Interlocked.Increment(ref cacheHit);
+							return tmp;
+						}
 					}
 				}
 
