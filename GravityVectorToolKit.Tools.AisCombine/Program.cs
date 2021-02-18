@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using CommandLineParser.Arguments;
 
 namespace GravityVectorToolKit.Tools.AisCombine
 {
@@ -22,11 +23,12 @@ namespace GravityVectorToolKit.Tools.AisCombine
 			Log.Info("AIS Combine " + Assembly.GetEntryAssembly().GetName().Version);
 			Log.Info(@"----------------------------------");
 
+			var settingsFilePath = GetSettingsFilePathFromCmdLineArgs(args);
 
 			AisCombinerSettings spec;
-			if (File.Exists("settings.json"))
+			if (File.Exists(settingsFilePath))
 			{
-				spec = JsonConvert.DeserializeObject<AisCombinerSettings>(File.ReadAllText("settings.json"));
+				spec = JsonConvert.DeserializeObject<AisCombinerSettings>(File.ReadAllText(settingsFilePath));
 			}
 			else
 			{
@@ -51,6 +53,22 @@ namespace GravityVectorToolKit.Tools.AisCombine
 			combiner.Analyze();
 			combiner.Prepare();
 			combiner.Run();
+		}
+
+		private static string GetSettingsFilePathFromCmdLineArgs(string[] args)
+		{
+			string settingsFilePath = "settings.json";
+			var parser = new CommandLineParser.CommandLineParser();
+			var fileArgument = new FileArgument('f', "settings");
+			fileArgument.FileMustExist = true;
+			parser.Arguments.Add(fileArgument);
+			parser.ParseCommandLine(args);
+			if (fileArgument.Parsed)
+			{
+				settingsFilePath = fileArgument.Value.FullName;
+			}
+
+			return settingsFilePath;
 		}
 
 		private static void ConfigureLogging()
