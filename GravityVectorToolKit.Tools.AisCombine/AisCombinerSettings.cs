@@ -32,7 +32,14 @@ namespace GravityVectorToolKit.Tools.AisCombine
 			}
 			if (!Directory.Exists(AisDestinationDirectory))
 			{
-				result.Add($"The AIS destination path {AisDestinationDirectory} does not exist");
+				try
+				{
+					Directory.CreateDirectory(AisDestinationDirectory);
+				}
+				catch (Exception e)
+				{
+					result.Add($"The AIS destination path {AisDestinationDirectory} does not exist, and it could not be created because: " + e.Message);
+				}
 			}
 			if (!File.Exists(WeatherDbPath))
 			{
