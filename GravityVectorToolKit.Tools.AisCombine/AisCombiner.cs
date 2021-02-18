@@ -313,14 +313,6 @@ namespace GravityVectorToolKit.Tools.AisCombine
 				if (GeoHasher.Reduce(reducedHash).Length == Settings.PrecisionSearchLimit - 1)
 				{
 					KillTheDog(currentRoundedEpoch, hash);
-					//DeadDogs.Add(hash);
-					//var parents = GeoHasher.Parents(hash, Settings.PrecisionSearchLimit);
-					//foreach (var parent in parents)
-					//{
-					//	DeadDogs.Add(parent);
-					//}
-
-					//Log.Info($"Can't find anything for {hash} up until {reducedHash} at epoch {currentRoundedEpoch}, giving up");
 					break;
 				}
 
