@@ -9,6 +9,7 @@ using Sylvan.Data.Csv;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -46,7 +47,6 @@ namespace GravityVectorToolKit.Tools.AisCombine
 			MaximumEpoch = madartWeatherDbContext.WeatherHists.Max(wh => wh.Epoch);
 			MinimumEpoch = madartWeatherDbContext.WeatherHists.Min(wh => wh.Epoch);
 			Log.Info($"The database contains weather data from {Util.DateTimeFromEpoch(MinimumEpoch)} to {Util.DateTimeFromEpoch(MaximumEpoch)}");
-			Log.Info("AIS position outside this range will be skipped silently");
 		}
 
 		public void Analyze()
@@ -82,6 +82,9 @@ namespace GravityVectorToolKit.Tools.AisCombine
 
 		public void Run()
 		{
+			var stopwatch = new Stopwatch();
+			stopwatch.Start();
+
 			EpochManager = new EpochManager(Settings.WeatherDbPath, Settings.MaximumEpochAgeMinutes);
 			GeoHasher = new GvtkGeohasher();
 			DeadDogs = new HashSet<string>();
@@ -94,13 +97,13 @@ namespace GravityVectorToolKit.Tools.AisCombine
 			var timer = new System.Timers.Timer(Settings.StatusMessageCycleSeconds * 1000);
 			timer.Elapsed += (a, b) =>
 			{
-				Log.Info($"Files: {fileCounter} - Rows: {rowCounter} - {(rowCounter - previousCounter) / Settings.StatusMessageCycleSeconds} r/s - Epochs: {EpochManager.EpochsLoaded} - Redirects: {RedirectMap.Count()} - Dead dogs: {DeadDogs.Count()}");
+				Log.Info($"Files: {fileCounter} - Rows: {rowCounter} - {(rowCounter - previousCounter) / Settings.StatusMessageCycleSeconds} r/s - Epochs: {EpochManager.EpochsLoaded} - Redirects: {RedirectMap.Count()} - Dead dogs: {DeadDogs.Count()} - Run time: {stopwatch.Elapsed.ToString("hh\\:mm\\:ss")}");
 				previousCounter = rowCounter;
 				EpochManager.VacuumPeriodic();
 			};
 			timer.AutoReset = true;
 			timer.Enabled = true;
-
+			Log.Info("Processing input files..");
 			Parallel.ForEach(Analysis.AsParallel().AsOrdered(), new ParallelOptions
 			{
 				MaxDegreeOfParallelism = Settings.MaxParallellism
@@ -132,8 +135,9 @@ namespace GravityVectorToolKit.Tools.AisCombine
 
 			Log.Info("Dumping redirect map..");
 			File.WriteAllText("RedirectMap.csv", DumpRedirectMap());
+			stopwatch.Stop();
 
-			Log.Info("Done!");
+			Log.Info("Completed in " + stopwatch.Elapsed.ToString("hh\\:mm\\:ss"));
 		}
 
 		#endregion Public methods
@@ -146,8 +150,7 @@ namespace GravityVectorToolKit.Tools.AisCombine
 			lock (SyncRoot)
 			{
 				Interlocked.Increment(ref fileCounter);
-				msg = $"{Path.GetFileName(sourceFile)} {fileCounter} of {Analysis.Count()}";
-				Log.Info($"Processing " + msg);
+				msg = $"{Path.GetFileName(sourceFile)} ({fileCounter} of {Analysis.Count()})";
 			}
 			var csv = CsvDataReader.Create(sourceFile, new CsvDataReaderOptions
 			{
@@ -171,22 +174,10 @@ namespace GravityVectorToolKit.Tools.AisCombine
 						currentRoundedEpoch = roundedEpoch;
 					}
 
-					if (currentRoundedEpoch > MaximumEpoch)
+					WeatherHist match = null;
+					if (!Settings.UseDirectSQL)
 					{
-						// We don't have data for this epoch, skip it silently
-						continue;
-					}
-					else if (currentRoundedEpoch < MinimumEpoch)
-					{
-						// We don't have data for this epoch, skip it silently
-						continue;
-					}
-
-
-					if (!Settings.UseDirectSQL && !LoadEpoch(currentRoundedEpoch))
-					{
-						Log.Info($"Could not find epoch {currentRoundedEpoch} ({Util.DateTimeFromEpoch(currentRoundedEpoch)}) in database, skipping");
-						continue;
+						LoadEpoch(currentRoundedEpoch);
 					}
 
 					var lat = csv.GetFloat(Settings.LatitudeColumnName);
@@ -194,9 +185,8 @@ namespace GravityVectorToolKit.Tools.AisCombine
 					var point = new Point(lon, lat);
 					var hash = GeoHasher.Encode(point, Settings.GeohashMatchPrecision);
 
-					WeatherHist match = null;
-
-					if (!IsDeadDog(currentRoundedEpoch, hash))
+					if (IsWithinEpochRange(currentRoundedEpoch) 
+						&& !IsDeadDog(currentRoundedEpoch, hash))
 					{
 						var matches = EpochManager.Lookup(currentRoundedEpoch, Redirect(hash), false, Settings.UseDirectSQL);
 						if (matches.Count() == 0)
@@ -210,9 +200,9 @@ namespace GravityVectorToolKit.Tools.AisCombine
 						}
 					}
 
+					writer.WriteLine(AppendWeatherData(csv, match));
 					Interlocked.Increment(ref globalRowCounter);
 					localRowCounter++;
-					AppendWeatherData(csv, writer, match);
 				}
 				writer.Flush();
 				writer.Close();
@@ -226,6 +216,11 @@ namespace GravityVectorToolKit.Tools.AisCombine
 
 			Log.Info("Completed " + msg);
 			return msg;
+		}
+
+		private bool IsWithinEpochRange(long currentRoundedEpoch)
+		{
+			return (currentRoundedEpoch < MaximumEpoch && currentRoundedEpoch > MinimumEpoch);
 		}
 
 		private WeatherHist SelectBestMatch(Point point, List<WeatherHist> matches)
@@ -247,7 +242,7 @@ namespace GravityVectorToolKit.Tools.AisCombine
 			return match;
 		}
 
-		private void AppendWeatherData(CsvDataReader csv, StreamWriter writer, WeatherHist result)
+		private string AppendWeatherData(CsvDataReader csv, WeatherHist result)
 		{
 			var rowData = new string[csv.FieldCount + 4];
 			csv.GetValues(rowData);
@@ -259,8 +254,7 @@ namespace GravityVectorToolKit.Tools.AisCombine
 				rowData[rowData.Length - 3] = string.Format(invariantCulture, "{0:0.##}", result.Thq);
 				rowData[rowData.Length - 4] = string.Format(invariantCulture, "{0:0.##}", result.Hs);
 			}
-
-			writer.WriteLine(string.Join(Settings.Delimiter, rowData));
+			return string.Join(Settings.Delimiter, rowData);
 		}
 
 		private bool LoadEpoch(long currentRoundedEpoch)

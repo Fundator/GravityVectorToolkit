@@ -24,7 +24,6 @@ namespace GravityVectorToolKit.Tools.AisCombine
 			Log.Info(@"----------------------------------");
 
 			var settingsFilePath = GetSettingsFilePathFromCmdLineArgs(args);
-
 			AisCombinerSettings spec;
 			if (File.Exists(settingsFilePath))
 			{
