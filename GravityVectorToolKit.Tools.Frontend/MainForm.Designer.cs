@@ -49,6 +49,9 @@ namespace GravityVectorToolKit.Tools.Frontend
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.btnFindNearMissMapFile = new System.Windows.Forms.Button();
+			this.txtNearMiss = new System.Windows.Forms.TextBox();
+			this.lblNearMiss = new System.Windows.Forms.Label();
 			this.btnFindDeviationMapFile = new System.Windows.Forms.Button();
 			this.txtDeviationMapPath = new System.Windows.Forms.TextBox();
 			this.btnFindGravityVectorFile = new System.Windows.Forms.Button();
@@ -67,16 +70,18 @@ namespace GravityVectorToolKit.Tools.Frontend
 			// 
 			this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.progressBar1.Location = new System.Drawing.Point(12, 543);
+			this.progressBar1.Location = new System.Drawing.Point(14, 697);
+			this.progressBar1.Margin = new System.Windows.Forms.Padding(4);
 			this.progressBar1.Name = "progressBar1";
-			this.progressBar1.Size = new System.Drawing.Size(654, 29);
+			this.progressBar1.Size = new System.Drawing.Size(785, 35);
 			this.progressBar1.TabIndex = 11;
 			// 
 			// btnValidate
 			// 
-			this.btnValidate.Location = new System.Drawing.Point(12, 447);
+			this.btnValidate.Location = new System.Drawing.Point(20, 595);
+			this.btnValidate.Margin = new System.Windows.Forms.Padding(4);
 			this.btnValidate.Name = "btnValidate";
-			this.btnValidate.Size = new System.Drawing.Size(112, 34);
+			this.btnValidate.Size = new System.Drawing.Size(134, 41);
 			this.btnValidate.TabIndex = 12;
 			this.btnValidate.Text = "Validate";
 			this.btnValidate.UseVisualStyleBackColor = true;
@@ -84,9 +89,10 @@ namespace GravityVectorToolKit.Tools.Frontend
 			// 
 			// btnImport
 			// 
-			this.btnImport.Location = new System.Drawing.Point(130, 447);
+			this.btnImport.Location = new System.Drawing.Point(162, 595);
+			this.btnImport.Margin = new System.Windows.Forms.Padding(4);
 			this.btnImport.Name = "btnImport";
-			this.btnImport.Size = new System.Drawing.Size(112, 34);
+			this.btnImport.Size = new System.Drawing.Size(134, 41);
 			this.btnImport.TabIndex = 13;
 			this.btnImport.Text = "Import";
 			this.btnImport.UseVisualStyleBackColor = true;
@@ -97,9 +103,10 @@ namespace GravityVectorToolKit.Tools.Frontend
 			this.chkDropAndRecreate.AutoSize = true;
 			this.chkDropAndRecreate.Checked = true;
 			this.chkDropAndRecreate.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkDropAndRecreate.Location = new System.Drawing.Point(13, 401);
+			this.chkDropAndRecreate.Location = new System.Drawing.Point(22, 540);
+			this.chkDropAndRecreate.Margin = new System.Windows.Forms.Padding(4);
 			this.chkDropAndRecreate.Name = "chkDropAndRecreate";
-			this.chkDropAndRecreate.Size = new System.Drawing.Size(364, 29);
+			this.chkDropAndRecreate.Size = new System.Drawing.Size(420, 34);
 			this.chkDropAndRecreate.TabIndex = 14;
 			this.chkDropAndRecreate.Text = "Drop and recreate tables (recommended)";
 			this.chkDropAndRecreate.UseVisualStyleBackColor = true;
@@ -108,9 +115,10 @@ namespace GravityVectorToolKit.Tools.Frontend
 			// 
 			this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.lblStatus.AutoSize = true;
-			this.lblStatus.Location = new System.Drawing.Point(12, 502);
+			this.lblStatus.Location = new System.Drawing.Point(14, 647);
+			this.lblStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.lblStatus.Name = "lblStatus";
-			this.lblStatus.Size = new System.Drawing.Size(65, 25);
+			this.lblStatus.Size = new System.Drawing.Size(75, 30);
 			this.lblStatus.TabIndex = 17;
 			this.lblStatus.Text = "Ready!";
 			// 
@@ -118,9 +126,10 @@ namespace GravityVectorToolKit.Tools.Frontend
 			// 
 			this.pictureBoxSpinner.BackColor = System.Drawing.Color.Transparent;
 			this.pictureBoxSpinner.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxSpinner.Image")));
-			this.pictureBoxSpinner.Location = new System.Drawing.Point(249, 447);
+			this.pictureBoxSpinner.Location = new System.Drawing.Point(305, 595);
+			this.pictureBoxSpinner.Margin = new System.Windows.Forms.Padding(4);
 			this.pictureBoxSpinner.Name = "pictureBoxSpinner";
-			this.pictureBoxSpinner.Size = new System.Drawing.Size(53, 34);
+			this.pictureBoxSpinner.Size = new System.Drawing.Size(64, 41);
 			this.pictureBoxSpinner.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.pictureBoxSpinner.TabIndex = 18;
 			this.pictureBoxSpinner.TabStop = false;
@@ -141,9 +150,11 @@ namespace GravityVectorToolKit.Tools.Frontend
 			this.groupBox1.Controls.Add(this.txtPassword);
 			this.groupBox1.Controls.Add(this.textBox1);
 			this.groupBox1.Controls.Add(this.label1);
-			this.groupBox1.Location = new System.Drawing.Point(12, 12);
+			this.groupBox1.Location = new System.Drawing.Point(14, 14);
+			this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(651, 218);
+			this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
+			this.groupBox1.Size = new System.Drawing.Size(781, 262);
 			this.groupBox1.TabIndex = 21;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Connection Details";
@@ -152,16 +163,18 @@ namespace GravityVectorToolKit.Tools.Frontend
 			// 
 			this.txtHostname.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtHostname.Location = new System.Drawing.Point(178, 24);
+			this.txtHostname.Location = new System.Drawing.Point(214, 29);
+			this.txtHostname.Margin = new System.Windows.Forms.Padding(4);
 			this.txtHostname.Name = "txtHostname";
-			this.txtHostname.Size = new System.Drawing.Size(463, 31);
+			this.txtHostname.Size = new System.Drawing.Size(555, 35);
 			this.txtHostname.TabIndex = 32;
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(68, 175);
+			this.label5.Location = new System.Drawing.Point(82, 210);
+			this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(107, 25);
+			this.label5.Size = new System.Drawing.Size(128, 30);
 			this.label5.TabIndex = 30;
 			this.label5.Text = "Password:";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -170,16 +183,18 @@ namespace GravityVectorToolKit.Tools.Frontend
 			// 
 			this.txtUsername.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtUsername.Location = new System.Drawing.Point(178, 135);
+			this.txtUsername.Location = new System.Drawing.Point(214, 162);
+			this.txtUsername.Margin = new System.Windows.Forms.Padding(4);
 			this.txtUsername.Name = "txtUsername";
-			this.txtUsername.Size = new System.Drawing.Size(463, 31);
+			this.txtUsername.Size = new System.Drawing.Size(555, 35);
 			this.txtUsername.TabIndex = 29;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(68, 138);
+			this.label4.Location = new System.Drawing.Point(82, 166);
+			this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(107, 25);
+			this.label4.Size = new System.Drawing.Size(128, 30);
 			this.label4.TabIndex = 28;
 			this.label4.Text = "Username:";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -188,16 +203,18 @@ namespace GravityVectorToolKit.Tools.Frontend
 			// 
 			this.txtDatabase.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtDatabase.Location = new System.Drawing.Point(178, 98);
+			this.txtDatabase.Location = new System.Drawing.Point(214, 118);
+			this.txtDatabase.Margin = new System.Windows.Forms.Padding(4);
 			this.txtDatabase.Name = "txtDatabase";
-			this.txtDatabase.Size = new System.Drawing.Size(463, 31);
+			this.txtDatabase.Size = new System.Drawing.Size(555, 35);
 			this.txtDatabase.TabIndex = 27;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(68, 101);
+			this.label3.Location = new System.Drawing.Point(82, 121);
+			this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(107, 25);
+			this.label3.Size = new System.Drawing.Size(128, 30);
 			this.label3.TabIndex = 26;
 			this.label3.Text = "Database:";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -206,16 +223,18 @@ namespace GravityVectorToolKit.Tools.Frontend
 			// 
 			this.txtPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtPort.Location = new System.Drawing.Point(178, 61);
+			this.txtPort.Location = new System.Drawing.Point(214, 73);
+			this.txtPort.Margin = new System.Windows.Forms.Padding(4);
 			this.txtPort.Name = "txtPort";
-			this.txtPort.Size = new System.Drawing.Size(463, 31);
+			this.txtPort.Size = new System.Drawing.Size(555, 35);
 			this.txtPort.TabIndex = 25;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(68, 64);
+			this.label2.Location = new System.Drawing.Point(82, 77);
+			this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(107, 25);
+			this.label2.Size = new System.Drawing.Size(128, 30);
 			this.label2.TabIndex = 24;
 			this.label2.Text = "Port:";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -224,25 +243,28 @@ namespace GravityVectorToolKit.Tools.Frontend
 			// 
 			this.txtPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtPassword.Location = new System.Drawing.Point(178, 172);
+			this.txtPassword.Location = new System.Drawing.Point(214, 206);
+			this.txtPassword.Margin = new System.Windows.Forms.Padding(4);
 			this.txtPassword.Name = "txtPassword";
-			this.txtPassword.Size = new System.Drawing.Size(463, 31);
+			this.txtPassword.Size = new System.Drawing.Size(555, 35);
 			this.txtPassword.TabIndex = 31;
 			// 
 			// textBox1
 			// 
 			this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBox1.Location = new System.Drawing.Point(-2631, 68);
+			this.textBox1.Location = new System.Drawing.Point(-3157, 82);
+			this.textBox1.Margin = new System.Windows.Forms.Padding(4);
 			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(1351, 31);
+			this.textBox1.Size = new System.Drawing.Size(1620, 35);
 			this.textBox1.TabIndex = 22;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(68, 27);
+			this.label1.Location = new System.Drawing.Point(82, 32);
+			this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(107, 25);
+			this.label1.Size = new System.Drawing.Size(128, 30);
 			this.label1.TabIndex = 21;
 			this.label1.Text = "Hostname:";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -251,6 +273,9 @@ namespace GravityVectorToolKit.Tools.Frontend
 			// 
 			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox2.Controls.Add(this.btnFindNearMissMapFile);
+			this.groupBox2.Controls.Add(this.txtNearMiss);
+			this.groupBox2.Controls.Add(this.lblNearMiss);
 			this.groupBox2.Controls.Add(this.btnFindDeviationMapFile);
 			this.groupBox2.Controls.Add(this.txtDeviationMapPath);
 			this.groupBox2.Controls.Add(this.btnFindGravityVectorFile);
@@ -260,19 +285,54 @@ namespace GravityVectorToolKit.Tools.Frontend
 			this.groupBox2.Controls.Add(this.lblDeviationMap);
 			this.groupBox2.Controls.Add(this.lblGravityVectors);
 			this.groupBox2.Controls.Add(this.lblNormalRoutes);
-			this.groupBox2.Location = new System.Drawing.Point(13, 237);
+			this.groupBox2.Location = new System.Drawing.Point(16, 284);
+			this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(650, 150);
+			this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
+			this.groupBox2.Size = new System.Drawing.Size(780, 248);
 			this.groupBox2.TabIndex = 22;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Input files";
 			// 
+			// btnFindNearMissMapFile
+			// 
+			this.btnFindNearMissMapFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnFindNearMissMapFile.Location = new System.Drawing.Point(716, 171);
+			this.btnFindNearMissMapFile.Margin = new System.Windows.Forms.Padding(4);
+			this.btnFindNearMissMapFile.Name = "btnFindNearMissMapFile";
+			this.btnFindNearMissMapFile.Size = new System.Drawing.Size(52, 37);
+			this.btnFindNearMissMapFile.TabIndex = 22;
+			this.btnFindNearMissMapFile.Text = "...";
+			this.btnFindNearMissMapFile.UseVisualStyleBackColor = true;
+			this.btnFindNearMissMapFile.Click += new System.EventHandler(this.btnFindNearMissMapFile_Click);
+			// 
+			// txtNearMiss
+			// 
+			this.txtNearMiss.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.txtNearMiss.Location = new System.Drawing.Point(212, 171);
+			this.txtNearMiss.Margin = new System.Windows.Forms.Padding(4);
+			this.txtNearMiss.Name = "txtNearMiss";
+			this.txtNearMiss.Size = new System.Drawing.Size(490, 35);
+			this.txtNearMiss.TabIndex = 21;
+			// 
+			// lblNearMiss
+			// 
+			this.lblNearMiss.Location = new System.Drawing.Point(14, 175);
+			this.lblNearMiss.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.lblNearMiss.Name = "lblNearMiss";
+			this.lblNearMiss.Size = new System.Drawing.Size(196, 30);
+			this.lblNearMiss.TabIndex = 20;
+			this.lblNearMiss.Text = "Near-miss map file:";
+			this.lblNearMiss.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// btnFindDeviationMapFile
 			// 
 			this.btnFindDeviationMapFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnFindDeviationMapFile.Location = new System.Drawing.Point(597, 106);
+			this.btnFindDeviationMapFile.Location = new System.Drawing.Point(716, 127);
+			this.btnFindDeviationMapFile.Margin = new System.Windows.Forms.Padding(4);
 			this.btnFindDeviationMapFile.Name = "btnFindDeviationMapFile";
-			this.btnFindDeviationMapFile.Size = new System.Drawing.Size(43, 31);
+			this.btnFindDeviationMapFile.Size = new System.Drawing.Size(52, 37);
 			this.btnFindDeviationMapFile.TabIndex = 19;
 			this.btnFindDeviationMapFile.Text = "...";
 			this.btnFindDeviationMapFile.UseVisualStyleBackColor = true;
@@ -282,17 +342,19 @@ namespace GravityVectorToolKit.Tools.Frontend
 			// 
 			this.txtDeviationMapPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtDeviationMapPath.Location = new System.Drawing.Point(177, 106);
+			this.txtDeviationMapPath.Location = new System.Drawing.Point(212, 127);
+			this.txtDeviationMapPath.Margin = new System.Windows.Forms.Padding(4);
 			this.txtDeviationMapPath.Name = "txtDeviationMapPath";
-			this.txtDeviationMapPath.Size = new System.Drawing.Size(409, 31);
+			this.txtDeviationMapPath.Size = new System.Drawing.Size(490, 35);
 			this.txtDeviationMapPath.TabIndex = 18;
 			// 
 			// btnFindGravityVectorFile
 			// 
 			this.btnFindGravityVectorFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnFindGravityVectorFile.Location = new System.Drawing.Point(597, 69);
+			this.btnFindGravityVectorFile.Location = new System.Drawing.Point(716, 83);
+			this.btnFindGravityVectorFile.Margin = new System.Windows.Forms.Padding(4);
 			this.btnFindGravityVectorFile.Name = "btnFindGravityVectorFile";
-			this.btnFindGravityVectorFile.Size = new System.Drawing.Size(43, 31);
+			this.btnFindGravityVectorFile.Size = new System.Drawing.Size(52, 37);
 			this.btnFindGravityVectorFile.TabIndex = 17;
 			this.btnFindGravityVectorFile.Text = "...";
 			this.btnFindGravityVectorFile.UseVisualStyleBackColor = true;
@@ -302,17 +364,19 @@ namespace GravityVectorToolKit.Tools.Frontend
 			// 
 			this.txtGravityVectorPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtGravityVectorPath.Location = new System.Drawing.Point(177, 69);
+			this.txtGravityVectorPath.Location = new System.Drawing.Point(212, 83);
+			this.txtGravityVectorPath.Margin = new System.Windows.Forms.Padding(4);
 			this.txtGravityVectorPath.Name = "txtGravityVectorPath";
-			this.txtGravityVectorPath.Size = new System.Drawing.Size(409, 31);
+			this.txtGravityVectorPath.Size = new System.Drawing.Size(490, 35);
 			this.txtGravityVectorPath.TabIndex = 16;
 			// 
 			// btnFindNormalRouteFile
 			// 
 			this.btnFindNormalRouteFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnFindNormalRouteFile.Location = new System.Drawing.Point(597, 32);
+			this.btnFindNormalRouteFile.Location = new System.Drawing.Point(716, 38);
+			this.btnFindNormalRouteFile.Margin = new System.Windows.Forms.Padding(4);
 			this.btnFindNormalRouteFile.Name = "btnFindNormalRouteFile";
-			this.btnFindNormalRouteFile.Size = new System.Drawing.Size(43, 31);
+			this.btnFindNormalRouteFile.Size = new System.Drawing.Size(52, 37);
 			this.btnFindNormalRouteFile.TabIndex = 15;
 			this.btnFindNormalRouteFile.Text = "...";
 			this.btnFindNormalRouteFile.UseVisualStyleBackColor = true;
@@ -322,43 +386,47 @@ namespace GravityVectorToolKit.Tools.Frontend
 			// 
 			this.txtNormalRoutePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtNormalRoutePath.Location = new System.Drawing.Point(177, 32);
+			this.txtNormalRoutePath.Location = new System.Drawing.Point(212, 38);
+			this.txtNormalRoutePath.Margin = new System.Windows.Forms.Padding(4);
 			this.txtNormalRoutePath.Name = "txtNormalRoutePath";
-			this.txtNormalRoutePath.Size = new System.Drawing.Size(409, 31);
+			this.txtNormalRoutePath.Size = new System.Drawing.Size(490, 35);
 			this.txtNormalRoutePath.TabIndex = 14;
 			// 
 			// lblDeviationMap
 			// 
-			this.lblDeviationMap.Location = new System.Drawing.Point(12, 109);
+			this.lblDeviationMap.Location = new System.Drawing.Point(14, 131);
+			this.lblDeviationMap.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.lblDeviationMap.Name = "lblDeviationMap";
-			this.lblDeviationMap.Size = new System.Drawing.Size(163, 25);
+			this.lblDeviationMap.Size = new System.Drawing.Size(196, 30);
 			this.lblDeviationMap.TabIndex = 13;
 			this.lblDeviationMap.Text = "Deviation map file:";
 			this.lblDeviationMap.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// lblGravityVectors
 			// 
-			this.lblGravityVectors.Location = new System.Drawing.Point(12, 72);
+			this.lblGravityVectors.Location = new System.Drawing.Point(14, 86);
+			this.lblGravityVectors.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.lblGravityVectors.Name = "lblGravityVectors";
-			this.lblGravityVectors.Size = new System.Drawing.Size(163, 25);
+			this.lblGravityVectors.Size = new System.Drawing.Size(196, 30);
 			this.lblGravityVectors.TabIndex = 12;
 			this.lblGravityVectors.Text = "Gravity vector file:";
 			this.lblGravityVectors.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// lblNormalRoutes
 			// 
-			this.lblNormalRoutes.Location = new System.Drawing.Point(12, 32);
+			this.lblNormalRoutes.Location = new System.Drawing.Point(14, 38);
+			this.lblNormalRoutes.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.lblNormalRoutes.Name = "lblNormalRoutes";
-			this.lblNormalRoutes.Size = new System.Drawing.Size(163, 25);
+			this.lblNormalRoutes.Size = new System.Drawing.Size(196, 30);
 			this.lblNormalRoutes.TabIndex = 11;
 			this.lblNormalRoutes.Text = "Normal route file:";
 			this.lblNormalRoutes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// MainForm
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 30F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(678, 584);
+			this.ClientSize = new System.Drawing.Size(814, 746);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.pictureBoxSpinner);
@@ -368,7 +436,8 @@ namespace GravityVectorToolKit.Tools.Frontend
 			this.Controls.Add(this.btnValidate);
 			this.Controls.Add(this.progressBar1);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MinimumSize = new System.Drawing.Size(700, 640);
+			this.Margin = new System.Windows.Forms.Padding(4);
+			this.MinimumSize = new System.Drawing.Size(835, 810);
 			this.Name = "MainForm";
 			this.Text = "MADART Database Import";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
@@ -412,5 +481,8 @@ namespace GravityVectorToolKit.Tools.Frontend
 		private System.Windows.Forms.Label lblGravityVectors;
 		private System.Windows.Forms.Label lblNormalRoutes;
 		private System.Windows.Forms.TextBox txtHostname;
+		private System.Windows.Forms.Button btnFindNearMissMapFile;
+		private System.Windows.Forms.TextBox txtNearMiss;
+		private System.Windows.Forms.Label lblNearMiss;
 	}
 }

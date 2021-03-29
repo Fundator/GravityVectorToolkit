@@ -1,4 +1,6 @@
-﻿namespace GravityVectorToolkit.Tools.DatabaseImport
+﻿using System.Text.Json.Serialization;
+
+namespace GravityVectorToolkit.Tools.DatabaseImport
 {
 	public class DatabaseImportParameters
 	{
@@ -7,6 +9,7 @@
 			ConnectionDetails = new ConnectionDetails();
 		}
 
+		[JsonIgnore]
 		public string ConnectionString
 		{
 			get
@@ -18,6 +21,7 @@
 		public string NormalRoutePath { get; set; }
 		public string GravityVectorPath { get; set; }
 		public string DeviationMapPath { get; set; }
+		public string NearMissMapPath { get; set; }
 		public bool DropAndCreate { get; set; }
 		public ConnectionDetails ConnectionDetails { get; set; }
 	}

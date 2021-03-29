@@ -8,10 +8,17 @@
 
   <ItemGroup>
     <None Remove="Resources\deviation_map_sample.csv" />
+    <None Remove="Resources\near_miss_sample.csv" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Resources\deviation_map_sample.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\near_miss_sample.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

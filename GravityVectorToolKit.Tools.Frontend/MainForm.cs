@@ -40,6 +40,12 @@ namespace GravityVectorToolKit.Tools.Frontend
 		/// </summary>
 		protected OpenFileDialog dlgDeviationMapFile = new OpenFileDialog();
 
+		/// <summary>
+		/// File dialog for the near-miss map file
+		/// </summary>
+		protected OpenFileDialog dlgNearMissMapFile = new OpenFileDialog();
+
+
 		public MainForm()
 		{
 			InitializeComponent();
@@ -48,9 +54,12 @@ namespace GravityVectorToolKit.Tools.Frontend
 			dlgNormalRouteFile.Title = "Select normal route file";
 			dlgGravityVectorFile.Title = "Select gravity vector file";
 			dlgDeviationMapFile.Title = "Select deviation map file";
+			dlgNearMissMapFile.Title = "Select near-miss map file";
+
 			ConfigureCommonProperties(dlgNormalRouteFile);
 			ConfigureCommonProperties(dlgGravityVectorFile);
 			ConfigureCommonProperties(dlgDeviationMapFile);
+			ConfigureCommonProperties(dlgNearMissMapFile);
 		}
 
 		/// <summary>
@@ -92,6 +101,12 @@ namespace GravityVectorToolKit.Tools.Frontend
 		{
 			dlgDeviationMapFile.ShowDialog();
 			txtDeviationMapPath.Text = dlgDeviationMapFile.FileName;
+		}
+
+		private void btnFindNearMissMapFile_Click(object sender, EventArgs e)
+		{
+			dlgNearMissMapFile.ShowDialog();
+			txtNearMiss.Text = dlgNearMissMapFile.FileName;
 		}
 
 		private void btnImport_Click(object sender, EventArgs e)
@@ -165,6 +180,7 @@ namespace GravityVectorToolKit.Tools.Frontend
 			parameters.NormalRoutePath = txtNormalRoutePath.Text;
 			parameters.GravityVectorPath = txtGravityVectorPath.Text;
 			parameters.DeviationMapPath = txtDeviationMapPath.Text;
+			parameters.NearMissMapPath = txtNearMiss.Text;
 			parameters.ConnectionDetails.HostName = txtHostname.Text;
 			parameters.ConnectionDetails.Port = txtPort.Text;
 			parameters.ConnectionDetails.DatabaseName = txtDatabase.Text;
@@ -188,6 +204,7 @@ namespace GravityVectorToolKit.Tools.Frontend
 			txtNormalRoutePath.Text = parameters.NormalRoutePath;
 			txtGravityVectorPath.Text = parameters.GravityVectorPath;
 			txtDeviationMapPath.Text = parameters.DeviationMapPath;
+			txtNearMiss.Text = parameters.NearMissMapPath; 
 			chkDropAndRecreate.Checked = parameters.DropAndCreate;
 		}
 
@@ -197,5 +214,7 @@ namespace GravityVectorToolKit.Tools.Frontend
 			var str = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
 			File.WriteAllText(SettingsFilePath, str);
 		}
+
+
 	}
 }

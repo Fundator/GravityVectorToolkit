@@ -53,6 +53,14 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 				}
 			}
 
+			if (!string.IsNullOrWhiteSpace(parameters.NearMissMapPath))
+			{
+				if (!File.Exists(parameters.NearMissMapPath))
+				{
+					result.Add(GenerateError($"The file {parameters.NearMissMapPath} does not exist"));
+				}
+			}
+
 			if (string.IsNullOrWhiteSpace(parameters.ConnectionString))
 			{
 				result.Add(GenerateError("You must specify a connection string"));
@@ -118,6 +126,12 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 			if (!string.IsNullOrWhiteSpace(parameters.DeviationMapPath))
 			{
 				ImportDeviationCells(parameters.DeviationMapPath);
+			}
+
+			// Import near-miss map
+			if (!string.IsNullOrWhiteSpace(parameters.NearMissMapPath))
+			{
+				ImportNearMissMap(parameters.NearMissMapPath);
 			}
 		}
 
@@ -289,6 +303,40 @@ namespace GravityVectorToolkit.Tools.DatabaseImport
 						session.Flush();
 					});
 				Log($"Done processing {rowCount} deviation cells");
+			}
+		}
+
+		public static void ImportNearMissMap(string path)
+		{
+			Log($"Loading near-miss map..");
+
+			var batchSize = 10000;
+			var rowCount = 0;
+			var syncRoot = new object();
+
+			using (var input = new StreamReader(File.OpenRead(path)))
+			{
+				var header = input.ReadLine(); // Keep the header
+				Parallel.ForEach(
+					input.ReadLines().TakeChunks(batchSize),
+					new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount },
+					lines =>
+					{
+						var linesWithHeader = new List<string> { header }
+										.Concat(lines);
+						var session = Util.GetSession();
+						var transaction = Util.BeginTransaction(session);
+						var records = Util.ReadFromList<NearMissIncident, NearMissIncidentCsvClassMap>(linesWithHeader);
+						foreach (var record in records)
+						{
+							Interlocked.Increment(ref rowCount);
+							session.SaveOrUpdate(record);
+						}
+						Log($"Processed {rowCount} rows");
+						transaction.Commit();
+						session.Flush();
+					});
+				Log($"Done processing {rowCount} near-miss incidents");
 			}
 		}
 

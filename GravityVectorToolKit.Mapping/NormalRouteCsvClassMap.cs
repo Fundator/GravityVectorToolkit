@@ -7,8 +7,6 @@ namespace GravityVectorToolKit.CSV.Mapping
 {
 	public class NormalRouteCsvClassMap : ClassMap<NormalRoute>
 	{
-		//private WKTReader wktReader = new WKTReader();
-
 		public NormalRouteCsvClassMap()
 		{
 			/*
