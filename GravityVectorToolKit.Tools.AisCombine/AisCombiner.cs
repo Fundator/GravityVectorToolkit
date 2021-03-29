@@ -1,4 +1,5 @@
-﻿using GravityVectorToolKit.Common;
+﻿using FluentNHibernate.Conventions.Helpers;
+using GravityVectorToolKit.Common;
 using GravityVectorToolKit.Tools.AisCombine.DataAccess;
 using log4net;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
@@ -7,6 +8,7 @@ using Newtonsoft.Json;
 using Sylvan;
 using Sylvan.Data.Csv;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -97,7 +99,7 @@ namespace GravityVectorToolKit.Tools.AisCombine
 			var timer = new System.Timers.Timer(Settings.StatusMessageCycleSeconds * 1000);
 			timer.Elapsed += (a, b) =>
 			{
-				Log.Info($"Files: {fileCounter} - Rows: {rowCounter} - {(rowCounter - previousCounter) / Settings.StatusMessageCycleSeconds} r/s - Epochs: {EpochManager.EpochsLoaded} - Redirects: {RedirectMap.Count()} - Dead dogs: {DeadDogs.Count()} - Run time: {stopwatch.Elapsed.ToString("hh\\:mm\\:ss")}");
+				Log.Info($"Files: {fileCounter} - Rows: {rowCounter} - {(rowCounter - previousCounter) / Settings.StatusMessageCycleSeconds} r/s - Epochs: {EpochManager.EpochsLoaded} - Redirects: {RedirectMap.Count()} - Dead dogs: {DeadDogs.Count()} - Cache hit/miss/total: {EpochManager.CacheHit}/{EpochManager.CacheMiss}/{EpochManager.Lookups} ({EpochManager.CacheHitRatePct}%) - Run time: {stopwatch.Elapsed.ToString("hh\\:mm\\:ss")}");
 				previousCounter = rowCounter;
 				EpochManager.VacuumPeriodic();
 			};
@@ -135,6 +137,8 @@ namespace GravityVectorToolKit.Tools.AisCombine
 
 			Log.Info("Dumping redirect map..");
 			File.WriteAllText("RedirectMap.csv", DumpRedirectMap());
+			Log.Info("Dumping dead dogs..");
+			File.WriteAllText("DeadDogs.csv", DumpDeadDogs());
 			stopwatch.Stop();
 
 			Log.Info("Completed in " + stopwatch.Elapsed.ToString("hh\\:mm\\:ss"));
@@ -143,7 +147,6 @@ namespace GravityVectorToolKit.Tools.AisCombine
 		#endregion Public methods
 
 		#region Utilities
-
 		private string ProcessFile(string sourceFile, ref long globalRowCounter, ref int fileCounter)
 		{
 			string msg;
@@ -185,9 +188,10 @@ namespace GravityVectorToolKit.Tools.AisCombine
 					var point = new Point(lon, lat);
 					var hash = GeoHasher.Encode(point, Settings.GeohashMatchPrecision);
 
-					if (IsWithinEpochRange(currentRoundedEpoch) 
+					if (IsWithinEpochRange(currentRoundedEpoch)
 						&& !IsDeadDog(currentRoundedEpoch, hash))
 					{
+
 						var matches = EpochManager.Lookup(currentRoundedEpoch, Redirect(hash), false, Settings.UseDirectSQL);
 						if (matches.Count() == 0)
 						{
@@ -417,6 +421,28 @@ namespace GravityVectorToolKit.Tools.AisCombine
 				b.Append(hasher.BoundingBox(kvp.Value).AsText() + delimiter);
 				b.Append(Environment.NewLine);
 			}
+			return b.ToString();
+		}
+
+		private string DumpDeadDogs()
+		{
+			var b = new StringBuilder();
+			var delimiter = ";";
+			var hasher = new GvtkGeohasher();
+			b.Append("timestamp;dog;p;bb");
+			b.Append(Environment.NewLine);
+			foreach (var dog in DeadDogs)
+			{
+				var timestamp = Util.DateTimeFromEpoch(long.Parse(dog.Split('-')[0]));
+				var dogHash = dog.Split('-')[1];
+
+				b.Append(dogHash + delimiter);
+				b.Append(timestamp.ToString("u") + delimiter);
+				b.Append(hasher.Decode(dogHash).AsText() + delimiter);
+				b.Append(hasher.BoundingBox(dogHash).AsText() + delimiter);
+				b.Append(Environment.NewLine);
+			}
+
 			return b.ToString();
 		}
 

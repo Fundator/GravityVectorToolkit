@@ -2,11 +2,13 @@
 using GravityVectorToolKit.Common;
 using GravityVectorToolKit.Tools.AisCombine.DataAccess;
 using log4net;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace GravityVectorToolKit.Tools.AisCombine
 {
@@ -29,13 +31,28 @@ namespace GravityVectorToolKit.Tools.AisCombine
 
 		public string DatabasePath { get; }
 
+		public int CacheMiss { get => cacheMiss; }
+		public int CacheHit { get => cacheHit; }
+		public int Lookups { get => cacheHit+cacheMiss; }
+
+		public double CacheHitRatePct { 
+			get 
+			{
+				return Math.Round(((cacheHit*1.0d) / (Lookups *1.0d)) * 100.0d, 2);
+			} 
+		}
+
 		public EpochManager(string db, int maximumEpochAgeMinutes = 15)
 		{
 			DatabasePath = db;
 			MaximumEpochAgeMinutes = maximumEpochAgeMinutes;
 			ThreadLocalDbContext = new ThreadLocal<MadartWeatherDbContext>(() =>
 			{
-				return new MadartWeatherDbContext(DatabasePath);
+				var context = new MadartWeatherDbContext(DatabasePath);
+				context.Database.ExecuteSqlRaw("PRAGMA read_uncommitted = true;");
+				context.Database.ExecuteSqlRaw("PRAGMA cache_size = 400000;");
+				context.Database.ExecuteSqlRaw("PRAGMA mmap_size = 30000000000;");
+				return context;
 			});
 
 			ThreadLocalQueryCache = new ThreadLocal<Dictionary<long, SortedDictionary<string, WeatherHist>>>(() =>
@@ -54,6 +71,8 @@ namespace GravityVectorToolKit.Tools.AisCombine
 				return Index.Count();
 			}
 		}
+
+
 
 		public bool IsLoaded(long currentRoundedEpoch)
 		{
@@ -154,6 +173,9 @@ namespace GravityVectorToolKit.Tools.AisCombine
 		int cacheHit = 0;
 		public List<WeatherHist> Lookup(long epoch, string hash, bool reducedPrecision, bool useSql = false, string originalHash = "")
 		{
+
+			//Interlocked.Increment(ref lookups);
+
 			if (originalHash == string.Empty)
 			{
 				originalHash = hash;
@@ -184,24 +206,27 @@ namespace GravityVectorToolKit.Tools.AisCombine
 			}
 			else
 			{
+
 				// Check the cache first
 				var queryCache = QueryCache;
-				if (queryCache.ContainsKey(epoch))
+				if (queryCache.TryGetValue(epoch, out var records))
 				{
-					if (queryCache.TryGetValue(epoch, out var records))
+
+
+					var tmp = records.Where(kvp => kvp.Key.StartsWith(hash)).Select(kvp => kvp.Value).ToList();
+					if (tmp.Count() > 0)
 					{
-						var tmp = records.Where(kvp => kvp.Key.StartsWith(hash)).Select(kvp => kvp.Value).ToList();
-						if (tmp.Count() > 0)
-						{
-							Interlocked.Increment(ref cacheHit);
-							return tmp;
-						}
+						Interlocked.Increment(ref cacheHit);
+						return tmp;
 					}
 				}
 
 				// Query the database
+				var nudgedHashHigh = StringNudge(hash, 1);
+				var nudgedHashLow = StringNudge(hash, -1);
 				var context = ThreadLocalDbContext.Value;
-				var result = context.WeatherHists.Where(wh => (wh.Epoch == epoch) && wh.Geohash.StartsWith(hash)).ToList();
+				//var result = context.WeatherHists.Where(wh => (wh.Epoch == epoch) && wh.Geohash.StartsWith(Hasher.Reduce(hash))).ToList();
+				var result = context.WeatherHists.Where(wh => (wh.Epoch == epoch) && wh.Geohash.CompareTo(nudgedHashLow) > 0 && wh.Geohash.CompareTo(nudgedHashHigh) < 0).ToList();
 
 				foreach (var w in result)
 				{
@@ -209,16 +234,19 @@ namespace GravityVectorToolKit.Tools.AisCombine
 					{
 						queryCache[w.Epoch] = new ConcurrentDictionary<string, WeatherHist>();
 					}
-					if (!queryCache[w.Epoch].TryAdd(w.Geohash, w))
-					{
-						//Log.Warn($"Unable to add {w.Epoch}/{w.Geohash} to cache");
-					}
+					queryCache[w.Epoch].TryAdd(w.Geohash, w);
 				}
 
 				Interlocked.Increment(ref cacheMiss);
 				return result;
-
 			}
+		}
+
+		private string StringNudge(string hash, int v)
+		{
+			var chars = hash.ToCharArray();
+			chars[chars.Length - 1] = (char)(Convert.ToUInt16(chars[chars.Length - 1]) + v);
+			return new string(chars);
 		}
 	}
 }
